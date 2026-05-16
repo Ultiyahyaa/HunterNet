@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HunterNet Threads</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/user/threads.css">
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+
+    <div class="logo" onclick="window.location.href='/dashboard'">
+        HunterNet
+    </div>
+
+    <button class="logout-btn" onclick="window.location.href='/home'">
+        LOG OUT
+    </button>
+
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="boards-layout">
+
+    <!-- SIDEBAR -->
+    <div class="boards-sidebar">
+
+        <div class="sidebar-section">
+
+            <h2>Threads</h2>
+
+            <div id="threadsList" class="boards-list"></div>
+
+        </div>
+
+        <div class="sidebar-section">
+
+            <h2>Actions</h2>
+
+            <!-- FIXED ID -->
+            <button id="openCreateThreadBtn" class="board-item create-board">
+                + Create Thread
+            </button>
+
+        </div>
+
+        <div class="sidebar-section">
+
+            <h2>Users Online</h2>
+
+            <div id="onlineUsers"></div>
+
+        </div>
+
+    </div>
+
+    <!-- MAIN -->
+    <div class="boards-container">
+
+        <div class="boards-header">
+
+            <div>
+                <h2 id="threadTitleView"># Threads</h2>
+
+                <p class="board-description">
+                    Secure discussion threads and classified message channels.
+                </p>
+            </div>
+
+            <button id="refreshThreadsBtn" class="refresh-btn">
+                REFRESH
+            </button>
+
+        </div>
+
+        <!-- CREATE THREAD PANEL -->
+        <div class="create-post-panel">
+
+            <input
+                type="text"
+                id="threadTitle"
+                placeholder="Thread title..."
+                maxlength="80"
+            >
+
+            <textarea
+                id="threadContent"
+                placeholder="Write thread content..."
+                maxlength="5000"
+            ></textarea>
+
+            <div class="create-post-footer">
+
+                <div class="post-meta">
+                    STATUS: ENCRYPTED CHANNEL
+                </div>
+
+                <!-- FIXED ID -->
+                <button id="submitThreadBtn">
+                    CREATE
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- FEED -->
+        <div id="threadsFeed" class="posts-feed"></div>
+
+    </div>
+
+</div>
+
+<!-- THREAD MODAL -->
+<div id="threadModal" class="thread-modal hidden">
+
+    <div class="thread-modal-box">
+
+        <div class="thread-header">
+
+            <h2>THREAD CHAT</h2>
+
+            <button id="closeThreadBtn">X</button>
+
+        </div>
+
+        <div class="thread-messages"></div>
+
+        <form class="thread-reply-form">
+
+            <input
+                type="text"
+                id="threadReplyInput"
+                placeholder="Reply in thread..."
+            >
+
+            <button type="submit">SEND</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script type="module" src="/js/user/threads.js"></script>
+
+</body>
+</html>

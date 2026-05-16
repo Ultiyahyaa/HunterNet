@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>HunterNet Settings</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/user/settings.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+
+    <div class="logo"
+    onclick="window.location.href='/dashboard'">
+        HunterNet
+    </div>
+
+    <button class="logout-btn" id="logoutBtn">
+        LOG OUT
+    </button>
+
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <h1>Settings</h1>
+
+    <div class="subtitle">
+        Account configuration and security controls
+    </div>
+
+    <div class="panel">
+
+        <h2>Change Password</h2>
+
+        <form id="changePasswordForm">
+
+            <input
+                type="password"
+                id="currentPassword"
+                placeholder="Current Password"
+                required
+            >
+
+            <input
+                type="password"
+                id="newPassword"
+                placeholder="New Password"
+                required
+            >
+
+            <button type="submit">
+                UPDATE PASSWORD
+            </button>
+
+        </form>
+
+        <div class="note">
+            WARNING: Password changes require re-authentication on all devices.
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="panel">
+
+        <h2>ADMINISTRATOR ACCESS</h2>
+
+        <form>
+
+            <button class="admin-btn" id="adminAccessBtn">
+                VERIFY ADMINISTRATIVE ACCESS
+            </button>
+
+        </form>
+
+        <div class="note">
+            WARNING: Administrative access is restricted to authorized personnel only. Unauthorized attempts will be logged and may result in account suspension.
+        </div>
+
+    </div>
+
+</div>
+
+<script src="/js/user/settings.js"></script>
+
+</body>
+</html>

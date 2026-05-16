@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HunterNet Chat</title>
+
+<link rel="stylesheet" href="/css/user/chat.css">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+
+    <div class="logo" onclick="window.location.href='/dashboard'">
+        HunterNet
+    </div>
+
+    <button class="logout-btn" id="logoutBtn" onclick="window.location.href='/home'">
+        LOG OUT
+    </button>
+
+</div>
+
+<!-- CHAT LAYOUT -->
+<div class="chat-layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <!-- GLOBAL -->
+        <div class="sidebar-section">
+
+            <h2>Global</h2>
+
+            <div id="globalChat" class="channel-item global active">
+                # Global Chat
+            </div>
+
+        </div>
+
+        <!-- ROOMS -->
+        <div class="sidebar-section">
+
+            <h2>Rooms</h2>
+
+            <button id="createRoomBtn" class="channel-item room create-room">
+                + Create New Room
+            </button>
+
+        </div>
+
+        <!-- USERS -->
+        <div class="sidebar-section">
+
+            <h2>Private Messages</h2>
+
+                <button id="contactUserBtn" class="channel-item create-room">
+                    + Contact User Privately
+                </button>
+
+            <div id="usersList"></div>
+
+        </div>
+
+    </div>
+
+    <!-- CHAT -->
+    <div class="chat-container">
+
+        <div class="chat-header">
+            <h2 id="chatTitle"># Global Chat</h2>
+            
+            <button id="pinsBtn" class="pins-btn">
+                PINS
+            </button>
+        </div>
+
+        <div id="messages" class="messages"></div>
+
+        <form id="messageForm" class="message-form">
+
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Enter transmission..."
+                required
+            >
+
+            <button type="submit">
+                SEND
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- CYBER MODAL -->
+<div id="cyberModal" class="cyber-modal hidden">
+
+    <div class="cyber-modal-box">
+
+        <div class="cyber-modal-header">
+
+            <h2 id="modalTitle">
+                SYSTEM
+            </h2>
+
+            <button id="closeModalBtn">
+                X
+            </button>
+
+        </div>
+
+        <div class="cyber-modal-body">
+
+            <input
+                type="text"
+                id="modalInput"
+                placeholder="ENTER TARGET..."
+            >
+
+        </div>
+
+        <div class="cyber-modal-footer">
+
+            <button id="confirmModalBtn">
+                CONFIRM
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="pinsPanel" class="pins-panel hidden">
+
+    <div class="pins-header">
+
+        <h2>Pinned Messages</h2>
+
+        <button id="closePins">
+            X
+        </button>
+
+    </div>
+
+    <div id="pinsList"></div>
+
+</div>
+
+<div id="pinsPanel" class="pins-panel hidden">
+
+    <div class="pins-header">
+
+        <h2>Pinned Messages</h2>
+
+        <button id="closePins">
+            X
+        </button>
+
+    </div>
+
+    <div id="pinsList"></div>
+
+</div>
+
+<script type="module" src="/js/user/chat.js"></script>
+
+</body>
+</html>

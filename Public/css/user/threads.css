@@ -1,0 +1,610 @@
+/* =========================
+   GLOBAL
+========================= */
+
+body {
+
+    margin: 0;
+
+    background: #040404;
+    color: #00ff88;
+
+    font-family: 'Share Tech Mono', monospace;
+
+    overflow-x: hidden;
+
+    background-image:
+        linear-gradient(
+            rgba(0,255,100,0.03) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0,255,100,0.03) 1px,
+            transparent 1px
+        );
+
+    background-size: 4px 4px;
+}
+
+body::before {
+
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.02),
+            rgba(255,255,255,0.02) 1px,
+            transparent 1px,
+            transparent 3px
+        );
+
+    pointer-events: none;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+
+    position: sticky;
+    top: 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 18px 28px;
+
+    background: rgba(0,0,0,0.96);
+
+    border-bottom: 2px solid #00ff88;
+
+    box-shadow: 0 0 15px rgba(0,255,100,0.25);
+
+    z-index: 999;
+}
+
+.logo {
+
+    font-size: 32px;
+    font-weight: bold;
+
+    color: #00ff88;
+
+    cursor: pointer;
+
+    letter-spacing: 2px;
+
+    text-shadow:
+        0 0 8px #00ff88,
+        0 0 18px #00ff88;
+}
+
+.logo:hover {
+    color: #00ffff;
+}
+
+.logout-btn {
+
+    background: transparent;
+
+    border: 2px solid #ff5555;
+
+    color: #ff5555;
+
+    padding: 10px 18px;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+
+    background: #ff5555;
+    color: black;
+
+    box-shadow: 0 0 15px #ff5555;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.boards-layout {
+
+    display: flex;
+
+    min-height: calc(100vh - 80px);
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.boards-sidebar {
+
+    width: 280px;
+
+    padding: 20px;
+
+    background: rgba(0,0,0,0.88);
+
+    border-right: 2px solid #00ff88;
+}
+
+.sidebar-section {
+
+    margin-bottom: 30px;
+}
+
+.sidebar-section h2 {
+
+    font-size: 16px;
+
+    color: #00ffff;
+
+    margin-bottom: 12px;
+
+    text-shadow: 0 0 10px #00ffff;
+}
+
+/* =========================
+   THREAD LIST
+========================= */
+
+.boards-list,
+#threadsList {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.board-item {
+
+    padding: 12px 14px;
+
+    border: 1px solid rgba(0,255,136,0.25);
+
+    color: #b8ffd0;
+
+    cursor: pointer;
+
+    background: rgba(0,0,0,0.3);
+
+    transition: 0.2s;
+
+    user-select: none;
+}
+
+.board-item:hover {
+
+    border-color: #00ff88;
+
+    color: #00ff88;
+
+    background: rgba(0,255,100,0.08);
+}
+
+.board-item.active {
+
+    border-color: #00ffff;
+
+    color: #00ffff;
+
+    text-shadow: 0 0 8px #00ffff;
+
+    background: rgba(0,255,255,0.05);
+}
+
+.create-board {
+
+    width: 100%;
+
+    text-align: left;
+
+    color: #00ff88;
+}
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.boards-container {
+
+    flex: 1;
+
+    padding: 28px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.boards-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    margin-bottom: 20px;
+}
+
+.boards-header h2 {
+
+    font-size: 34px;
+
+    margin: 0;
+
+    color: #00ff88;
+
+    text-shadow: 0 0 12px #00ff88;
+}
+
+.board-description {
+
+    margin-top: 8px;
+
+    color: #8fffc1;
+
+    max-width: 700px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.refresh-btn,
+#createThreadBtn,
+#submitThreadBtn,
+#submitPostBtn,
+.thread-btn {
+
+    background: transparent;
+
+    border: 2px solid #00ff88;
+
+    color: #00ff88;
+
+    padding: 10px 16px;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    transition: 0.2s;
+}
+
+.refresh-btn:hover,
+#createThreadBtn:hover,
+#submitThreadBtn:hover,
+.thread-btn:hover {
+
+    background: #00ff88;
+
+    color: black;
+
+    box-shadow: 0 0 15px rgba(0,255,100,0.35);
+}
+
+/* =========================
+   CREATE THREAD PANEL
+========================= */
+
+.create-post-panel {
+
+    border: 2px solid #00ff88;
+
+    background: rgba(0,0,0,0.85);
+
+    padding: 18px;
+
+    margin-bottom: 25px;
+
+    box-shadow: 0 0 12px rgba(0,255,100,0.15);
+}
+
+#createThreadBtn {
+
+    margin-top: 8px;
+}
+
+#threadTitle,
+#threadContent {
+
+    width: 100%;
+
+    background: rgba(0,0,0,0.6);
+
+    border: 1px solid #00ff88;
+
+    color: #00ff88;
+
+    padding: 10px;
+
+    font-family: inherit;
+
+    box-sizing: border-box;
+}
+
+#threadContent {
+
+    height: 120px;
+
+    margin-top: 10px;
+
+    resize: vertical;
+}
+
+.create-post-footer {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-top: 12px;
+}
+
+.post-meta {
+
+    color: #8fffc1;
+
+    font-size: 13px;
+}
+
+/* =========================
+   THREAD FEED
+========================= */
+
+.posts-feed,
+#threadsFeed {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+/* =========================
+   THREAD CARD (POST)
+========================= */
+
+.post-card,
+.board-post {
+
+    border: 2px solid #00ff88;
+
+    background: rgba(0,0,0,0.82);
+
+    padding: 18px;
+
+    box-shadow: 0 0 12px rgba(0,255,100,0.12);
+
+    transition: 0.2s;
+}
+
+.post-card:hover,
+.board-post:hover {
+
+    box-shadow: 0 0 18px rgba(0,255,100,0.25);
+}
+
+.post-title {
+
+    font-size: 20px;
+
+    color: #00ff88;
+
+    margin: 0 0 10px 0;
+}
+
+.post-content {
+
+    color: #c7ffd9;
+
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+}
+
+.post-meta {
+
+    display: flex;
+
+    gap: 10px;
+
+    font-size: 13px;
+
+    color: #8fffc1;
+}
+
+.post-author {
+
+    color: #00ffff;
+}
+
+/* =========================
+   THREAD MODAL
+========================= */
+
+.thread-modal.hidden {
+
+    display: none;
+}
+
+.thread-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(0,0,0,0.85);
+
+    z-index: 9999;
+}
+
+.thread-modal-box {
+
+    width: 650px;
+
+    max-width: 95vw;
+
+    border: 2px solid #00ff88;
+
+    background: #050505;
+
+    padding: 20px;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+.thread-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 12px;
+}
+
+.thread-header h2 {
+
+    color: #00ffff;
+
+    margin: 0;
+}
+
+/* =========================
+   THREAD MESSAGES
+========================= */
+
+.thread-messages {
+
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 10px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.thread-message {
+
+    border: 1px solid rgba(0,255,136,0.2);
+
+    padding: 10px;
+
+    background: rgba(0,255,100,0.03);
+}
+
+.thread-user {
+
+    color: #00ffff;
+
+    margin-bottom: 5px;
+}
+
+/* =========================
+   REPLY BOX
+========================= */
+
+.thread-reply-form {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+#threadReplyInput {
+
+    flex: 1;
+
+    background: rgba(0,0,0,0.6);
+
+    border: 1px solid #00ff88;
+
+    color: #00ff88;
+
+    padding: 10px;
+
+    font-family: inherit;
+}
+
+.thread-reply-form button {
+
+    background: transparent;
+
+    border: 2px solid #00ff88;
+
+    color: #00ff88;
+
+    padding: 10px 14px;
+
+    cursor: pointer;
+}
+
+.thread-reply-form button:hover {
+
+    background: #00ff88;
+
+    color: black;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+    .boards-layout {
+
+        flex-direction: column;
+    }
+
+    .boards-sidebar {
+
+        width: 100%;
+
+        border-right: none;
+
+        border-bottom: 2px solid #00ff88;
+    }
+
+    .thread-modal-box {
+
+        height: 90vh;
+    }
+}
