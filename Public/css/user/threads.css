@@ -13,16 +13,15 @@ body {
 
     overflow-x: hidden;
 
-    background-image:
-        linear-gradient(
-            rgba(0,255,100,0.03) 1px,
+    background-image: linear-gradient(
+            rgba(0, 255, 100, 0.03) 1px,
             transparent 1px
-        ),
-        linear-gradient(
+    ),
+    linear-gradient(
             90deg,
-            rgba(0,255,100,0.03) 1px,
+            rgba(0, 255, 100, 0.03) 1px,
             transparent 1px
-        );
+    );
 
     background-size: 4px 4px;
 }
@@ -34,14 +33,13 @@ body::before {
     position: fixed;
     inset: 0;
 
-    background:
-        repeating-linear-gradient(
+    background: repeating-linear-gradient(
             to bottom,
-            rgba(255,255,255,0.02),
-            rgba(255,255,255,0.02) 1px,
+            rgba(255, 255, 255, 0.02),
+            rgba(255, 255, 255, 0.02) 1px,
             transparent 1px,
             transparent 3px
-        );
+    );
 
     pointer-events: none;
 }
@@ -61,11 +59,11 @@ body::before {
 
     padding: 18px 28px;
 
-    background: rgba(0,0,0,0.96);
+    background: rgba(0, 0, 0, 0.96);
 
     border-bottom: 2px solid #00ff88;
 
-    box-shadow: 0 0 15px rgba(0,255,100,0.25);
+    box-shadow: 0 0 15px rgba(0, 255, 100, 0.25);
 
     z-index: 999;
 }
@@ -81,9 +79,8 @@ body::before {
 
     letter-spacing: 2px;
 
-    text-shadow:
-        0 0 8px #00ff88,
-        0 0 18px #00ff88;
+    text-shadow: 0 0 8px #00ff88,
+    0 0 18px #00ff88;
 }
 
 .logo:hover {
@@ -136,7 +133,7 @@ body::before {
 
     padding: 20px;
 
-    background: rgba(0,0,0,0.88);
+    background: rgba(0, 0, 0, 0.88);
 
     border-right: 2px solid #00ff88;
 }
@@ -175,13 +172,13 @@ body::before {
 
     padding: 12px 14px;
 
-    border: 1px solid rgba(0,255,136,0.25);
+    border: 1px solid rgba(0, 255, 136, 0.25);
 
     color: #b8ffd0;
 
     cursor: pointer;
 
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.3);
 
     transition: 0.2s;
 
@@ -194,7 +191,7 @@ body::before {
 
     color: #00ff88;
 
-    background: rgba(0,255,100,0.08);
+    background: rgba(0, 255, 100, 0.08);
 }
 
 .board-item.active {
@@ -205,7 +202,7 @@ body::before {
 
     text-shadow: 0 0 8px #00ffff;
 
-    background: rgba(0,255,255,0.05);
+    background: rgba(0, 255, 255, 0.05);
 }
 
 .create-board {
@@ -297,7 +294,7 @@ body::before {
 
     color: black;
 
-    box-shadow: 0 0 15px rgba(0,255,100,0.35);
+    box-shadow: 0 0 15px rgba(0, 255, 100, 0.35);
 }
 
 /* =========================
@@ -308,13 +305,13 @@ body::before {
 
     border: 2px solid #00ff88;
 
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
 
     padding: 18px;
 
     margin-bottom: 25px;
 
-    box-shadow: 0 0 12px rgba(0,255,100,0.15);
+    box-shadow: 0 0 12px rgba(0, 255, 100, 0.15);
 }
 
 #createThreadBtn {
@@ -327,7 +324,7 @@ body::before {
 
     width: 100%;
 
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
 
     border: 1px solid #00ff88;
 
@@ -390,11 +387,11 @@ body::before {
 
     border: 2px solid #00ff88;
 
-    background: rgba(0,0,0,0.82);
+    background: rgba(0, 0, 0, 0.82);
 
     padding: 18px;
 
-    box-shadow: 0 0 12px rgba(0,255,100,0.12);
+    box-shadow: 0 0 12px rgba(0, 255, 100, 0.12);
 
     transition: 0.2s;
 }
@@ -402,7 +399,7 @@ body::before {
 .post-card:hover,
 .board-post:hover {
 
-    box-shadow: 0 0 18px rgba(0,255,100,0.25);
+    box-shadow: 0 0 18px rgba(0, 255, 100, 0.25);
 }
 
 .post-title {
@@ -460,7 +457,7 @@ body::before {
 
     justify-content: center;
 
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
 
     z-index: 9999;
 }
@@ -521,11 +518,11 @@ body::before {
 
 .thread-message {
 
-    border: 1px solid rgba(0,255,136,0.2);
+    border: 1px solid rgba(0, 255, 136, 0.2);
 
     padding: 10px;
 
-    background: rgba(0,255,100,0.03);
+    background: rgba(0, 255, 100, 0.03);
 }
 
 .thread-user {
@@ -552,7 +549,7 @@ body::before {
 
     flex: 1;
 
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
 
     border: 1px solid #00ff88;
 

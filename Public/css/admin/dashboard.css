@@ -14,13 +14,13 @@ body {
 
     overflow-x: hidden;
 
-    background-image:
-        linear-gradient(rgba(255,215,0,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px);
 
     background-size: 4px 4px;
 
 }
+
 /* =========================
    SCANLINES
 ========================= */
@@ -34,14 +34,13 @@ body::before {
 
     pointer-events: none;
 
-    background:
-        repeating-linear-gradient(
+    background: repeating-linear-gradient(
             to bottom,
-            rgba(255,215,0,0.02),
-            rgba(255,215,0,0.02) 1px,
+            rgba(255, 215, 0, 0.02),
+            rgba(255, 215, 0, 0.02) 1px,
             transparent 1px,
             transparent 3px
-        );
+    );
 
 }
 
@@ -63,10 +62,9 @@ body::before {
 
     border-bottom: 2px solid #ffd700;
 
-    background: rgba(0,0,0,0.92);
+    background: rgba(0, 0, 0, 0.92);
 
-    box-shadow:
-        0 0 20px rgba(255,215,0,0.15);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
 
     z-index: 999;
 }
@@ -81,9 +79,8 @@ body::before {
 
     cursor: pointer;
 
-    text-shadow:
-        0 0 8px #ffd700,
-        0 0 18px #ffd700;
+    text-shadow: 0 0 8px #ffd700,
+    0 0 18px #ffd700;
 
 }
 
@@ -109,8 +106,7 @@ body::before {
     background: #ffd700;
     color: black;
 
-    box-shadow:
-        0 0 15px #ffd700;
+    box-shadow: 0 0 15px #ffd700;
 
 }
 
@@ -133,9 +129,8 @@ body::before {
 
     color: #ffd700;
 
-    text-shadow:
-        0 0 8px #ffd700,
-        0 0 16px #ffd700;
+    text-shadow: 0 0 8px #ffd700,
+    0 0 16px #ffd700;
 }
 
 .header p {
@@ -158,12 +153,11 @@ body::before {
 
     border: 1px solid #ffd700;
 
-    background: rgba(0,0,0,0.88);
+    background: rgba(0, 0, 0, 0.88);
 
     color: #ffec99;
 
-    box-shadow:
-        0 0 15px rgba(255,215,0,0.2);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
 
 }
 
@@ -191,7 +185,7 @@ body::before {
 ========================= */
 
 .card {
-    background: rgba(0,0,0,0.92);
+    background: rgba(0, 0, 0, 0.92);
 
     border: 2px solid #ffd700;
 
@@ -203,17 +197,15 @@ body::before {
 
     transition: 0.25s;
 
-    box-shadow:
-        0 0 15px rgba(255,215,0,0.12);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.12);
 
 }
 
 .card:hover {
     transform: translateY(-5px);
 
-    background: rgba(255,215,0,0.08);
-    box-shadow:
-        0 0 25px rgba(255,215,0,0.35);
+    background: rgba(255, 215, 0, 0.08);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.35);
 
 }
 
@@ -222,8 +214,7 @@ body::before {
 
     color: #ffd700;
 
-    text-shadow:
-        0 0 8px #ffd700;
+    text-shadow: 0 0 8px #ffd700;
 
 }
 

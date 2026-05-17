@@ -178,6 +178,7 @@ router.get("/api/me", (req, res) => {
     }
 
     res.json({
+        id: req.session.user.id,
         username: req.session.user.username
     });
 });

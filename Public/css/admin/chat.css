@@ -17,9 +17,8 @@ body {
 
     overflow: hidden;
 
-    background-image:
-        linear-gradient(rgba(0,255,100,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,255,100,0.03) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(0, 255, 100, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 100, 0.03) 1px, transparent 1px);
 
     background-size: 4px 4px;
 }
@@ -34,14 +33,13 @@ body::before {
     position: fixed;
     inset: 0;
 
-    background:
-        repeating-linear-gradient(
+    background: repeating-linear-gradient(
             to bottom,
-            rgba(255,255,255,0.02),
-            rgba(255,255,255,0.02) 1px,
+            rgba(255, 255, 255, 0.02),
+            rgba(255, 255, 255, 0.02) 1px,
             transparent 1px,
             transparent 3px
-        );
+    );
 
     pointer-events: none;
 }
@@ -60,12 +58,11 @@ body::before {
 
     padding: 18px 28px;
 
-    background: rgba(0,0,0,0.96);
+    background: rgba(0, 0, 0, 0.96);
 
     border-bottom: 2px solid #ffd700;
 
-    box-shadow:
-        0 0 15px rgba(0,255,100,0.25);
+    box-shadow: 0 0 15px rgba(0, 255, 100, 0.25);
 
     z-index: 999;
 }
@@ -80,9 +77,8 @@ body::before {
 
     cursor: pointer;
 
-    text-shadow:
-        0 0 8px #ffd700,
-        0 0 18px #ffd700;
+    text-shadow: 0 0 8px #ffd700,
+    0 0 18px #ffd700;
 }
 
 /* logout (same system as dashboard) */
@@ -107,8 +103,7 @@ body::before {
     background: #ff5555;
     color: black;
 
-    box-shadow:
-        0 0 15px #ff5555;
+    box-shadow: 0 0 15px #ff5555;
 }
 
 /* =========================
@@ -129,7 +124,7 @@ body::before {
 .sidebar {
     width: 320px;
 
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
 
     border-right: 2px solid #ffd700;
 
@@ -137,8 +132,7 @@ body::before {
 
     overflow-y: auto;
 
-    box-shadow:
-        inset 0 0 15px rgba(0,255,100,0.06);
+    box-shadow: inset 0 0 15px rgba(0, 255, 100, 0.06);
 }
 
 .sidebar-section {
@@ -167,9 +161,9 @@ body::before {
     padding: 12px;
     margin-bottom: 10px;
 
-    border: 2px solid rgba(0,255,100,0.2);
+    border: 2px solid rgba(0, 255, 100, 0.2);
 
-    background: rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
 
     cursor: pointer;
 
@@ -181,8 +175,7 @@ body::before {
 
     transition: 0.25s;
 
-    box-shadow:
-        0 0 10px rgba(0,255,100,0.08);
+    box-shadow: 0 0 10px rgba(0, 255, 100, 0.08);
 }
 
 .channel-item:hover {
@@ -190,19 +183,17 @@ body::before {
 
     border-color: #00ffff;
 
-    background: rgba(0,255,255,0.08);
+    background: rgba(0, 255, 255, 0.08);
 
-    box-shadow:
-        0 0 15px rgba(0,255,255,0.25);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.25);
 }
 
 .channel-item.active {
     border-color: #00ffff;
 
-    background: rgba(0,255,255,0.12);
+    background: rgba(0, 255, 255, 0.12);
 
-    box-shadow:
-        0 0 18px rgba(0,255,255,0.3);
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.3);
 }
 
 /* =========================
@@ -216,19 +207,17 @@ body::before {
 
 .global:hover {
     border-color: #ffd700;
-    background: rgba(0,255,136,0.08);
+    background: rgba(0, 255, 136, 0.08);
 
-    box-shadow:
-        0 0 15px rgba(0,255,136,0.25);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.25);
 }
 
 .global.active {
     border-color: #ffd700;
 
-    background: rgba(0,255,136,0.12);
+    background: rgba(0, 255, 136, 0.12);
 
-    box-shadow:
-        0 0 18px rgba(0,255,136,0.35);
+    box-shadow: 0 0 18px rgba(0, 255, 136, 0.35);
 }
 
 /* ROOMS = BLUE */
@@ -238,19 +227,17 @@ body::before {
 
 .room:hover {
     border-color: #00bfff;
-    background: rgba(0,191,255,0.08);
+    background: rgba(0, 191, 255, 0.08);
 
-    box-shadow:
-        0 0 15px rgba(0,191,255,0.25);
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.25);
 }
 
 .room.active {
     border-color: #00bfff;
 
-    background: rgba(0,191,255,0.12);
+    background: rgba(0, 191, 255, 0.12);
 
-    box-shadow:
-        0 0 18px rgba(0,191,255,0.35);
+    box-shadow: 0 0 18px rgba(0, 191, 255, 0.35);
 }
 
 /* USERS / DMS = RED */
@@ -260,19 +247,17 @@ body::before {
 
 .user:hover {
     border-color: #ff5555;
-    background: rgba(255,85,85,0.08);
+    background: rgba(255, 85, 85, 0.08);
 
-    box-shadow:
-        0 0 15px rgba(255,85,85,0.25);
+    box-shadow: 0 0 15px rgba(255, 85, 85, 0.25);
 }
 
 .user.active {
     border-color: #ff5555;
 
-    background: rgba(255,85,85,0.12);
+    background: rgba(255, 85, 85, 0.12);
 
-    box-shadow:
-        0 0 18px rgba(255,85,85,0.35);
+    box-shadow: 0 0 18px rgba(255, 85, 85, 0.35);
 }
 
 /* =========================
@@ -284,28 +269,25 @@ body::before {
 
     color: #ffe88a;
 
-    border-color: rgba(255,215,0,0.35);
+    border-color: rgba(255, 215, 0, 0.35);
 
-    box-shadow:
-        0 0 12px rgba(255,215,0,0.12);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.12);
 }
 
 .create-room:hover {
     border-color: #ffd700;
 
-    background: rgba(255,215,0,0.08);
+    background: rgba(255, 215, 0, 0.08);
 
-    box-shadow:
-        0 0 18px rgba(255,215,0,0.35);
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.35);
 }
 
 .create-room.active {
     border-color: #ffd700;
 
-    background: rgba(255,215,0,0.12);
+    background: rgba(255, 215, 0, 0.12);
 
-    box-shadow:
-        0 0 20px rgba(255,215,0,0.4);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
 }
 
 /* =========================
@@ -338,14 +320,11 @@ CHAT HEADER
 
     padding: 20px;
 
-    border-bottom:
-            1px solid rgba(0,255,100,0.2);
+    border-bottom: 1px solid rgba(0, 255, 100, 0.2);
 
-    background:
-            rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
 
-    box-shadow:
-            inset 0 0 10px rgba(0,255,100,0.05);
+    box-shadow: inset 0 0 10px rgba(0, 255, 100, 0.05);
 }
 
 .chat-header h2 {
@@ -356,8 +335,7 @@ CHAT HEADER
 
     color: #ffd700;
 
-    text-shadow:
-            0 0 10px rgba(255,215,0,0.25);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.25);
 }
 
 /* =========================
@@ -379,14 +357,15 @@ CHAT HEADER
 }
 
 .message {
-    background: rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
 
     padding: 12px;
 
-    border: 2px solid rgba(0,255,100,0.2);
+    border: 2px solid rgba(0, 255, 100, 0.2);
 
-    box-shadow:
-        0 0 12px rgba(0,255,100,0.08);
+    box-shadow: 0 0 12px rgba(0, 255, 100, 0.08);
+
+    pointer-events: auto;
 }
 
 .message-user {
@@ -417,14 +396,11 @@ PINS PANEL
 
     overflow-y: auto;
 
-    background:
-            rgba(5,5,5,0.96);
+    background: rgba(5, 5, 5, 0.96);
 
-    border:
-            2px solid rgba(255,215,0,0.3);
+    border: 2px solid rgba(255, 215, 0, 0.3);
 
-    border-left:
-            4px solid #ffd700;
+    border-left: 4px solid #ffd700;
 
     border-radius: 14px;
 
@@ -432,14 +408,12 @@ PINS PANEL
 
     z-index: 9999;
 
-    box-shadow:
-            0 0 30px rgba(255,215,0,0.12),
-            inset 0 0 15px rgba(255,215,0,0.03);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.12),
+    inset 0 0 15px rgba(255, 215, 0, 0.03);
 
     backdrop-filter: blur(8px);
 
-    animation:
-            pinsPanelOpen 0.18s ease-out;
+    animation: pinsPanelOpen 0.18s ease-out;
 }
 
 /* =========================
@@ -452,20 +426,14 @@ PINS PANEL OPEN ANIMATION
 
         opacity: 0;
 
-        transform:
-                translateX(16px)
-                translateY(-6px)
-                scale(0.97);
+        transform: translateX(16px) translateY(-6px) scale(0.97);
     }
 
     to {
 
         opacity: 1;
 
-        transform:
-                translateX(0)
-                translateY(0)
-                scale(1);
+        transform: translateX(0) translateY(0) scale(1);
     }
 }
 
@@ -479,14 +447,11 @@ PIN ENTRY
 
 .pin-entry {
 
-    background:
-            rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
 
-    border:
-            2px solid rgba(255,215,0,0.2);
+    border: 2px solid rgba(255, 215, 0, 0.2);
 
-    border-left:
-            4px solid #ffd700;
+    border-left: 4px solid #ffd700;
 
     border-radius: 10px;
 
@@ -494,23 +459,20 @@ PIN ENTRY
 
     margin-bottom: 14px;
 
-    transition:
-            transform 0.15s ease,
-            border-color 0.15s ease,
-            box-shadow 0.15s ease;
+    transition: transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 
-    box-shadow:
-            0 0 12px rgba(255,215,0,0.08);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.08);
 }
 
 .pin-entry:hover {
 
     transform: translateY(-2px);
 
-    border-color: rgba(255,215,0,0.45);
+    border-color: rgba(255, 215, 0, 0.45);
 
-    box-shadow:
-            0 0 18px rgba(255,215,0,0.18);
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.18);
 }
 
 /* =========================
@@ -536,8 +498,7 @@ PIN USER
 
     color: #00ffff;
 
-    text-shadow:
-            0 0 10px #00ffff;
+    text-shadow: 0 0 10px #00ffff;
 
     font-weight: bold;
 }
@@ -555,52 +516,15 @@ PIN CONTENT
     word-break: break-word;
 }
 
-/* =========================
-PINS BUTTON
-========================= */
-
-.pins-btn {
-
-    background:
-            rgba(0,0,0,0.75);
-
-    border:
-            2px solid rgba(255,215,0,0.35);
-
-    color: #ffd700;
-
-    padding:
-            10px 18px;
-
-    font-family: inherit;
-
-    font-size: 14px;
-
-    letter-spacing: 1px;
-
-    cursor: pointer;
-
-    transition:
-            border-color 0.15s ease,
-            box-shadow 0.15s ease,
-            background 0.15s ease,
-            transform 0.15s ease;
-
-    box-shadow:
-            0 0 12px rgba(255,215,0,0.08);
-}
-
 .pins-btn:hover {
 
     transform: translateY(-1px);
 
-    background:
-            rgba(255,215,0,0.08);
+    background: rgba(255, 215, 0, 0.08);
 
     border-color: #ffd700;
 
-    box-shadow:
-            0 0 18px rgba(255,215,0,0.28);
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.28);
 }
 
 /* =========================
@@ -619,8 +543,7 @@ PINS PANEL HEADER
 
     padding-bottom: 12px;
 
-    border-bottom:
-            1px solid rgba(255,215,0,0.15);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.15);
 }
 
 .pins-header h2 {
@@ -633,8 +556,7 @@ PINS PANEL HEADER
 
     letter-spacing: 1px;
 
-    text-shadow:
-            0 0 10px rgba(255,215,0,0.5);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
 /* =========================
@@ -646,11 +568,9 @@ CLOSE PINS BUTTON
     width: 38px;
     height: 38px;
 
-    background:
-            rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
 
-    border:
-            2px solid rgba(255,85,85,0.4);
+    border: 2px solid rgba(255, 85, 85, 0.4);
 
     color: #ff5555;
 
@@ -658,27 +578,38 @@ CLOSE PINS BUTTON
 
     cursor: pointer;
 
-    transition:
-            transform 0.15s ease,
-            border-color 0.15s ease,
-            box-shadow 0.15s ease,
-            background 0.15s ease;
+    transition: transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
 
-    box-shadow:
-            0 0 10px rgba(255,85,85,0.08);
+    box-shadow: 0 0 10px rgba(255, 85, 85, 0.08);
 }
 
 #closePins:hover {
 
     transform: scale(1.05);
 
-    background:
-            rgba(255,85,85,0.08);
+    background: rgba(255, 85, 85, 0.08);
 
     border-color: #ff5555;
 
-    box-shadow:
-            0 0 18px rgba(255,85,85,0.28);
+    box-shadow: 0 0 18px rgba(255, 85, 85, 0.28);
+}
+
+/* =========================
+   EMPTY PINS
+========================= */
+
+.empty-pins {
+
+    text-align: center;
+
+    padding: 30px 10px;
+
+    color: rgba(255, 255, 255, 0.45);
+
+    letter-spacing: 2px;
 }
 
 /* =========================
@@ -692,22 +623,19 @@ PINS SCROLLBAR
 
 .pins-panel::-webkit-scrollbar-track {
 
-    background:
-            rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .pins-panel::-webkit-scrollbar-thumb {
 
-    background:
-            rgba(255,215,0,0.25);
+    background: rgba(255, 215, 0, 0.25);
 
     border-radius: 10px;
 }
 
 .pins-panel::-webkit-scrollbar-thumb:hover {
 
-    background:
-            rgba(255,215,0,0.45);
+    background: rgba(255, 215, 0, 0.45);
 }
 
 /* =========================
@@ -716,16 +644,13 @@ PINS BUTTON
 
 .pins-btn {
 
-    background:
-            rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
 
-    border:
-            2px solid rgba(255,215,0,0.35);
+    border: 2px solid rgba(255, 215, 0, 0.35);
 
     color: #ffd700;
 
-    padding:
-            10px 18px;
+    padding: 10px 18px;
 
     font-family: inherit;
 
@@ -735,27 +660,23 @@ PINS BUTTON
 
     cursor: pointer;
 
-    transition:
-            border-color 0.15s ease,
-            box-shadow 0.15s ease,
-            background 0.15s ease,
-            transform 0.15s ease;
+    transition: border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
 
-    box-shadow:
-            0 0 12px rgba(255,215,0,0.08);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.08);
 }
 
 .pins-btn:hover {
 
     transform: translateY(-1px);
 
-    background:
-            rgba(255,215,0,0.08);
+    background: rgba(255, 215, 0, 0.08);
 
     border-color: #ffd700;
 
-    box-shadow:
-            0 0 18px rgba(255,215,0,0.28);
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.28);
 }
 
 /* =========================
@@ -774,8 +695,7 @@ PINS HEADER
 
     padding-bottom: 12px;
 
-    border-bottom:
-            1px solid rgba(255,215,0,0.15);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.15);
 }
 
 .pins-header h2 {
@@ -788,8 +708,7 @@ PINS HEADER
 
     letter-spacing: 1px;
 
-    text-shadow:
-            0 0 10px rgba(255,215,0,0.5);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
 /* =========================
@@ -801,11 +720,9 @@ CLOSE PINS BUTTON
     width: 38px;
     height: 38px;
 
-    background:
-            rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
 
-    border:
-            2px solid rgba(255,85,85,0.4);
+    border: 2px solid rgba(255, 85, 85, 0.4);
 
     color: #ff5555;
 
@@ -813,27 +730,23 @@ CLOSE PINS BUTTON
 
     cursor: pointer;
 
-    transition:
-            transform 0.15s ease,
-            border-color 0.15s ease,
-            box-shadow 0.15s ease,
-            background 0.15s ease;
+    transition: transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
 
-    box-shadow:
-            0 0 10px rgba(255,85,85,0.08);
+    box-shadow: 0 0 10px rgba(255, 85, 85, 0.08);
 }
 
 #closePins:hover {
 
     transform: scale(1.05);
 
-    background:
-            rgba(255,85,85,0.08);
+    background: rgba(255, 85, 85, 0.08);
 
     border-color: #ff5555;
 
-    box-shadow:
-            0 0 18px rgba(255,85,85,0.28);
+    box-shadow: 0 0 18px rgba(255, 85, 85, 0.28);
 }
 
 /* =========================
@@ -842,14 +755,11 @@ PIN ENTRY
 
 .pin-entry {
 
-    background:
-            rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
 
-    border:
-            2px solid rgba(255,215,0,0.2);
+    border: 2px solid rgba(255, 215, 0, 0.2);
 
-    border-left:
-            4px solid #ffd700;
+    border-left: 4px solid #ffd700;
 
     border-radius: 10px;
 
@@ -857,23 +767,20 @@ PIN ENTRY
 
     margin-bottom: 14px;
 
-    transition:
-            transform 0.15s ease,
-            border-color 0.15s ease,
-            box-shadow 0.15s ease;
+    transition: transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 
-    box-shadow:
-            0 0 12px rgba(255,215,0,0.08);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.08);
 }
 
 .pin-entry:hover {
 
     transform: translateY(-2px);
 
-    border-color: rgba(255,215,0,0.45);
+    border-color: rgba(255, 215, 0, 0.45);
 
-    box-shadow:
-            0 0 18px rgba(255,215,0,0.18);
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.18);
 }
 
 /* =========================
@@ -884,8 +791,7 @@ PIN USER
 
     color: #00ffff;
 
-    text-shadow:
-            0 0 10px #00ffff;
+    text-shadow: 0 0 10px #00ffff;
 
     font-weight: bold;
 }
@@ -924,8 +830,7 @@ GLOBAL CYBER SCROLLBARS
 .sidebar::-webkit-scrollbar-track,
 .pins-panel::-webkit-scrollbar-track {
 
-    background:
-            rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
 
     border-radius: 10px;
 }
@@ -936,20 +841,17 @@ GLOBAL CYBER SCROLLBARS
 .sidebar::-webkit-scrollbar-thumb,
 .pins-panel::-webkit-scrollbar-thumb {
 
-    background:
-            linear-gradient(
-                    to bottom,
-                    rgba(255,215,0,0.22),
-                    rgba(255,215,0,0.12)
-            );
+    background: linear-gradient(
+            to bottom,
+            rgba(255, 215, 0, 0.22),
+            rgba(255, 215, 0, 0.12)
+    );
 
     border-radius: 10px;
 
-    border:
-            1px solid rgba(255,215,0,0.15);
+    border: 1px solid rgba(255, 215, 0, 0.15);
 
-    box-shadow:
-            0 0 10px rgba(255,215,0,0.08);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.08);
 }
 
 /* HOVER */
@@ -958,15 +860,13 @@ GLOBAL CYBER SCROLLBARS
 .sidebar::-webkit-scrollbar-thumb:hover,
 .pins-panel::-webkit-scrollbar-thumb:hover {
 
-    background:
-            linear-gradient(
-                    to bottom,
-                    rgba(255,215,0,0.45),
-                    rgba(255,215,0,0.25)
-            );
+    background: linear-gradient(
+            to bottom,
+            rgba(255, 215, 0, 0.45),
+            rgba(255, 215, 0, 0.25)
+    );
 
-    box-shadow:
-            0 0 14px rgba(255,215,0,0.22);
+    box-shadow: 0 0 14px rgba(255, 215, 0, 0.22);
 }
 
 /* =========================
@@ -979,9 +879,9 @@ GLOBAL CYBER SCROLLBARS
 
     padding: 20px;
 
-    border-top: 1px solid rgba(0,255,100,0.2);
+    border-top: 1px solid rgba(0, 255, 100, 0.2);
 
-    background: rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.9);
 }
 
 .message-form input {
@@ -997,13 +897,11 @@ GLOBAL CYBER SCROLLBARS
 
     outline: none;
 
-    box-shadow:
-        inset 0 0 10px rgba(0,255,100,0.1);
+    box-shadow: inset 0 0 10px rgba(0, 255, 100, 0.1);
 }
 
 .message-form input:focus {
-    box-shadow:
-        0 0 12px #ffd700;
+    box-shadow: 0 0 12px #ffd700;
 }
 
 .message-form button {
@@ -1019,16 +917,14 @@ GLOBAL CYBER SCROLLBARS
 
     transition: 0.2s;
 
-    box-shadow:
-        0 0 10px rgba(0,255,100,0.15);
+    box-shadow: 0 0 10px rgba(0, 255, 100, 0.15);
 }
 
 .message-form button:hover {
     background: #ffd700;
     color: black;
 
-    box-shadow:
-        0 0 15px #ffd700;
+    box-shadow: 0 0 15px #ffd700;
 }
 
 /* =========================
@@ -1042,8 +938,12 @@ GLOBAL CYBER SCROLLBARS
 }
 
 @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0;
+    }
 }
 
 /* =========================
@@ -1055,7 +955,7 @@ GLOBAL CYBER SCROLLBARS
 
     inset: 0;
 
-    background: rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
 
     display: flex;
     justify-content: center;
@@ -1077,9 +977,8 @@ GLOBAL CYBER SCROLLBARS
 
     border: 2px solid #ffd700;
 
-    box-shadow:
-        0 0 25px rgba(255,215,0,0.25),
-        inset 0 0 15px rgba(255,215,0,0.08);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.25),
+    inset 0 0 15px rgba(255, 215, 0, 0.08);
 
     animation: modalAppear 0.18s ease-out;
 }
@@ -1104,9 +1003,9 @@ GLOBAL CYBER SCROLLBARS
 
     padding: 15px 18px;
 
-    border-bottom: 1px solid rgba(0,255,136,0.2);
+    border-bottom: 1px solid rgba(0, 255, 136, 0.2);
 
-    background: rgba(0,255,136,0.05);
+    background: rgba(0, 255, 136, 0.05);
 }
 
 .cyber-modal-header h2 {
@@ -1114,8 +1013,7 @@ GLOBAL CYBER SCROLLBARS
 
     color: #ffd700;
 
-    text-shadow:
-        0 0 10px #ffd700;
+    text-shadow: 0 0 10px #ffd700;
 }
 
 #closeModalBtn {
@@ -1139,8 +1037,7 @@ GLOBAL CYBER SCROLLBARS
     background: #ff5555;
     color: black;
 
-    box-shadow:
-        0 0 15px #ff5555;
+    box-shadow: 0 0 15px #ff5555;
 }
 
 .cyber-modal-body {
@@ -1162,13 +1059,11 @@ GLOBAL CYBER SCROLLBARS
 
     font-family: inherit;
 
-    box-shadow:
-        inset 0 0 12px rgba(0,255,136,0.08);
+    box-shadow: inset 0 0 12px rgba(0, 255, 136, 0.08);
 }
 
 #modalInput:focus {
-    box-shadow:
-        0 0 12px #ffd700;
+    box-shadow: 0 0 12px #ffd700;
 }
 
 .cyber-modal-footer {
@@ -1198,37 +1093,121 @@ GLOBAL CYBER SCROLLBARS
     background: #ffd700;
     color: black;
 
-    box-shadow:
-        0 0 18px #ffd700;
+    box-shadow: 0 0 18px #ffd700;
 }
 
 /* =========================
-MESSAGE ENHANCEMENTS
+MESSAGE BASE
 ========================= */
 
 .message {
-
     position: relative;
+    border-radius: 10px;
+    transition: border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.15s ease;
+    pointer-events: auto;
+}
 
+/* ONLY hover when menu is NOT open */
+.message:hover:not(.menu-open) {
+    transform: translateY(-1px);
+    border-color: rgba(0, 255, 255, 0.35);
+    background: rgba(0, 255, 255, 0.03);
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.12);
+}
+
+/* =========================
+MENU BUTTON
+========================= */
+
+.message-menu-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    background: rgba(0, 0, 0, 0.9);
+    color: #ffd700;
+    font-size: 14px;
+    cursor: pointer;
+
+    opacity: 0;
+    transition: opacity 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* show button on hover OR when menu is open */
+.message:hover .message-menu-btn,
+.message.menu-open .message-menu-btn {
+    opacity: 1;
+}
+
+/* =========================
+MENU PANEL
+========================= */
+
+.message-menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+
+    width: 180px;
+    z-index: 10001;
+
+    overflow: hidden;
     border-radius: 10px;
 
-    transition:
-        border-color 0.2s ease,
-        background 0.2s ease,
-        transform 0.15s ease;
+    background: rgba(5, 5, 5, 0.98);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+
+    backdrop-filter: blur(6px);
+
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.12),
+    inset 0 0 12px rgba(255, 215, 0, 0.04);
+
+    animation: menuAppear 0.12s ease-out;
+}
+
+/* =========================
+MENU OPEN STATE (CRITICAL FIX)
+========================= */
+
+.message.menu-open {
+    z-index: 9998;
+    position: relative;
+}
+
+/* disable ALL hover interference */
+.message.menu-open:hover {
+    transform: none !important;
+    background: rgba(0, 0, 0, 0.75);
+    box-shadow: 0 0 12px rgba(0, 255, 100, 0.08);
+}
+
+/* ensure menu is always clickable */
+.message-menu,
+.menu-action,
+.message-menu-btn {
+    pointer-events: auto;
 }
 
 .message:hover {
 
     transform: translateY(-1px);
 
-    border-color: rgba(0,255,255,0.35);
+    border-color: rgba(0, 255, 255, 0.35);
 
-    background:
-        rgba(0,255,255,0.03);
+    background: rgba(0, 255, 255, 0.03);
 
-    box-shadow:
-        0 0 18px rgba(0,255,255,0.12);
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.12);
+}
+
+.message:hover:not(.menu-open) {
+    transform: translateY(-1px);
+    border-color: rgba(0, 255, 255, 0.35);
+    background: rgba(0, 255, 255, 0.03);
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.12);
 }
 
 /* =========================
@@ -1237,14 +1216,11 @@ PINNED MESSAGE
 
 .message.pinned {
 
-    border-left:
-        4px solid #ffd700;
+    border-left: 4px solid #ffd700;
 
-    background:
-        rgba(255,215,0,0.05);
+    background: rgba(255, 215, 0, 0.05);
 
-    box-shadow:
-        0 0 18px rgba(255,215,0,0.12);
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.12);
 }
 
 /* =========================
@@ -1270,11 +1246,9 @@ GEAR BUTTON
 
     border-radius: 6px;
 
-    border:
-        1px solid rgba(255,215,0,0.25);
+    border: 1px solid rgba(255, 215, 0, 0.25);
 
-    background:
-        rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.9);
 
     color: #ffd700;
 
@@ -1284,17 +1258,15 @@ GEAR BUTTON
 
     opacity: 0;
 
-    transition:
-        opacity 0.15s ease,
-        transform 0.15s ease,
-        box-shadow 0.15s ease;
+    transition: opacity 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 
-    box-shadow:
-        0 0 10px rgba(255,215,0,0.08);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.08);
 }
 
-.message:hover .message-menu-btn {
-
+.message:hover .message-menu-btn,
+.message.menu-open .message-menu-btn {
     opacity: 1;
 }
 
@@ -1302,8 +1274,7 @@ GEAR BUTTON
 
     transform: scale(1.05);
 
-    box-shadow:
-        0 0 12px rgba(255,215,0,0.3);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
 
     border-color: #ffd700;
 }
@@ -1325,38 +1296,30 @@ MENU PANEL
 
     border-radius: 10px;
 
-    background:
-        rgba(5,5,5,0.98);
+    background: rgba(5, 5, 5, 0.98);
 
-    border:
-        1px solid rgba(255,215,0,0.3);
+    border: 1px solid rgba(255, 215, 0, 0.3);
 
     backdrop-filter: blur(6px);
 
-    box-shadow:
-        0 0 20px rgba(255,215,0,0.12),
-        inset 0 0 12px rgba(255,215,0,0.04);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.12),
+    inset 0 0 12px rgba(255, 215, 0, 0.04);
 
-    animation:
-        menuAppear 0.12s ease-out;
+    animation: menuAppear 0.12s ease-out;
 
-    z-index: 9999;
+    z-index: 10000;
 }
 
 @keyframes menuAppear {
 
     from {
         opacity: 0;
-        transform:
-            translateY(-4px)
-            scale(0.98);
+        transform: translateY(-4px) scale(0.98);
     }
 
     to {
         opacity: 1;
-        transform:
-            translateY(0)
-            scale(1);
+        transform: translateY(0) scale(1);
     }
 }
 
@@ -1382,15 +1345,13 @@ MENU ACTIONS
 
     cursor: pointer;
 
-    transition:
-        background 0.15s ease,
-        color 0.15s ease;
+    transition: background 0.15s ease,
+    color 0.15s ease;
 }
 
 .menu-action:hover {
 
-    background:
-        rgba(255,255,255,0.04);
+    background: rgba(255, 255, 255, 0.04);
 }
 
 /* DELETE */
@@ -1399,8 +1360,7 @@ MENU ACTIONS
 
     color: #ff5555;
 
-    text-shadow:
-        0 0 10px #ff5555;
+    text-shadow: 0 0 10px #ff5555;
 }
 
 /* PIN */
@@ -1409,9 +1369,16 @@ MENU ACTIONS
 
     color: #ffd700;
 
-    text-shadow:
-        0 0 10px #ffd700;
+    text-shadow: 0 0 10px #ffd700;
 }
+
+.message-menu .unpin-btn:hover {
+
+    color: #ffd700;
+
+    text-shadow: 0 0 10px #ffd700;
+}
+
 
 /* INSPECT */
 
@@ -1419,8 +1386,7 @@ MENU ACTIONS
 
     color: #00ffff;
 
-    text-shadow:
-        0 0 10px #00ffff;
+    text-shadow: 0 0 10px #00ffff;
 }
 
 /* =========================
@@ -1429,19 +1395,17 @@ MENU OPEN STATE (SOLVES HOVER CONFLICT)
 
 .message.menu-open {
 
-    z-index: 5; /* brings message above neighbors */
+    z-index: 9998; /* brings message above neighbors */
+    position: relative;
+    pointer-events: auto;
 
 }
 
 /* disables hover effects while menu is open */
 .message.menu-open:hover {
-
-    background: rgba(0,0,0,0.75) !important;
-
+    background: rgba(0, 0, 0, 0.75) !important;
     transform: none !important;
-
-    box-shadow:
-        0 0 12px rgba(0,255,100,0.08) !important;
+    box-shadow: 0 0 12px rgba(0, 255, 100, 0.08) !important;
 }
 
 /* =========================
@@ -1453,19 +1417,42 @@ CONTROLLED POINTER BEHAVIOR
     pointer-events: auto;
 }
 
+.message:hover:not(.menu-open) {
+    transform: translateY(-1px);
+    border-color: rgba(0, 255, 255, 0.35);
+    background: rgba(0, 255, 255, 0.03);
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.12);
+}
+
+.message:has(.message-menu:hover),
+.message.menu-open {
+    transform: none !important;
+}
+
 /* ONLY disable hover effect conflicts, NOT interaction */
 .message.menu-open {
-
     /* keeps text selectable + buttons clickable */
     pointer-events: auto;
+    position: relative;
+    z-index: 9998;
+}
+
+.message.menu-open:hover {
+    transform: none !important;
+    background: rgba(0, 0, 0, 0.75) !important;
+    box-shadow: 0 0 12px rgba(0, 255, 100, 0.08) !important;
 }
 
 /* ensures menu always stays interactive */
 .message-menu,
 .message-menu-btn,
 .menu-action {
-
     pointer-events: auto;
+
+}
+
+.message-menu {
+    z-index: 10001;
 }
 
 /* =========================
@@ -1474,14 +1461,11 @@ PINNED MESSAGE
 
 .message.pinned {
 
-    border-left:
-            4px solid #ffd700;
+    border-left: 4px solid #ffd700;
 
-    background:
-            rgba(255,215,0,0.05);
+    background: rgba(255, 215, 0, 0.05);
 
-    box-shadow:
-            0 0 18px rgba(255,215,0,0.12);
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.12);
 }
 
 /* =========================
@@ -1496,8 +1480,7 @@ PINNED BADGE
 
     margin-left: 10px;
 
-    padding:
-            3px 8px;
+    padding: 3px 8px;
 
     font-size: 10px;
 
@@ -1513,6 +1496,71 @@ PINNED BADGE
 
     border-radius: 5px;
 
-    box-shadow:
-            0 0 10px rgba(255,215,0,0.25);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.25);
+}
+
+/* =========================
+PORTAL MENU SYSTEM (DISCORD STYLE)
+========================= */
+
+.menu-portal {
+    position: fixed;
+    inset: 0;
+    z-index: 20000;
+}
+
+/* transparent click catcher */
+.menu-backdrop {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+}
+
+/* floating menu */
+.portal-menu {
+    position: absolute;
+    width: 180px;
+
+    background: rgba(5, 5, 5, 0.98);
+    border: 1px solid rgba(255, 215, 0, 0.35);
+    border-radius: 10px;
+
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.18);
+
+    overflow: hidden;
+
+    animation: menuAppear 0.12s ease-out;
+}
+
+/* menu buttons */
+.portal-action {
+    width: 100%;
+    padding: 12px 14px;
+
+    background: transparent;
+    border: none;
+
+    color: #d7ffe6;
+    text-align: left;
+
+    cursor: pointer;
+    font-family: inherit;
+
+    transition: background 0.15s ease;
+}
+
+.portal-action:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.portal-action.delete:hover {
+    color: #ff5555;
+}
+
+.portal-action.pin:hover {
+    color: #ffd700;
+}
+
+.portal-action.inspect:hover {
+    color: #00ffff;
 }

@@ -1,8 +1,31 @@
 import { createChatCore } from "../core/chatCore.js";
 
+const currentUserResponse = await fetch(
+    "/auth/api/me",
+    {
+        credentials: "include"
+    }
+);
+
+const currentUser =
+    currentUserResponse.ok
+        ? await currentUserResponse.json()
+        : null;
+
+window.currentUserId =
+    currentUser?.id || null;
+
 /* =========================
 CREATE CHAT
 ========================= */
+const logoutBtn = document.getElementById("logoutBtn");
+const createRoomBtn = document.getElementById("createRoomBtn");
+const contactUserBtn = document.getElementById("contactUserBtn");
+const cyberModal = document.getElementById("cyberModal");
+const modalTitle = document.getElementById("modalTitle");
+const modalInput = document.getElementById("modalInput");
+const confirmModalBtn = document.getElementById("confirmModalBtn");
+const closeModalBtn = document.getElementById("closeModalBtn");
 
 const chat = createChatCore({
 
@@ -12,16 +35,164 @@ const chat = createChatCore({
         messageForm: document.getElementById("messageForm"),
         messageInput: document.getElementById("messageInput"),
         globalChat: document.getElementById("globalChat"),
-        usersList: document.getElementById("usersList")
+        usersList: document.getElementById("usersList"),
+        roomsList: document.getElementById("roomsList")
     },
 
     api: {
+
         global: "/chat/api/global",
-        sendGlobal: "/chat/api/global/send"
+        sendGlobal: "/chat/api/global/send",
+
+        rooms: "/chat/api/rooms",
+        roomMessages: (id) =>
+            `/chat/api/rooms/${id}/messages`,
+
+        sendRoom: (id) =>
+            `/chat/api/rooms/${id}/send`,
+
+        dms: "/chat/api/dms",
+
+        dmMessages: (id) =>
+            `/chat/api/dms/${id}`,
+
+        sendDm: (id) =>
+            `/chat/api/dms/${id}/send`
     },
 
     isAdmin: false
 });
+
+let modalAction = null;
+
+function openModal(action) {
+    modalAction = action;
+
+    if (action === "createRoom") {
+        modalTitle.textContent = "Create New Room";
+        modalInput.placeholder = "ENTER ROOM NAME";
+    } else {
+        modalTitle.textContent = "Contact User Privately";
+        modalInput.placeholder = "ENTER USERNAME";
+    }
+
+    modalInput.value = "";
+    cyberModal.classList.remove("hidden");
+    modalInput.focus();
+}
+
+function closeModal() {
+    cyberModal.classList.add("hidden");
+    modalAction = null;
+    modalInput.value = "";
+}
+
+async function handleModalConfirm() {
+    const value = modalInput.value.trim();
+
+    if (!value) {
+        return;
+    }
+
+    if (modalAction === "createRoom") {
+        const response = await fetch(
+            "/chat/api/rooms/create",
+            {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: JSON.stringify({
+                    name: value
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            alert(result.message || "Failed to create room");
+            return;
+        }
+
+        await chat.loadRooms();
+
+        chat.switchChat({
+            type: "room",
+            id: result.room.id,
+            name: `# ${result.room.name}`
+        });
+
+        closeModal();
+        return;
+    }
+
+    if (modalAction === "createDM") {
+        const response = await fetch(
+            "/chat/api/dms/start",
+            {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: JSON.stringify({
+                    username: value
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            alert(result.message || "User not found");
+            return;
+        }
+
+        await chat.loadDMs();
+
+        chat.switchChat({
+            type: "dm",
+            id: result.id,
+            roomId: result.roomId,
+            name: `@ ${result.username}`
+        });
+
+        closeModal();
+    }
+}
+
+createRoomBtn?.addEventListener(
+    "click",
+    () => openModal("createRoom")
+);
+
+contactUserBtn?.addEventListener(
+    "click",
+    () => openModal("createDM")
+);
+
+closeModalBtn?.addEventListener(
+    "click",
+    closeModal
+);
+
+confirmModalBtn?.addEventListener(
+    "click",
+    handleModalConfirm
+);
+
+cyberModal?.addEventListener(
+    "click",
+    (e) => {
+        if (e.target === cyberModal) {
+            closeModal();
+        }
+    }
+);
 
 /* =========================
 PINS PANEL
@@ -133,3 +304,12 @@ closePins?.addEventListener(
         );
     }
 );
+
+logoutBtn.addEventListener("click", async () => {
+    await fetch("/auth/api/logout", {
+        method: "POST"
+    })
+
+    window.location.href = "/home"
+
+})

@@ -17,9 +17,8 @@ body {
 
     overflow: hidden;
 
-    background-image:
-            linear-gradient(rgba(0,255,100,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,255,100,0.03) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(0, 255, 100, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 100, 0.03) 1px, transparent 1px);
 
     background-size: 4px 4px;
 }
@@ -35,14 +34,13 @@ body::before {
     position: fixed;
     inset: 0;
 
-    background:
-            repeating-linear-gradient(
-                    to bottom,
-                    rgba(255,255,255,0.02),
-                    rgba(255,255,255,0.02) 1px,
-                    transparent 1px,
-                    transparent 3px
-            );
+    background: repeating-linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.02),
+            rgba(255, 255, 255, 0.02) 1px,
+            transparent 1px,
+            transparent 3px
+    );
 
     pointer-events: none;
 }
@@ -62,12 +60,11 @@ body::before {
 
     padding: 18px 28px;
 
-    background: rgba(0,0,0,0.96);
+    background: rgba(0, 0, 0, 0.96);
 
     border-bottom: 2px solid #00ff88;
 
-    box-shadow:
-            0 0 15px rgba(0,255,100,0.25);
+    box-shadow: 0 0 15px rgba(0, 255, 100, 0.25);
 
     z-index: 999;
 }
@@ -83,9 +80,8 @@ body::before {
 
     cursor: pointer;
 
-    text-shadow:
-            0 0 8px #00ff88,
-            0 0 18px #00ff88;
+    text-shadow: 0 0 8px #00ff88,
+    0 0 18px #00ff88;
 }
 
 .logo:hover {
@@ -116,8 +112,7 @@ body::before {
     background: #ff5555;
     color: black;
 
-    box-shadow:
-            0 0 15px #ff5555;
+    box-shadow: 0 0 15px #ff5555;
 }
 
 /* =========================
@@ -141,7 +136,7 @@ body::before {
 
     width: 320px;
 
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
 
     border-right: 2px solid #00ff88;
 
@@ -149,8 +144,7 @@ body::before {
 
     overflow-y: auto;
 
-    box-shadow:
-            inset 0 0 15px rgba(0,255,100,0.06);
+    box-shadow: inset 0 0 15px rgba(0, 255, 100, 0.06);
 }
 
 .sidebar-section {
@@ -168,8 +162,7 @@ body::before {
 
     margin-bottom: 10px;
 
-    text-shadow:
-            0 0 10px #00ffff;
+    text-shadow: 0 0 10px #00ffff;
 }
 
 /* =========================
@@ -183,9 +176,9 @@ body::before {
     padding: 12px;
     margin-bottom: 10px;
 
-    border: 2px solid rgba(0,255,100,0.2);
+    border: 2px solid rgba(0, 255, 100, 0.2);
 
-    background: rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
 
     cursor: pointer;
 
@@ -197,8 +190,7 @@ body::before {
 
     transition: 0.25s;
 
-    box-shadow:
-            0 0 10px rgba(0,255,100,0.08);
+    box-shadow: 0 0 10px rgba(0, 255, 100, 0.08);
 }
 
 .channel-item:hover {
@@ -207,20 +199,18 @@ body::before {
 
     border-color: #00ffff;
 
-    background: rgba(0,255,255,0.08);
+    background: rgba(0, 255, 255, 0.08);
 
-    box-shadow:
-            0 0 15px rgba(0,255,255,0.25);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.25);
 }
 
 .channel-item.active {
 
     border-color: #00ffff;
 
-    background: rgba(0,255,255,0.12);
+    background: rgba(0, 255, 255, 0.12);
 
-    box-shadow:
-            0 0 18px rgba(0,255,255,0.3);
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.3);
 }
 
 /* =========================
@@ -236,20 +226,18 @@ body::before {
 
     border-color: #00ff88;
 
-    background: rgba(0,255,136,0.08);
+    background: rgba(0, 255, 136, 0.08);
 
-    box-shadow:
-            0 0 15px rgba(0,255,136,0.25);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.25);
 }
 
 .global.active {
 
     border-color: #00ff88;
 
-    background: rgba(0,255,136,0.12);
+    background: rgba(0, 255, 136, 0.12);
 
-    box-shadow:
-            0 0 18px rgba(0,255,136,0.35);
+    box-shadow: 0 0 18px rgba(0, 255, 136, 0.35);
 }
 
 .room {
@@ -261,20 +249,18 @@ body::before {
 
     border-color: #00bfff;
 
-    background: rgba(0,191,255,0.08);
+    background: rgba(0, 191, 255, 0.08);
 
-    box-shadow:
-            0 0 15px rgba(0,191,255,0.25);
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.25);
 }
 
 .room.active {
 
     border-color: #00bfff;
 
-    background: rgba(0,191,255,0.12);
+    background: rgba(0, 191, 255, 0.12);
 
-    box-shadow:
-            0 0 18px rgba(0,191,255,0.35);
+    box-shadow: 0 0 18px rgba(0, 191, 255, 0.35);
 }
 
 .user {
@@ -286,20 +272,18 @@ body::before {
 
     border-color: #ff5555;
 
-    background: rgba(255,85,85,0.08);
+    background: rgba(255, 85, 85, 0.08);
 
-    box-shadow:
-            0 0 15px rgba(255,85,85,0.25);
+    box-shadow: 0 0 15px rgba(255, 85, 85, 0.25);
 }
 
 .user.active {
 
     border-color: #ff5555;
 
-    background: rgba(255,85,85,0.12);
+    background: rgba(255, 85, 85, 0.12);
 
-    box-shadow:
-            0 0 18px rgba(255,85,85,0.35);
+    box-shadow: 0 0 18px rgba(255, 85, 85, 0.35);
 }
 
 /* =========================
@@ -312,20 +296,18 @@ body::before {
 
     color: #ffe88a;
 
-    border-color: rgba(255,215,0,0.35);
+    border-color: rgba(255, 215, 0, 0.35);
 
-    box-shadow:
-            0 0 12px rgba(255,215,0,0.12);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.12);
 }
 
 .create-room:hover {
 
     border-color: #ffd700;
 
-    background: rgba(255,215,0,0.08);
+    background: rgba(255, 215, 0, 0.08);
 
-    box-shadow:
-            0 0 18px rgba(255,215,0,0.35);
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.35);
 }
 
 /* =========================
@@ -360,14 +342,11 @@ body::before {
 
     padding: 20px;
 
-    border-bottom:
-            1px solid rgba(0,255,100,0.2);
+    border-bottom: 1px solid rgba(0, 255, 100, 0.2);
 
-    background:
-            rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
 
-    box-shadow:
-            inset 0 0 10px rgba(0,255,100,0.05);
+    box-shadow: inset 0 0 10px rgba(0, 255, 100, 0.05);
 }
 
 .chat-header h2 {
@@ -383,32 +362,39 @@ body::before {
 
 .pins-btn {
 
-    background: transparent;
+    background: rgba(0, 0, 0, 0.75);
 
-    border: 2px solid #00ff88;
+    border: 2px solid rgba(0, 255, 100, 0.2);
 
     color: #00ff88;
 
     padding: 10px 18px;
 
-    cursor: pointer;
-
     font-family: inherit;
 
-    transition: 0.2s;
+    font-size: 14px;
 
-    box-shadow:
-            0 0 10px rgba(0,255,100,0.12);
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.08);
 }
 
 .pins-btn:hover {
 
-    background: #00ff88;
+    transform: translateY(-1px);
 
-    color: black;
+    background: rgba(255, 215, 0, 0.08);
 
-    box-shadow:
-            0 0 18px #00ff88;
+    border-color: #00ff88;
+
+    box-shadow: 0 0 18px rgba(0, 255, 100, 0.2);
 }
 
 /* =========================
@@ -433,27 +419,24 @@ body::before {
 
 .message {
 
-    background: rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
 
     padding: 12px;
 
-    border: 2px solid rgba(0,255,100,0.2);
+    border: 2px solid rgba(0, 255, 100, 0.2);
 
     border-radius: 10px;
 
-    box-shadow:
-            0 0 12px rgba(0,255,100,0.08);
+    box-shadow: 0 0 12px rgba(0, 255, 100, 0.08);
 
     transition: 0.2s;
 }
 
 .message:hover {
 
-    border-color:
-            rgba(0,255,136,0.45);
+    border-color: rgba(0, 255, 136, 0.45);
 
-    box-shadow:
-            0 0 16px rgba(0,255,136,0.12);
+    box-shadow: 0 0 16px rgba(0, 255, 136, 0.12);
 }
 
 .message-user {
@@ -462,8 +445,7 @@ body::before {
 
     margin-bottom: 6px;
 
-    text-shadow:
-            0 0 8px #00ffff;
+    text-shadow: 0 0 8px #00ffff;
 }
 
 .message-content {
@@ -485,14 +467,11 @@ PINNED MESSAGE
 
 .message.pinned {
 
-    border-left:
-            4px solid #ffd700;
+    border-left: 4px solid #ffd700;
 
-    background:
-            rgba(255,215,0,0.05);
+    background: rgba(255, 215, 0, 0.05);
 
-    box-shadow:
-            0 0 18px rgba(255,215,0,0.12);
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.12);
 }
 
 .message-pinned-badge,
@@ -516,8 +495,7 @@ PINNED MESSAGE
 
     background: #00ff88;
 
-    box-shadow:
-            0 0 10px rgba(0,255,136,0.18);
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.18);
 }
 
 /* =========================
@@ -532,11 +510,9 @@ PINNED MESSAGE
 
     padding: 20px;
 
-    border-top:
-            1px solid rgba(0,255,100,0.2);
+    border-top: 1px solid rgba(0, 255, 100, 0.2);
 
-    background:
-            rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.9);
 }
 
 .message-form input {
@@ -553,14 +529,12 @@ PINNED MESSAGE
 
     outline: none;
 
-    box-shadow:
-            inset 0 0 10px rgba(0,255,100,0.1);
+    box-shadow: inset 0 0 10px rgba(0, 255, 100, 0.1);
 }
 
 .message-form input:focus {
 
-    box-shadow:
-            0 0 12px #00ff88;
+    box-shadow: 0 0 12px #00ff88;
 }
 
 .message-form button {
@@ -577,8 +551,7 @@ PINNED MESSAGE
 
     transition: 0.2s;
 
-    box-shadow:
-            0 0 10px rgba(0,255,100,0.15);
+    box-shadow: 0 0 10px rgba(0, 255, 100, 0.15);
 }
 
 .message-form button:hover {
@@ -587,8 +560,7 @@ PINNED MESSAGE
 
     color: black;
 
-    box-shadow:
-            0 0 15px #00ff88;
+    box-shadow: 0 0 15px #00ff88;
 }
 
 /* =========================
@@ -607,14 +579,11 @@ PINNED MESSAGE
 
     overflow-y: auto;
 
-    background:
-            rgba(5,5,5,0.96);
+    background: rgba(5, 5, 5, 0.96);
 
-    border:
-            2px solid rgba(0,255,136,0.25);
+    border: 2px solid rgba(0, 255, 136, 0.25);
 
-    border-left:
-            4px solid #00ff88;
+    border-left: 4px solid #00ff88;
 
     border-radius: 14px;
 
@@ -624,12 +593,10 @@ PINNED MESSAGE
 
     backdrop-filter: blur(8px);
 
-    box-shadow:
-            0 0 30px rgba(0,255,136,0.12),
-            inset 0 0 15px rgba(0,255,136,0.03);
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.12),
+    inset 0 0 15px rgba(0, 255, 136, 0.03);
 
-    animation:
-            pinsPanelOpen 0.18s ease-out;
+    animation: pinsPanelOpen 0.18s ease-out;
 }
 
 /* =========================
@@ -648,8 +615,7 @@ PINNED MESSAGE
 
     padding-bottom: 12px;
 
-    border-bottom:
-            1px solid rgba(0,255,136,0.12);
+    border-bottom: 1px solid rgba(0, 255, 136, 0.12);
 }
 
 .pins-header h2 {
@@ -658,8 +624,7 @@ PINNED MESSAGE
 
     color: #00ff88;
 
-    text-shadow:
-            0 0 10px rgba(0,255,136,0.25);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
 }
 
 #closePins {
@@ -686,8 +651,7 @@ PINNED MESSAGE
 
     color: black;
 
-    box-shadow:
-            0 0 15px #ff5555;
+    box-shadow: 0 0 15px #ff5555;
 }
 
 /* =========================
@@ -696,14 +660,11 @@ PINNED MESSAGE
 
 .pin-entry {
 
-    background:
-            rgba(0,0,0,0.65);
+    background: rgba(0, 0, 0, 0.65);
 
-    border:
-            2px solid rgba(0,255,136,0.14);
+    border: 2px solid rgba(0, 255, 136, 0.14);
 
-    border-left:
-            4px solid #00ff88;
+    border-left: 4px solid #00ff88;
 
     border-radius: 10px;
 
@@ -711,8 +672,7 @@ PINNED MESSAGE
 
     margin-bottom: 14px;
 
-    box-shadow:
-            0 0 12px rgba(0,255,136,0.05);
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.05);
 }
 
 .pin-top,
@@ -733,8 +693,7 @@ PINNED MESSAGE
 
     font-weight: bold;
 
-    text-shadow:
-            0 0 8px rgba(0,255,255,0.22);
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.22);
 }
 
 .pin-badge {
@@ -773,7 +732,7 @@ PINNED MESSAGE
 
     padding: 30px 10px;
 
-    color: rgba(255,255,255,0.45);
+    color: rgba(255, 255, 255, 0.45);
 
     letter-spacing: 2px;
 }
@@ -787,8 +746,91 @@ PINNED MESSAGE
     display: none !important;
 }
 
-/* =========================
-   PINS OPEN ANIMATION
+/* =========================   MODAL
+======================== */
+
+.cyber-modal {
+
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    z-index: 10000;
+}
+
+.cyber-modal-box {
+
+    width: min(420px, 90vw);
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid rgba(0, 255, 136, 0.25);
+    border-left: 4px solid #00ff88;
+    border-radius: 18px;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.14);
+    overflow: hidden;
+}
+
+.cyber-modal-header,
+.cyber-modal-footer {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.12);
+}
+
+.cyber-modal-header h2 {
+
+    margin: 0;
+    color: #00ff88;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+.cyber-modal-body {
+
+    padding: 20px;
+}
+
+#modalInput {
+
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #00ff88;
+    background: rgba(0, 0, 0, 0.9);
+    color: #00ff88;
+    outline: none;
+    font-family: inherit;
+}
+
+#modalInput:focus {
+
+    box-shadow: 0 0 12px #00ff88;
+}
+
+#confirmModalBtn,
+#closeModalBtn {
+
+    background: transparent;
+    border: 2px solid #00ff88;
+    color: #00ff88;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: 0.2s;
+}
+
+#confirmModalBtn:hover,
+#closeModalBtn:hover {
+
+    background: rgba(0, 255, 136, 0.08);
+}
+
+/* =========================   PINS OPEN ANIMATION
 ========================= */
 
 @keyframes pinsPanelOpen {
@@ -797,20 +839,14 @@ PINNED MESSAGE
 
         opacity: 0;
 
-        transform:
-                translateX(16px)
-                translateY(-6px)
-                scale(0.97);
+        transform: translateX(16px) translateY(-6px) scale(0.97);
     }
 
     to {
 
         opacity: 1;
 
-        transform:
-                translateX(0)
-                translateY(0)
-                scale(1);
+        transform: translateX(0) translateY(0) scale(1);
     }
 }
 
@@ -829,16 +865,14 @@ PINNED MESSAGE
 .sidebar::-webkit-scrollbar-track,
 .pins-panel::-webkit-scrollbar-track {
 
-    background:
-            rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .messages::-webkit-scrollbar-thumb,
 .sidebar::-webkit-scrollbar-thumb,
 .pins-panel::-webkit-scrollbar-thumb {
 
-    background:
-            rgba(0,255,136,0.22);
+    background: rgba(0, 255, 136, 0.22);
 
     border-radius: 10px;
 }
@@ -847,8 +881,7 @@ PINNED MESSAGE
 .sidebar::-webkit-scrollbar-thumb:hover,
 .pins-panel::-webkit-scrollbar-thumb:hover {
 
-    background:
-            rgba(0,255,136,0.45);
+    background: rgba(0, 255, 136, 0.45);
 }
 
 /* =========================
@@ -861,9 +894,7 @@ PINNED MESSAGE
 
     scrollbar-width: thin;
 
-    scrollbar-color:
-            rgba(0,255,136,0.35)
-            rgba(255,255,255,0.03);
+    scrollbar-color: rgba(0, 255, 136, 0.35) rgba(255, 255, 255, 0.03);
 }
 
 /* =========================

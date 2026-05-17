@@ -4,6 +4,7 @@ CORE CHAT ENGINE (SHARED)
 
 export function createChatCore(config) {
 
+
     const {
         elements,
         api,
@@ -17,14 +18,19 @@ export function createChatCore(config) {
         messageForm,
         messageInput,
         globalChat,
-        usersList
+        usersList,
+        roomsList
     } = elements;
 
     let currentChat = {
         type: "global",
-        target: null,
+        id: null,
         name: "Global Chat"
     };
+
+    const socket = io();
+
+    socket.emit("join:global");
 
     /* =========================
     TIME SYSTEM
@@ -35,27 +41,30 @@ export function createChatCore(config) {
         if (!timestamp) return "";
 
         const now = Date.now();
-        const time = new Date(timestamp).getTime();
+
+        const time =
+            new Date(timestamp).getTime();
 
         const diff =
             Math.floor((now - time) / 1000);
 
-        if (diff < 10) return "just now";
-        if (diff < 60) return `${diff}s ago`;
+        if (diff < 10)
+            return "just now";
+
+        if (diff < 60)
+            return `${diff}s ago`;
 
         const minutes =
             Math.floor(diff / 60);
 
-        if (minutes < 60) {
+        if (minutes < 60)
             return `${minutes}m ago`;
-        }
 
         const hours =
             Math.floor(minutes / 60);
 
-        if (hours < 24) {
+        if (hours < 24)
             return `${hours}h ago`;
-        }
 
         return `${Math.floor(hours / 24)}d ago`;
     }
@@ -89,20 +98,24 @@ export function createChatCore(config) {
 
         try {
 
-            const res = await fetch(url, {
+            const res =
+                await fetch(url, {
 
-                credentials: "include",
+                    credentials:
+                        "include",
 
-                ...options
-            });
+                    ...options
+                });
 
-            if (!res.ok) return null;
+            if (!res.ok)
+                return null;
 
             return await res.json();
 
         } catch (err) {
 
             console.log(err);
+
             return null;
         }
     }
@@ -116,9 +129,11 @@ export function createChatCore(config) {
         const wrapper =
             document.createElement("div");
 
-        wrapper.className = "message";
+        wrapper.className =
+            "message";
 
-        wrapper.dataset.messageId = msg.id;
+        wrapper.dataset.messageId =
+            msg.id;
 
         if (msg.pinned) {
             wrapper.classList.add(
@@ -127,7 +142,7 @@ export function createChatCore(config) {
         }
 
         /* =========================
-        USERNAME
+        USER
         ========================= */
 
         const userDiv =
@@ -142,7 +157,9 @@ export function createChatCore(config) {
         usernameText.textContent =
             msg.username;
 
-        userDiv.appendChild(usernameText);
+        userDiv.appendChild(
+            usernameText
+        );
 
         /* =========================
         TIMESTAMP
@@ -162,25 +179,27 @@ export function createChatCore(config) {
         timestamp.textContent =
             ` // ${getRelativeTime(msg.created_at)}`;
 
-        userDiv.appendChild(timestamp);
+        userDiv.appendChild(
+            timestamp
+        );
 
         /* =========================
-        PINNED BADGE
+        PIN BADGE
         ========================= */
 
         if (msg.pinned) {
 
-            const pinnedBadge =
+            const badge =
                 document.createElement("span");
 
-            pinnedBadge.className =
+            badge.className =
                 "message-pinned-badge";
 
-            pinnedBadge.textContent =
+            badge.textContent =
                 "PINNED";
 
             userDiv.appendChild(
-                pinnedBadge
+                badge
             );
         }
 
@@ -195,17 +214,19 @@ export function createChatCore(config) {
             "message-content";
 
         contentDiv.textContent =
-            msg.content || msg.message;
+            msg.content ||
+            msg.message;
+
+        wrapper.appendChild(
+            userDiv
+        );
+
+        wrapper.appendChild(
+            contentDiv
+        );
 
         /* =========================
-        APPEND
-        ========================= */
-
-        wrapper.appendChild(userDiv);
-        wrapper.appendChild(contentDiv);
-
-        /* =========================
-        ADMIN MODERATION
+        ADMIN MENU
         ========================= */
 
         if (isAdmin) {
@@ -219,8 +240,7 @@ export function createChatCore(config) {
             moderation.innerHTML = `
 
                 <button
-                    class="message-menu-btn"
-                    aria-label="Moderation Menu">
+                    class="message-menu-btn">
                     ⚙
                 </button>
 
@@ -233,9 +253,17 @@ export function createChatCore(config) {
                     </button>
 
                     <button
-                        class="menu-action pin-btn"
+                        class="menu-action ${
+                msg.pinned
+                    ? "unpin-btn"
+                    : "pin-btn"
+            }"
                         data-id="${msg.id}">
-                        PIN
+                        ${
+                msg.pinned
+                    ? "UNPIN"
+                    : "PIN"
+            }
                     </button>
 
                     <button
@@ -247,7 +275,9 @@ export function createChatCore(config) {
                 </div>
             `;
 
-            wrapper.appendChild(moderation);
+            wrapper.appendChild(
+                moderation
+            );
         }
 
         return wrapper;
@@ -260,16 +290,6 @@ export function createChatCore(config) {
     function renderMessages(data) {
 
         messagesDiv.innerHTML = "";
-
-        if (!Array.isArray(data)) {
-
-            console.error(
-                "Expected array:",
-                data
-            );
-
-            return;
-        }
 
         data.forEach(msg => {
 
@@ -287,114 +307,280 @@ export function createChatCore(config) {
         updateTimestamps();
     }
 
+    function setActiveChannel(element) {
+
+        document
+            .querySelectorAll(
+                ".channel-item"
+            )
+            .forEach(item => {
+
+                item.classList.remove(
+                    "active"
+                );
+            });
+
+        element?.classList.add(
+            "active"
+        );
+    }
+
+    /* =========================
+    SOCKET EVENTS
+    ========================= */
+
+    socket.on(
+        "message:new",
+        (msg) => {
+
+            const exists =
+                document.querySelector(
+                    `[data-message-id="${msg.id}"]`
+                );
+
+            if (exists) return;
+
+            const element =
+                createMessageElement(msg);
+
+            messagesDiv.appendChild(
+                element
+            );
+
+            messagesDiv.scrollTop =
+                messagesDiv.scrollHeight;
+        }
+    );
+
+    socket.on(
+        "message:delete",
+        (id) => {
+
+            document
+                .querySelector(
+                    `[data-message-id="${id}"]`
+                )
+                ?.remove();
+        }
+    );
+
+    socket.on(
+        "message:pin",
+        (messageId) => {
+
+            const message =
+                document.querySelector(
+                    `[data-message-id="${messageId}"]`
+                );
+
+            if (!message) return;
+
+            message.classList.add(
+                "pinned"
+            );
+
+            if (
+                !message.querySelector(
+                    ".message-pinned-badge"
+                )
+            ) {
+
+                const badge =
+                    document.createElement(
+                        "span"
+                    );
+
+                badge.className =
+                    "message-pinned-badge";
+
+                badge.textContent =
+                    "PINNED";
+
+                message
+                    .querySelector(
+                        ".message-user"
+                    )
+                    ?.appendChild(
+                        badge
+                    );
+            }
+
+            const pinBtn =
+                message.querySelector(
+                    ".pin-btn"
+                );
+
+            if (pinBtn) {
+
+                pinBtn.classList.remove(
+                    "pin-btn"
+                );
+
+                pinBtn.classList.add(
+                    "unpin-btn"
+                );
+
+                pinBtn.textContent =
+                    "UNPIN";
+            }
+        }
+    );
+
+    socket.on(
+        "message:unpin",
+        (messageId) => {
+
+            const message =
+                document.querySelector(
+                    `[data-message-id="${messageId}"]`
+                );
+
+            if (!message) return;
+
+            message.classList.remove(
+                "pinned"
+            );
+
+            message
+                .querySelector(
+                    ".message-pinned-badge"
+                )
+                ?.remove();
+
+            const unpinBtn =
+                message.querySelector(
+                    ".unpin-btn"
+                );
+
+            if (unpinBtn) {
+
+                unpinBtn.classList.remove(
+                    "unpin-btn"
+                );
+
+                unpinBtn.classList.add(
+                    "pin-btn"
+                );
+
+                unpinBtn.textContent =
+                    "PIN";
+            }
+        }
+    );
+
     /* =========================
     ADMIN EVENTS
     ========================= */
 
     if (isAdmin) {
 
-        messagesDiv.addEventListener("click", (e) => {
+        messagesDiv.addEventListener(
+            "click",
+            async (e) => {
 
-            /* =========================
-            TOGGLE MENU
-            ========================= */
-
-            const menuBtn =
-                e.target.closest(".message-menu-btn");
-
-            if (menuBtn) {
-
-                const message =
-                    menuBtn.closest(".message");
-
-                const menu =
-                    message.querySelector(".message-menu");
-
-                const isOpen =
-                    !menu.classList.contains("hidden");
-
-                /* close all menus first */
-                document
-                    .querySelectorAll(".message-menu")
-                    .forEach(m => m.classList.add("hidden"));
-
-                document
-                    .querySelectorAll(".message.menu-open")
-                    .forEach(m =>
-                        m.classList.remove("menu-open")
+                const menuBtn =
+                    e.target.closest(
+                        ".message-menu-btn"
                     );
 
-                /* toggle current */
-                if (!isOpen) {
-                    menu.classList.remove("hidden");
-                    message.classList.add("menu-open");
+                if (menuBtn) {
+
+                    const message =
+                        menuBtn.closest(
+                            ".message"
+                        );
+
+                    const menu =
+                        message.querySelector(
+                            ".message-menu"
+                        );
+
+                    const isOpen =
+                        !menu.classList.contains(
+                            "hidden"
+                        );
+
+                    document
+                        .querySelectorAll(
+                            ".message-menu"
+                        )
+                        .forEach(m =>
+                            m.classList.add(
+                                "hidden"
+                            )
+                        );
+
+                    if (!isOpen) {
+
+                        menu.classList.remove(
+                            "hidden"
+                        );
+                    }
+
+                    return;
                 }
 
-                return;
-            }
-
-            /* =========================
-            DELETE
-            ========================= */
-
-            const deleteBtn =
-                e.target.closest(".delete-btn");
-
-            if (deleteBtn) {
-                adminHandlers.onDelete?.(
-                    deleteBtn.dataset.id
-                );
-            }
-
-            /* =========================
-            INSPECT
-            ========================= */
-
-            const inspectBtn =
-                e.target.closest(".inspect-btn");
-
-            if (inspectBtn) {
-                adminHandlers.onInspect?.(
-                    inspectBtn.dataset.user
-                );
-            }
-
-            /* =========================
-            PIN
-            ========================= */
-
-            const pinBtn =
-                e.target.closest(".pin-btn");
-
-            if (pinBtn) {
-                adminHandlers.onPin?.(
-                    pinBtn.dataset.id
-                );
-            }
-
-            /* =========================
-            CLOSE ON OUTSIDE CLICK
-            ========================= */
-
-            if (!e.target.closest(".message-moderation")) {
-
-                document
-                    .querySelectorAll(".message-menu")
-                    .forEach(m =>
-                        m.classList.add("hidden")
+                const deleteBtn =
+                    e.target.closest(
+                        ".delete-btn"
                     );
 
-                document
-                    .querySelectorAll(".message.menu-open")
-                    .forEach(m =>
-                        m.classList.remove("menu-open")
+                if (deleteBtn) {
+
+                    adminHandlers.onDelete?.(
+                        deleteBtn.dataset.id
                     );
+
+                    return;
+                }
+
+                const pinBtn =
+                    e.target.closest(
+                        ".pin-btn"
+                    );
+
+                if (pinBtn) {
+
+                    adminHandlers.onPin?.(
+                        pinBtn.dataset.id
+                    );
+
+                    return;
+                }
+
+                const unpinBtn =
+                    e.target.closest(
+                        ".unpin-btn"
+                    );
+
+                if (unpinBtn) {
+
+                    adminHandlers.onUnpin?.(
+                        unpinBtn.dataset.id
+                    );
+
+                    return;
+                }
+
+                const inspectBtn =
+                    e.target.closest(
+                        ".inspect-btn"
+                    );
+
+                if (inspectBtn) {
+
+                    adminHandlers.onInspect?.(
+                        inspectBtn.dataset.user
+                    );
+
+                    return;
+                }
             }
-        });
+        );
     }
 
     /* =========================
-    LOAD CHAT
+    LOAD
     ========================= */
 
     async function loadMessages(url) {
@@ -408,56 +594,245 @@ export function createChatCore(config) {
     }
 
     /* =========================
-    GLOBAL CLICK
+    SWITCH CHAT
+    ========================= */
+
+    async function switchChat(chatData) {
+
+        currentChat = {
+            ...chatData,
+            target:
+                chatData.type === "global"
+                    ? null
+                    : `${chatData.id}`
+        };
+
+        chatTitle.textContent =
+            chatData.name;
+
+        if (chatData.type === "global") {
+
+            socket.emit("join:global");
+
+            setActiveChannel(globalChat);
+
+            await loadMessages(
+                api.global
+            );
+
+            return;
+        }
+
+        if (chatData.type === "room") {
+
+            socket.emit(
+                "join:room",
+                chatData.id
+            );
+
+            setActiveChannel(
+                chatData.element ||
+                document.querySelector(
+                    `.channel-item.room[data-chat-id="${chatData.id}"]`
+                )
+            );
+
+            await loadMessages(
+                api.roomMessages(
+                    chatData.id
+                )
+            );
+
+            return;
+        }
+
+        if (chatData.type === "dm") {
+
+            const dmRoom =
+                chatData.roomId || [
+                    chatData.id,
+                    window.currentUserId
+                ]
+                    .sort()
+                    .join("-");
+
+            socket.emit(
+                "join:dm",
+                dmRoom
+            );
+
+            currentChat.roomId = dmRoom;
+
+            setActiveChannel(
+                chatData.element ||
+                document.querySelector(
+                    `.channel-item.user[data-chat-id="${chatData.id}"]`
+                )
+            );
+
+            await loadMessages(
+                api.dmMessages(
+                    chatData.id
+                )
+            );
+        }
+    }
+
+    /* =========================
+LOAD ROOMS
+========================= */
+
+    async function loadRooms() {
+
+        if (!roomsList) return;
+
+        const rooms =
+            await safeFetch(
+                api.rooms
+            );
+
+        if (!rooms) return;
+
+        roomsList.innerHTML = "";
+
+        rooms.forEach(room => {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.className =
+                "channel-item room";
+
+            div.dataset.chatId =
+                room.id;
+
+            div.textContent =
+                `# ${room.name}`;
+
+            div.addEventListener(
+                "click",
+                () => {
+
+                    switchChat({
+
+                        type: "room",
+
+                        id: room.id,
+
+                        name:
+                            `# ${room.name}`,
+
+                        element: div
+                    });
+                }
+            );
+
+            roomsList.appendChild(
+                div
+            );
+        });
+
+        if (
+            currentChat.type === "room"
+        ) {
+            setActiveChannel(
+                roomsList.querySelector(
+                    `[data-chat-id="${currentChat.id}"]`
+                )
+            );
+        }
+    }
+
+    /* =========================
+LOAD DMS
+========================= */
+
+    async function loadDMs() {
+
+        if (!usersList) return;
+
+        const dms =
+            await safeFetch(
+                api.dms
+            );
+
+        if (!dms) return;
+
+        usersList.innerHTML = "";
+
+        dms.forEach(dm => {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.className =
+                "channel-item user";
+
+            div.dataset.chatId =
+                dm.id;
+
+            div.textContent =
+                `@ ${dm.username}`;
+
+            div.addEventListener(
+                "click",
+                () => {
+
+                    switchChat({
+
+                        type: "dm",
+
+                        id: dm.id,
+
+                        name:
+                            `@ ${dm.username}`,
+
+                        element: div
+                    });
+                }
+            );
+
+            usersList.appendChild(
+                div
+            );
+        });
+
+        if (
+            currentChat.type === "dm"
+        ) {
+            setActiveChannel(
+                usersList.querySelector(
+                    `[data-chat-id="${currentChat.id}"]`
+                )
+            );
+        }
+    }
+
+    /* =========================
+    GLOBAL
     ========================= */
 
     globalChat?.addEventListener(
         "click",
         () => {
 
-            setActive(globalChat);
-
-            currentChat = {
+            switchChat({
 
                 type: "global",
+                id: null,
+                name: "# Global Chat"
+            });
 
-                target: null,
-
-                name: "Global Chat"
-            };
-
-            chatTitle.textContent =
-                "# Global Chat";
-
-            loadMessages(api.global);
+            setActiveChannel(globalChat);
         }
     );
 
     /* =========================
-    ACTIVE STATE
-    ========================= */
-
-    function setActive(selected) {
-
-        document
-            .querySelectorAll(
-                ".channel-item"
-            )
-            .forEach(el =>
-                el.classList.remove(
-                    "active"
-                )
-            );
-
-        if (selected) {
-            selected.classList.add(
-                "active"
-            );
-        }
-    }
-
-    /* =========================
-    SEND MESSAGE
+    SEND
     ========================= */
 
     messageForm?.addEventListener(
@@ -471,33 +846,42 @@ export function createChatCore(config) {
 
             if (!text) return;
 
-            let endpoint = null;
+            let url = null;
 
             if (
                 currentChat.type ===
                 "global"
             ) {
-                endpoint =
-                    api.sendGlobal;
-            }
 
-            if (
-                currentChat.type ===
-                "dm"
-            ) {
-                endpoint =
-                    `/dms/api/${currentChat.target}/send`;
+                url =
+                    api.sendGlobal;
             }
 
             if (
                 currentChat.type ===
                 "room"
             ) {
-                endpoint =
-                    `/rooms/api/${currentChat.target}/send`;
+
+                url =
+                    api.sendRoom(
+                        currentChat.id
+                    );
             }
 
-            await safeFetch(endpoint, {
+            if (
+                currentChat.type ===
+                "dm"
+            ) {
+
+                url =
+                    api.sendDm(
+                        currentChat.id
+                    );
+            }
+
+            if (!url) return;
+
+            await safeFetch(url, {
 
                 method: "POST",
 
@@ -512,53 +896,37 @@ export function createChatCore(config) {
             });
 
             messageInput.value = "";
-
-            reloadCurrentChat();
         }
     );
-
-    /* =========================
-    RELOAD ACTIVE CHAT
-    ========================= */
-
-    function reloadCurrentChat() {
-
-        if (currentChat.type === "global") {
-            loadMessages(api.global);
-        }
-
-        if (currentChat.type === "dm") {
-            loadMessages(
-                `/dms/api/${currentChat.target}`
-            );
-        }
-
-        if (currentChat.type === "room") {
-            loadMessages(
-                `/rooms/${currentChat.target}/messages`
-            );
-        }
-    }
 
     /* =========================
     INIT
     ========================= */
 
-    reloadCurrentChat();
+    switchChat({
+
+        type: "global",
+        id: null,
+        name: "# Global Chat"
+    });
+
+    loadRooms();
+
+    loadDMs();
 
     return {
 
         renderMessages,
 
-        reloadCurrentChat,
-
         loadMessages,
 
-        getCurrentChat: () =>
-            currentChat,
+        loadRooms,
 
-        setCurrentChat: (chat) => {
-            currentChat = chat;
-        }
+        loadDMs,
+
+        switchChat,
+
+        getCurrentChat: () =>
+            currentChat
     };
 }

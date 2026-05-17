@@ -3,18 +3,35 @@ require("dotenv").config()
 const express = require("express")
 const session = require("express-session")
 const path = require("path")
+const http = require("http")
+const { Server } = require("socket.io")
 
-const chatRoutes = require("./routes/chat")
+const app = express()
+const server = http.createServer(app);
+const io =
+    new Server(server, {
+
+        cors: {
+            origin: true,
+            credentials: true
+        }
+    });
+
+const chatSockets = require("./sockets/chatSockets")
+const chatRoutes = require("./routes/chat")(io);
 const settingsRoutes = require("./routes/settings")
-const roomRoutes = require("./routes/rooms")
-const dmRoutes = require("./routes/dms");
+const roomRoutes = require("./routes/rooms")(io)
+const dmRoutes = require("./routes/dms")(io);
 const authRoutes = require("./routes/auth")
 const adminRoutes = require("./routes/admin")
 const threadsRoutes = require("./routes/threads")
 
 const authRequired = require("./middleware/auth")
 const adminOnly = require("./middleware/admin")
-const app = express()
+
+chatSockets(io);
+
+app.set("io", io);
 
 app.use(express.json())
 
@@ -31,6 +48,14 @@ app.use(session({
   }
 }))
 
+/* =========================
+SOCKET CONNECTIONS
+========================= */
+
+/* =========================
+ROUTES
+========================= */
+
 app.use(express.static(
   path.join(__dirname, "../public")
 ))
@@ -38,12 +63,14 @@ app.use(express.static(
 app.use("/", settingsRoutes)
 app.use("/auth", authRoutes)
 app.use("/admin", adminRoutes)
-app.use("/chat", chatRoutes)
-app.use("/rooms", roomRoutes)
-app.use("/dm", dmRoutes)
+app.use("/chat/api/rooms", roomRoutes)
+app.use("/chat/api/dms", dmRoutes)
+app.use("/chat", chatRoutes);
 app.use("/threads", threadsRoutes);
 
-// PROTECTED ROUTES
+/* =========================
+PROTECTED ROUTES
+========================= */
 
 app.get("/home", (req, res) => {
     res.sendFile(
@@ -96,8 +123,9 @@ app.use("/admin", adminOnly, express.static(
   )
 )
 
-app.listen(3000, () => {
-  console.log(
-    "Server running on port 3000"
-  )
-})
+server.listen(3000, () => {
+
+    console.log(
+        "HunterNet running on 3000"
+    );
+});

@@ -26,41 +26,13 @@ const chat = createChatCore({
 
     adminHandlers: {
 
-        renderControls: (msg) => `
-
-            <div class="admin-actions">
-
-                <button
-                    class="delete-btn"
-                    data-id="${msg.id}">
-                    delete
-                </button>
-
-                <button
-                    class="inspect-btn"
-                    data-user="${msg.user_id}">
-                    inspect
-                </button>
-
-                <button
-                    class="pin-btn"
-                    data-id="${msg.id}">
-                    pin
-                </button>
-
-            </div>
-        `,
-
         onDelete: async (id) => {
 
             await fetch(
                 `/chat/api/admin/message/${id}`,
                 {
-
                     method: "DELETE",
-
-                    credentials:
-                        "include"
+                    credentials: "include"
                 }
             );
 
@@ -109,9 +81,8 @@ const chat = createChatCore({
             const username =
                 messageElement
                     ?.querySelector(
-                        ".message-user"
+                        ".message-user span"
                     )
-                    ?.childNodes[0]
                     ?.textContent
                     ?.trim();
 
@@ -132,13 +103,13 @@ const chat = createChatCore({
                     body: JSON.stringify({
 
                         message_id:
-                            messageId,
+                        messageId,
 
                         chat_type:
-                            current.type,
+                        current.type,
 
                         chat_target:
-                            current.target,
+                        current.target,
 
                         content,
 
@@ -147,8 +118,19 @@ const chat = createChatCore({
                 }
             );
 
-            alert(
-                "Message pinned"
+        },
+
+        onUnpin: async (messageId) => {
+
+            await fetch(
+                `/chat/api/admin/pin/${messageId}`,
+                {
+
+                    method: "DELETE",
+
+                    credentials:
+                        "include"
+                }
             );
         }
     }
@@ -207,11 +189,17 @@ pinsBtn?.addEventListener(
 
             div.innerHTML = `
                 <div class="pin-top">
-
+            
                     <div class="pin-user">
                         ${pin.username}
                     </div>
-                
+            
+                    <button
+                        class="pin-remove-btn"
+                        data-id="${pin.message_id}">
+                        UNPIN
+                    </button>
+            
                 </div>
             
                 <div class="pin-content">
@@ -224,6 +212,40 @@ pinsBtn?.addEventListener(
     }
 );
 
+/* =========================
+UNPIN FROM PINS PANEL
+========================= */
+
+pinsList?.addEventListener(
+    "click",
+    async (e) => {
+
+        const btn =
+            e.target.closest(
+                ".pin-remove-btn"
+            );
+
+        if (!btn) return;
+
+        const messageId =
+            btn.dataset.id;
+
+        await fetch(
+            `/chat/api/admin/pin/${messageId}`,
+            {
+
+                method: "DELETE",
+
+                credentials:
+                    "include"
+            }
+        );
+
+        btn.closest(".pin-entry")
+            ?.remove();
+    }
+);
+
 closePins?.addEventListener(
     "click",
     () => {
@@ -232,3 +254,10 @@ closePins?.addEventListener(
         );
     }
 );
+
+logoutBtn.addEventListener("click", async () => {
+    const res = await fetch("/admin/api/logout", {
+        method: "POST",
+        credentials: "include"
+    })
+})

@@ -9,9 +9,8 @@ body {
 
     font-family: 'Share Tech Mono', monospace;
 
-    background-image:
-        linear-gradient(rgba(0,255,100,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,255,100,0.03) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(0, 255, 100, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 100, 0.03) 1px, transparent 1px);
 
     background-size: 4px 4px;
 }
@@ -30,12 +29,11 @@ body {
 
     padding: 18px 28px;
 
-    background: rgba(0,0,0,0.96);
+    background: rgba(0, 0, 0, 0.96);
 
     border-bottom: 2px solid #00ff88;
 
-    box-shadow:
-        0 0 15px rgba(0,255,100,0.25);
+    box-shadow: 0 0 15px rgba(0, 255, 100, 0.25);
 
     z-index: 999;
 }
@@ -50,9 +48,8 @@ body {
 
     cursor: pointer;
 
-    text-shadow:
-        0 0 8px #00ff88,
-        0 0 18px #00ff88;
+    text-shadow: 0 0 8px #00ff88,
+    0 0 18px #00ff88;
 }
 
 .logo:hover {
@@ -116,9 +113,8 @@ body {
 
     border: 2px solid #00ffff;
 
-    box-shadow:
-        0 0 12px #00ffff,
-        inset 0 0 10px rgba(0,255,255,0.1);
+    box-shadow: 0 0 12px #00ffff,
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
 
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -144,11 +140,10 @@ body {
 
     border: 2px solid #00ff88;
 
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
 
-    box-shadow:
-        0 0 20px rgba(0,255,100,0.25),
-        inset 0 0 15px rgba(0,255,100,0.08);
+    box-shadow: 0 0 20px rgba(0, 255, 100, 0.25),
+    inset 0 0 15px rgba(0, 255, 100, 0.08);
 }
 
 .hero h1 {
@@ -158,9 +153,8 @@ body {
 
     font-size: 54px;
 
-    text-shadow:
-        0 0 8px #00ff88,
-        0 0 16px #00ff88;
+    text-shadow: 0 0 8px #00ff88,
+    0 0 16px #00ff88;
 }
 
 .subtitle {
@@ -190,10 +184,9 @@ body {
 
     border-left: 4px solid #00ff88;
 
-    background: rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
 
-    box-shadow:
-        0 0 12px rgba(0,255,100,0.15);
+    box-shadow: 0 0 12px rgba(0, 255, 100, 0.15);
 }
 
 .post h2 {
@@ -242,14 +235,13 @@ body::before {
     position: fixed;
     inset: 0;
 
-    background:
-        repeating-linear-gradient(
+    background: repeating-linear-gradient(
             to bottom,
-            rgba(255,255,255,0.02),
-            rgba(255,255,255,0.02) 1px,
+            rgba(255, 255, 255, 0.02),
+            rgba(255, 255, 255, 0.02) 1px,
             transparent 1px,
             transparent 3px
-        );
+    );
 
     pointer-events: none;
 }

@@ -14,7 +14,8 @@ export function createThreadsCore(config) {
         modalInput,
         modalForm,
         closeModalBtn,
-        refreshBtn
+        refreshBtn,
+        isAdmin = false
     } = elements;
 
     let currentThread = null;

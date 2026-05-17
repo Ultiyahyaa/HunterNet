@@ -2,97 +2,258 @@ const express = require("express");
 const pool = require("../database/database");
 const authRequired = require("../middleware/auth");
 
-const router = express.Router();
+module.exports = (io) => {
 
-/* =========================
-   GET USERS
-========================= */
+    const router = express.Router();
 
-router.get("/api/users", authRequired, async (req, res) => {
+    /* =========================
+       GET USERS / DM CONTACTS
+    ========================= */
 
-    try {
+    router.get(
+        "/",
+        authRequired,
 
-        const result = await pool.query(`
-            SELECT id, username
-            FROM users
-            ORDER BY username ASC
-        `);
+        async (req, res) => {
 
-        res.json(result.rows);
+            try {
 
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ success: false });
-    }
+                const result =
+                    await pool.query(`
 
-});
+                        SELECT id,
+                               username
 
-/* =========================
-   GET DM THREAD
-========================= */
+                        FROM users
 
-router.get("/api/:userId", authRequired, async (req, res) => {
+                        WHERE id != $1
 
-    try {
+                        ORDER BY username ASC
 
-        const result = await pool.query(`
-            SELECT
-                id,
-                sender_id AS user_id,
-                sender_username AS username,
-                content AS message,
-                created_at
-            FROM direct_messages
-            WHERE
-                (sender_id = $1 AND receiver_id = $2)
-                OR
-                (sender_id = $2 AND receiver_id = $1)
-            ORDER BY created_at ASC
-        `, [
-            req.session.user.id,
-            req.params.userId
-        ]);
+                    `, [req.session.user.id]);
 
-        res.json(result.rows);
+                res.json(
+                    result.rows
+                );
 
-    } catch (err) {
+            } catch (err) {
 
-        console.log(err);
+                console.log(err);
 
-        res.status(500).json({
-            success: false
-        });
-    }
-});
+                res.status(500).json({
+                    success: false
+                });
+            }
+        }
+    );
 
-/* =========================
-   SEND DM
-========================= */
+    router.post(
+        "/start",
+        authRequired,
 
-router.post("/api/:userId/send", authRequired, async (req, res) => {
+        async (req, res) => {
 
-    const { content } = req.body;
+            const { username } = req.body;
 
-    try {
+            if (!username || !username.trim()) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Username is required"
+                });
+            }
 
-        await pool.query(`
-            INSERT INTO direct_messages
-            (sender_id, receiver_id, sender_username, content)
-            VALUES ($1, $2, $3, $4)
-        `, [
-            req.session.user.id,
-            req.params.userId,
-            req.session.user.username,
-            content
-        ]);
+            try {
 
-        res.json({ success: true });
+                const result = await pool.query(`
+                    SELECT id, username
+                    FROM users
+                    WHERE username = $1
+                      AND id != $2
+                `, [
+                    username.trim(),
+                    req.session.user.id
+                ]);
 
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ success: false });
-    }
+                if (!result.rows.length) {
+                    return res.status(404).json({
+                        success: false,
+                        message: "User not found"
+                    });
+                }
 
-});
+                const user = result.rows[0];
 
-module.exports = router;
+                const roomId = [
+                    req.session.user.id,
+                    user.id
+                ]
+                    .sort()
+                    .join("-");
+
+                res.json({
+                    success: true,
+                    id: user.id,
+                    username: user.username,
+                    roomId
+                });
+
+            } catch (err) {
+
+                console.log(err);
+
+                res.status(500).json({
+                    success: false
+                });
+            }
+        }
+    );
+
+    /* =========================
+       GET DM THREAD
+    ========================= */
+
+    router.get(
+        "/:userId",
+        authRequired,
+
+        async (req, res) => {
+
+            try {
+
+                const result =
+                    await pool.query(`
+
+                        SELECT dm.id,
+                               dm.sender_id       AS user_id,
+                               dm.sender_username AS username,
+                               dm.content,
+                               dm.created_at,
+
+                               false              AS pinned
+
+                        FROM direct_messages dm
+
+                        WHERE (
+                            dm.sender_id = $1
+                                AND
+                            dm.receiver_id = $2
+                            )
+
+                           OR (
+                            dm.sender_id = $2
+                                AND
+                            dm.receiver_id = $1
+                            )
+
+                        ORDER BY dm.created_at ASC
+
+                    `, [
+
+                        req.session.user.id,
+
+                        req.params.userId
+                    ]);
+
+                res.json(
+                    result.rows
+                );
+
+            } catch (err) {
+
+                console.log(err);
+
+                res.status(500).json({
+                    success: false
+                });
+            }
+        }
+    );
+
+    /* =========================
+       SEND DM
+    ========================= */
+
+    router.post(
+        "/:userId/send",
+        authRequired,
+
+        async (req, res) => {
+
+            const {content} =
+                req.body;
+
+            try {
+
+                const result =
+                    await pool.query(`
+
+                        INSERT INTO direct_messages
+                        (sender_id,
+                         receiver_id,
+                         sender_username,
+                         content)
+
+                        VALUES ($1, $2, $3, $4)
+
+                        RETURNING *
+
+                    `, [
+
+                        req.session.user.id,
+
+                        req.params.userId,
+
+                        req.session.user.username,
+
+                        content
+                    ]);
+
+                const message = {
+
+                    ...result.rows[0],
+
+                    user_id:
+                    result.rows[0]
+                        .sender_id,
+
+                    username:
+                    result.rows[0]
+                        .sender_username,
+
+                    pinned: false
+                };
+
+                const users = [
+
+                    req.session.user.id,
+
+                    req.params.userId
+                ]
+                    .sort()
+                    .join("-");
+
+                io.to(
+                    `dm:${users}`
+                ).emit(
+                    "message:new",
+                    message
+                );
+
+                res.json({
+                    success: true,
+                    message
+                });
+
+            } catch (err) {
+
+                console.log(err);
+
+                res.status(500).json({
+                    success: false
+                });
+            }
+        }
+    );
+
+    return router;
+};

@@ -11,8 +11,8 @@ body {
     font-family: 'Share Tech Mono', monospace;
 
     background-image:
-        linear-gradient(rgba(0,255,100,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,255,100,0.03) 1px, transparent 1px);
+            linear-gradient(rgba(0, 255, 100, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 100, 0.03) 1px, transparent 1px);
 
     background-size: 4px 4px;
 }
@@ -27,14 +27,13 @@ body::before {
     position: fixed;
     inset: 0;
 
-    background:
-        repeating-linear-gradient(
+    background: repeating-linear-gradient(
             to bottom,
-            rgba(255,255,255,0.02),
-            rgba(255,255,255,0.02) 1px,
+            rgba(255, 255, 255, 0.02),
+            rgba(255, 255, 255, 0.02) 1px,
             transparent 1px,
             transparent 3px
-        );
+    );
 
     pointer-events: none;
 }
@@ -49,7 +48,7 @@ body::before {
     align-items: center;
     padding: 18px 28px;
 
-    background: rgba(0,0,0,0.96);
+    background: rgba(0, 0, 0, 0.96);
     border-bottom: 2px solid #00ff88;
 }
 
@@ -64,9 +63,8 @@ body::before {
 
     cursor: pointer;
 
-    text-shadow:
-        0 0 8px #00ff88,
-        0 0 18px #00ff88;
+    text-shadow: 0 0 8px #00ff88,
+    0 0 18px #00ff88;
 }
 
 /* RIGHT SIDE GROUP */
@@ -101,8 +99,7 @@ body::before {
     background: #ff5555;
     color: black;
 
-    box-shadow:
-        0 0 15px #ff5555;
+    box-shadow: 0 0 15px #ff5555;
 }
 
 /* =========================
@@ -128,9 +125,8 @@ h1 {
 
     color: #00ff88;
 
-    text-shadow:
-        0 0 10px #00ff88,
-        0 0 18px #00ff88;
+    text-shadow: 0 0 10px #00ff88,
+    0 0 18px #00ff88;
 }
 
 .subtitle {
@@ -146,15 +142,14 @@ h1 {
 ========================= */
 
 .panel {
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
 
     border: 2px solid #00ff88;
 
     padding: 30px;
 
-    box-shadow:
-        0 0 15px rgba(0,255,100,0.2),
-        inset 0 0 10px rgba(0,255,100,0.05);
+    box-shadow: 0 0 15px rgba(0, 255, 100, 0.2),
+    inset 0 0 10px rgba(0, 255, 100, 0.05);
 }
 
 .panel h2 {
@@ -266,5 +261,5 @@ button:hover {
 
     color: #ff7777;
 
-    background: rgba(255,0,0,0.05);
+    background: rgba(255, 0, 0, 0.05);
 }

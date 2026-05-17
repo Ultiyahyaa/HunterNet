@@ -1,4 +1,4 @@
-import { createThreadsCore } from "../core/threadsCore.js";
+import {createThreadsCore} from "../core/threadsCore.js";
 
 const logoutBtn = document.getElementById("logoutBtn");
 
@@ -41,20 +41,19 @@ const thread = createThreadsCore({
 
         refreshBtn:
             document.getElementById("refreshThreadsBtn")
+
     },
 
     api: {
         threads: "/threads/api"
-    }
+    },
 
+    isAdmin: true
 });
 
-
 logoutBtn.addEventListener("click", async () => {
-    await fetch("/auth/api/logout", {
-        method: "POST"
+    const res = await fetch("/admin/api/logout", {
+        method: "POST",
+        credentials: "include"
     })
-
-    window.location.href = "/home"
-
 })

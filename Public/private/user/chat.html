@@ -20,7 +20,7 @@
         HunterNet
     </div>
 
-    <button class="logout-btn" id="logoutBtn" onclick="window.location.href='/home'">
+    <button class="logout-btn" id="logoutBtn">
         LOG OUT
     </button>
 
@@ -51,6 +51,8 @@
             <button id="createRoomBtn" class="channel-item room create-room">
                 + Create New Room
             </button>
+
+            <div id="roomsList"></div>
 
         </div>
 
@@ -156,6 +158,7 @@
 
 </div>
 
+<script src="/socket.io/socket.io.js"></script>
 <script type="module" src="/js/user/chat.js"></script>
 
 </body>

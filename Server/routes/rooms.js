@@ -2,91 +2,202 @@ const express = require("express");
 const pool = require("../database/database");
 const authRequired = require("../middleware/auth");
 
-const router = express.Router();
+module.exports = (io) => {
 
-/* =========================
-   GET ROOMS
-========================= */
+    const router = express.Router();
 
-router.get("/", authRequired, async (req, res) => {
+    /* =========================
+       GET ROOMS
+    ========================= */
 
-    try {
+    router.get("/", authRequired, async (req, res) => {
 
-        const result = await pool.query(`
-            SELECT id, name
-            FROM rooms
-            ORDER BY id ASC
-        `);
+        try {
 
-        res.json(result.rows);
+            const result = await pool.query(`
+                SELECT id,
+                       name
+                FROM rooms
+                ORDER BY id ASC
+            `);
 
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ success: false });
-    }
+            res.json(result.rows);
 
-});
+        } catch (err) {
 
-/* =========================
-   ROOM MESSAGES
-========================= */
+            console.log(err);
 
-router.get("/:roomId/messages", authRequired, async (req, res) => {
+            res.status(500).json({
+                success: false
+            });
+        }
+    });
 
-    try {
+    /* =========================
+       ROOM MESSAGES
+    ========================= */
 
-        const result = await pool.query(`
-            SELECT
-                id,
-                user_id,
-                username,
-                content AS message,
-                created_at
-            FROM room_messages
-            WHERE room_id = $1
-            ORDER BY created_at ASC
-        `, [req.params.roomId]);
+    router.get(
+        "/:roomId/messages",
+        authRequired,
 
-        res.json(result.rows);
+        async (req, res) => {
 
-    } catch (err) {
+            try {
 
-        console.log(err);
+                const result =
+                    await pool.query(`
 
-        res.status(500).json({
-            success: false
-        });
-    }
-});
+                        SELECT rm.id,
+                               rm.room_id,
+                               rm.user_id,
+                               rm.username,
+                               rm.content,
+                               rm.created_at,
 
-/* =========================
-   SEND ROOM MESSAGE
-========================= */
+                               EXISTS (SELECT 1
+                                       FROM pinned_messages pm
+                                       WHERE pm.message_id = rm.id
+                                         AND pm.chat_type = 'room'
+                                         AND pm.chat_target = rm.room_id::text) AS pinned
+                    
+                        FROM room_messages rm
 
-router.post("/api/:roomId/send", authRequired, async (req, res) => {
+                        WHERE rm.room_id = $1
 
-    const { content } = req.body;
+                        ORDER BY rm.created_at ASC
 
-    try {
+                    `, [
+                        req.params.roomId
+                    ]);
 
-        await pool.query(`
-            INSERT INTO room_messages
-            (room_id, user_id, username, content)
-            VALUES ($1, $2, $3, $4)
-        `, [
-            req.params.roomId,
-            req.session.user.id,
-            req.session.user.username,
-            content
-        ]);
+                res.json(
+                    result.rows
+                );
 
-        res.json({ success: true });
+            } catch (err) {
 
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ success: false });
-    }
+                console.log(err);
 
-});
+                res.status(500).json({
+                    success: false
+                });
+            }
+        }
+    );
 
-module.exports = router;
+    /* =========================
+       CREATE NEW ROOM
+    ========================= */
+
+    router.post(
+        "/create",
+        authRequired,
+
+        async (req, res) => {
+
+            const { name } = req.body;
+
+            if (!name || !name.trim()) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Room name is required"
+                });
+            }
+
+            try {
+
+                const result = await pool.query(`
+                    INSERT INTO rooms (name)
+                    VALUES ($1)
+                    RETURNING id, name
+                `, [
+                    name.trim()
+                ]);
+
+                res.json({
+                    success: true,
+                    room: result.rows[0]
+                });
+
+            } catch (err) {
+
+                console.log(err);
+
+                res.status(500).json({
+                    success: false
+                });
+            }
+        }
+    );
+
+    /* =========================
+       SEND ROOM MESSAGE
+    ========================= */
+
+    router.post(
+        "/:roomId/send",
+        authRequired,
+
+        async (req, res) => {
+
+            const {content} =
+                req.body;
+
+            try {
+
+                const result =
+                    await pool.query(`
+
+                        INSERT INTO room_messages
+                        (room_id,
+                         user_id,
+                         username,
+                         content)
+
+                        VALUES ($1, $2, $3, $4)
+
+                        RETURNING *
+
+                    `, [
+
+                        req.params.roomId,
+
+                        req.session.user.id,
+
+                        req.session.user.username,
+
+                        content
+                    ]);
+
+                const message =
+                    {
+                        ...result.rows[0],
+                        pinned: false
+                    };
+
+                io.to(
+                    `room:${req.params.roomId}`
+                ).emit(
+                    "message:new",
+                    message
+                );
+
+                res.json({
+                    success: true,
+                    message
+                });
+
+            } catch (err) {
+
+                console.log(err);
+
+                res.status(500).json({
+                    success: false
+                });
+            }
+        }
+    );
+
+    return router;
+};

@@ -4,8 +4,8 @@ const manageUsersBtn =
 const chatModerationBtn =
   document.getElementById("chatModerationBtn")
 
-const boardsBtn =
-  document.getElementById("boardsBtn")
+const threadsBtn =
+  document.getElementById("threadsBtn")
 
 const databaseBtn =
   document.getElementById("databaseBtn")
@@ -53,8 +53,8 @@ chatModerationBtn.addEventListener("click", () => {
   window.location.href = "/admin/chat"
 })
 
-boardsBtn.addEventListener("click", () => {
-  alert("Board moderation coming soon.")
+threadsBtn.addEventListener("click", () => {
+  window.location.href = "/admin/threads"
 })
 
 databaseBtn.addEventListener("click", () => {
@@ -75,38 +75,9 @@ systemBtn.addEventListener("click", () => {
 // ------------------------
 
 logoutBtn.addEventListener("click", async () => {
-  try {
     const res = await fetch("/admin/api/logout", {
       method: "POST",
       credentials: "include"
     })
 
-    const text = await res.text()
-    console.log("RAW RESPONSE:", text)
-
-    let data
-    try {
-      data = JSON.parse(text)
-    } catch (e) {
-      throw new Error("Server did not return JSON")
-    }
-
-    if (!res.ok) {
-      throw new Error(data.message || "Request failed")
-    }
-
-    if (data.success) {
-      window.location.href = "/dashboard"
-    } else {
-      throw new Error("Failed to exit admin mode")
-    }
-
-  } catch (err) {
-    console.log("ADMIN LOGOUT ERROR:", err)
-
-    alert("Server error while exiting admin mode")
-
-    logoutBtn.textContent = "LOG OUT"
-    logoutBtn.disabled = false
-  }
 })
