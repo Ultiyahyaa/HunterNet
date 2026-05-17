@@ -127,7 +127,7 @@ export function createChatCore(config) {
         }
 
         /* =========================
-        USER + TIME
+        USERNAME
         ========================= */
 
         const userDiv =
@@ -136,8 +136,17 @@ export function createChatCore(config) {
         userDiv.className =
             "message-user";
 
-        userDiv.textContent =
+        const usernameText =
+            document.createElement("span");
+
+        usernameText.textContent =
             msg.username;
+
+        userDiv.appendChild(usernameText);
+
+        /* =========================
+        TIMESTAMP
+        ========================= */
 
         const timestamp =
             document.createElement("span");
@@ -154,6 +163,26 @@ export function createChatCore(config) {
             ` // ${getRelativeTime(msg.created_at)}`;
 
         userDiv.appendChild(timestamp);
+
+        /* =========================
+        PINNED BADGE
+        ========================= */
+
+        if (msg.pinned) {
+
+            const pinnedBadge =
+                document.createElement("span");
+
+            pinnedBadge.className =
+                "message-pinned-badge";
+
+            pinnedBadge.textContent =
+                "PINNED";
+
+            userDiv.appendChild(
+                pinnedBadge
+            );
+        }
 
         /* =========================
         CONTENT

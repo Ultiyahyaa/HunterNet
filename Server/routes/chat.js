@@ -15,13 +15,21 @@ router.get("/api/global", authRequired, async (req, res) => {
 
         const result = await pool.query(`
             SELECT
-                id,
-                user_id,
-                username,
-                content,
-                created_at
-            FROM global_messages
-            ORDER BY created_at ASC
+                gm.id,
+                gm.user_id,
+                gm.username,
+                gm.content,
+                gm.created_at,
+
+                EXISTS (
+                    SELECT 1
+                    FROM pinned_messages pm
+                    WHERE pm.message_id = gm.id
+                ) AS pinned
+
+            FROM global_messages gm
+
+            ORDER BY gm.created_at ASC
         `);
 
         res.json(result.rows);
@@ -144,14 +152,21 @@ router.get(
 
             const result = await pool.query(`
                 SELECT
-                    id,
-                    user_id,
-                    username,
-                    content,
-                    created_at
-                FROM global_messages
-                ORDER BY created_at ASC
-                LIMIT 500
+                    gm.id,
+                    gm.user_id,
+                    gm.username,
+                    gm.content,
+                    gm.created_at,
+
+                    EXISTS (
+                        SELECT 1
+                        FROM pinned_messages pm
+                        WHERE pm.message_id = gm.id
+                    ) AS pinned
+
+                FROM global_messages gm
+
+                ORDER BY gm.created_at ASC
             `);
 
             /* IMPORTANT:

@@ -206,11 +206,14 @@ pinsBtn?.addEventListener(
                 "pin-entry";
 
             div.innerHTML = `
+                <div class="pin-top">
 
-                <div class="pin-user">
-                    ${pin.username}
+                    <div class="pin-user">
+                        ${pin.username}
+                    </div>
+                
                 </div>
-
+            
                 <div class="pin-content">
                     ${pin.content}
                 </div>
@@ -224,7 +227,6 @@ pinsBtn?.addEventListener(
 closePins?.addEventListener(
     "click",
     () => {
-
         pinsPanel.classList.add(
             "hidden"
         );

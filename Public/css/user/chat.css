@@ -18,39 +18,41 @@ body {
     overflow: hidden;
 
     background-image:
-        linear-gradient(rgba(0,255,100,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,255,100,0.03) 1px, transparent 1px);
+            linear-gradient(rgba(0,255,100,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,255,100,0.03) 1px, transparent 1px);
 
     background-size: 4px 4px;
 }
 
 /* =========================
-   SCANLINES (DASHBOARD STYLE)
+   SCANLINES
 ========================= */
 
 body::before {
+
     content: "";
 
     position: fixed;
     inset: 0;
 
     background:
-        repeating-linear-gradient(
-            to bottom,
-            rgba(255,255,255,0.02),
-            rgba(255,255,255,0.02) 1px,
-            transparent 1px,
-            transparent 3px
-        );
+            repeating-linear-gradient(
+                    to bottom,
+                    rgba(255,255,255,0.02),
+                    rgba(255,255,255,0.02) 1px,
+                    transparent 1px,
+                    transparent 3px
+            );
 
     pointer-events: none;
 }
 
 /* =========================
-   NAVBAR (MATCH DASHBOARD)
+   NAVBAR
 ========================= */
 
 .navbar {
+
     position: sticky;
     top: 0;
 
@@ -65,12 +67,13 @@ body::before {
     border-bottom: 2px solid #00ff88;
 
     box-shadow:
-        0 0 15px rgba(0,255,100,0.25);
+            0 0 15px rgba(0,255,100,0.25);
 
     z-index: 999;
 }
 
 .logo {
+
     color: #00ff88;
 
     font-size: 32px;
@@ -81,16 +84,17 @@ body::before {
     cursor: pointer;
 
     text-shadow:
-        0 0 8px #00ff88,
-        0 0 18px #00ff88;
+            0 0 8px #00ff88,
+            0 0 18px #00ff88;
 }
 
 .logo:hover {
+
     color: #00ffff;
 }
 
-/* logout (same system as dashboard) */
 .logout-btn {
+
     background: transparent;
 
     color: #ff5555;
@@ -108,29 +112,33 @@ body::before {
 }
 
 .logout-btn:hover {
+
     background: #ff5555;
     color: black;
 
     box-shadow:
-        0 0 15px #ff5555;
+            0 0 15px #ff5555;
 }
 
 /* =========================
-   LAYOUT CORE
+   LAYOUT
 ========================= */
 
 .chat-layout {
+
     display: flex;
+
     height: calc(100vh - 70px);
 
     overflow: hidden;
 }
 
 /* =========================
-   SIDEBAR (NOW MATCHES CARDS STYLE)
+   SIDEBAR
 ========================= */
 
 .sidebar {
+
     width: 320px;
 
     background: rgba(0,0,0,0.85);
@@ -142,14 +150,16 @@ body::before {
     overflow-y: auto;
 
     box-shadow:
-        inset 0 0 15px rgba(0,255,100,0.06);
+            inset 0 0 15px rgba(0,255,100,0.06);
 }
 
 .sidebar-section {
+
     margin-bottom: 25px;
 }
 
 .sidebar-section h2 {
+
     color: #00ffff;
 
     border-bottom: 1px solid #00ffff;
@@ -158,14 +168,16 @@ body::before {
 
     margin-bottom: 10px;
 
-    text-shadow: 0 0 10px #00ffff;
+    text-shadow:
+            0 0 10px #00ffff;
 }
 
 /* =========================
-   CHANNEL ITEMS (MATCH DASHBOARD CARDS)
+   CHANNEL ITEMS
 ========================= */
 
 .channel-item {
+
     width: 100%;
 
     padding: 12px;
@@ -186,10 +198,11 @@ body::before {
     transition: 0.25s;
 
     box-shadow:
-        0 0 10px rgba(0,255,100,0.08);
+            0 0 10px rgba(0,255,100,0.08);
 }
 
 .channel-item:hover {
+
     transform: translateY(-2px);
 
     border-color: #00ffff;
@@ -197,93 +210,104 @@ body::before {
     background: rgba(0,255,255,0.08);
 
     box-shadow:
-        0 0 15px rgba(0,255,255,0.25);
+            0 0 15px rgba(0,255,255,0.25);
 }
 
 .channel-item.active {
+
     border-color: #00ffff;
 
     background: rgba(0,255,255,0.12);
 
     box-shadow:
-        0 0 18px rgba(0,255,255,0.3);
+            0 0 18px rgba(0,255,255,0.3);
 }
 
 /* =========================
    TYPE COLORS
 ========================= */
 
-/* GLOBAL = GREEN */
 .global {
+
     border-left: 4px solid #00ff88;
 }
 
 .global:hover {
+
     border-color: #00ff88;
+
     background: rgba(0,255,136,0.08);
 
     box-shadow:
-        0 0 15px rgba(0,255,136,0.25);
+            0 0 15px rgba(0,255,136,0.25);
 }
 
 .global.active {
+
     border-color: #00ff88;
 
     background: rgba(0,255,136,0.12);
 
     box-shadow:
-        0 0 18px rgba(0,255,136,0.35);
+            0 0 18px rgba(0,255,136,0.35);
 }
 
-/* ROOMS = BLUE */
 .room {
+
     border-left: 4px solid #00bfff;
 }
 
 .room:hover {
+
     border-color: #00bfff;
+
     background: rgba(0,191,255,0.08);
 
     box-shadow:
-        0 0 15px rgba(0,191,255,0.25);
+            0 0 15px rgba(0,191,255,0.25);
 }
 
 .room.active {
+
     border-color: #00bfff;
 
     background: rgba(0,191,255,0.12);
 
     box-shadow:
-        0 0 18px rgba(0,191,255,0.35);
+            0 0 18px rgba(0,191,255,0.35);
 }
 
-/* USERS / DMS = RED */
 .user {
+
     border-left: 4px solid #ff5555;
 }
 
 .user:hover {
+
     border-color: #ff5555;
+
     background: rgba(255,85,85,0.08);
 
     box-shadow:
-        0 0 15px rgba(255,85,85,0.25);
+            0 0 15px rgba(255,85,85,0.25);
 }
 
 .user.active {
+
     border-color: #ff5555;
 
     background: rgba(255,85,85,0.12);
 
     box-shadow:
-        0 0 18px rgba(255,85,85,0.35);
+            0 0 18px rgba(255,85,85,0.35);
 }
 
 /* =========================
-   CREATE ROOM = GOLD
+   CREATE ROOM
 ========================= */
 
 .create-room {
+
     border-left: 4px solid #ffd700;
 
     color: #ffe88a;
@@ -291,58 +315,108 @@ body::before {
     border-color: rgba(255,215,0,0.35);
 
     box-shadow:
-        0 0 12px rgba(255,215,0,0.12);
+            0 0 12px rgba(255,215,0,0.12);
 }
 
 .create-room:hover {
+
     border-color: #ffd700;
 
     background: rgba(255,215,0,0.08);
 
     box-shadow:
-        0 0 18px rgba(255,215,0,0.35);
-}
-
-.create-room.active {
-    border-color: #ffd700;
-
-    background: rgba(255,215,0,0.12);
-
-    box-shadow:
-        0 0 20px rgba(255,215,0,0.4);
+            0 0 18px rgba(255,215,0,0.35);
 }
 
 /* =========================
-   CHAT AREA (DASHBOARD STYLE MODULE)
+   CHAT AREA
 ========================= */
 
 .chat-container {
+
     flex: 1;
 
     display: flex;
     flex-direction: column;
 
     height: 100%;
+
     overflow: hidden;
 }
 
-/* header */
+/* =========================
+   CHAT HEADER
+========================= */
+
 .chat-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
     padding: 20px;
 
-    border-bottom: 1px solid rgba(0,255,100,0.2);
+    border-bottom:
+            1px solid rgba(0,255,100,0.2);
 
-    background: rgba(0,0,0,0.85);
+    background:
+            rgba(0,0,0,0.85);
 
     box-shadow:
-        inset 0 0 10px rgba(0,255,100,0.05);
+            inset 0 0 10px rgba(0,255,100,0.05);
+}
+
+.chat-header h2 {
+
+    margin: 0;
+
+    flex: 1;
 }
 
 /* =========================
-   MESSAGES (CRITICAL FIX + STYLE MATCH)
+   PINS BUTTON
+========================= */
+
+.pins-btn {
+
+    background: transparent;
+
+    border: 2px solid #00ff88;
+
+    color: #00ff88;
+
+    padding: 10px 18px;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    transition: 0.2s;
+
+    box-shadow:
+            0 0 10px rgba(0,255,100,0.12);
+}
+
+.pins-btn:hover {
+
+    background: #00ff88;
+
+    color: black;
+
+    box-shadow:
+            0 0 18px #00ff88;
+}
+
+/* =========================
+   MESSAGES
 ========================= */
 
 .messages {
+
     flex: 1;
 
     overflow-y: auto;
@@ -351,50 +425,122 @@ body::before {
 
     display: flex;
     flex-direction: column;
+
     gap: 12px;
 
     min-height: 0;
 }
 
 .message {
+
     background: rgba(0,0,0,0.75);
 
     padding: 12px;
 
     border: 2px solid rgba(0,255,100,0.2);
 
+    border-radius: 10px;
+
     box-shadow:
-        0 0 12px rgba(0,255,100,0.08);
+            0 0 12px rgba(0,255,100,0.08);
+
+    transition: 0.2s;
+}
+
+.message:hover {
+
+    border-color:
+            rgba(0,255,136,0.45);
+
+    box-shadow:
+            0 0 16px rgba(0,255,136,0.12);
 }
 
 .message-user {
+
     color: #00ffff;
 
     margin-bottom: 6px;
 
-    text-shadow: 0 0 8px #00ffff;
+    text-shadow:
+            0 0 8px #00ffff;
 }
 
 .message-content {
+
     color: #d7ffe6;
+
+    line-height: 1.5;
+
+    word-break: break-word;
 }
 
 /* =========================
-   INPUT BAR (MATCH DASHBOARD BUTTON STYLE)
+   PINNED MESSAGE
+========================= */
+
+/* =========================
+PINNED MESSAGE
+========================= */
+
+.message.pinned {
+
+    border-left:
+            4px solid #ffd700;
+
+    background:
+            rgba(255,215,0,0.05);
+
+    box-shadow:
+            0 0 18px rgba(255,215,0,0.12);
+}
+
+.message-pinned-badge,
+.pinned-label {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-left: 10px;
+
+    padding: 2px 8px;
+
+    font-size: 11px;
+
+    border-radius: 999px;
+
+    letter-spacing: 1px;
+
+    color: black;
+
+    background: #00ff88;
+
+    box-shadow:
+            0 0 10px rgba(0,255,136,0.18);
+}
+
+/* =========================
+   INPUT BAR
 ========================= */
 
 .message-form {
+
     display: flex;
+
     gap: 10px;
 
     padding: 20px;
 
-    border-top: 1px solid rgba(0,255,100,0.2);
+    border-top:
+            1px solid rgba(0,255,100,0.2);
 
-    background: rgba(0,0,0,0.9);
+    background:
+            rgba(0,0,0,0.9);
 }
 
 .message-form input {
+
     flex: 1;
 
     background: black;
@@ -408,15 +554,17 @@ body::before {
     outline: none;
 
     box-shadow:
-        inset 0 0 10px rgba(0,255,100,0.1);
+            inset 0 0 10px rgba(0,255,100,0.1);
 }
 
 .message-form input:focus {
+
     box-shadow:
-        0 0 12px #00ff88;
+            0 0 12px #00ff88;
 }
 
 .message-form button {
+
     background: transparent;
 
     border: 2px solid #00ff88;
@@ -430,113 +578,100 @@ body::before {
     transition: 0.2s;
 
     box-shadow:
-        0 0 10px rgba(0,255,100,0.15);
+            0 0 10px rgba(0,255,100,0.15);
 }
 
 .message-form button:hover {
+
     background: #00ff88;
+
     color: black;
 
     box-shadow:
-        0 0 15px #00ff88;
+            0 0 15px #00ff88;
 }
 
 /* =========================
-   TERMINAL CURSOR (MATCH DASHBOARD)
+   PINS PANEL
 ========================= */
 
-.cursor::after {
-    content: "_";
+.pins-panel {
 
-    animation: blink 1s infinite;
-}
-
-@keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-}
-
-/* =========================
-   CYBER MODAL
-========================= */
-
-.cyber-modal {
     position: fixed;
 
-    inset: 0;
+    top: 90px;
+    right: 24px;
 
-    background: rgba(0,0,0,0.75);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    z-index: 5000;
-
-    backdrop-filter: blur(4px);
-}
-
-.hidden {
-    display: none;
-}
-
-.cyber-modal-box {
     width: 420px;
+    max-height: 650px;
 
-    background: #050505;
+    overflow-y: auto;
 
-    border: 2px solid #00ff88;
+    background:
+            rgba(5,5,5,0.96);
+
+    border:
+            2px solid rgba(0,255,136,0.25);
+
+    border-left:
+            4px solid #00ff88;
+
+    border-radius: 14px;
+
+    padding: 18px;
+
+    z-index: 9999;
+
+    backdrop-filter: blur(8px);
 
     box-shadow:
-        0 0 25px rgba(0,255,136,0.25),
-        inset 0 0 15px rgba(0,255,136,0.08);
+            0 0 30px rgba(0,255,136,0.12),
+            inset 0 0 15px rgba(0,255,136,0.03);
 
-    animation: modalAppear 0.18s ease-out;
+    animation:
+            pinsPanelOpen 0.18s ease-out;
 }
 
-@keyframes modalAppear {
+/* =========================
+   PINS HEADER
+========================= */
 
-    from {
-        opacity: 0;
-        transform: translateY(-10px) scale(0.97);
-    }
+.pins-header {
 
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.cyber-modal-header {
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
 
-    padding: 15px 18px;
+    margin-bottom: 18px;
 
-    border-bottom: 1px solid rgba(0,255,136,0.2);
+    padding-bottom: 12px;
 
-    background: rgba(0,255,136,0.05);
+    border-bottom:
+            1px solid rgba(0,255,136,0.12);
 }
 
-.cyber-modal-header h2 {
+.pins-header h2 {
+
     margin: 0;
 
     color: #00ff88;
 
     text-shadow:
-        0 0 10px #00ff88;
+            0 0 10px rgba(0,255,136,0.25);
 }
 
-#closeModalBtn {
+#closePins {
+
     background: transparent;
 
     border: 2px solid #ff5555;
 
     color: #ff5555;
 
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
 
     cursor: pointer;
 
@@ -545,121 +680,210 @@ body::before {
     transition: 0.2s;
 }
 
-#closeModalBtn:hover {
+#closePins:hover {
+
     background: #ff5555;
+
     color: black;
 
     box-shadow:
-        0 0 15px #ff5555;
+            0 0 15px #ff5555;
 }
 
-.cyber-modal-body {
-    padding: 20px;
-}
-
-#modalInput {
-    width: 100%;
-
-    background: black;
-
-    border: 2px solid #00ff88;
-
-    color: #00ff88;
-
-    padding: 14px;
-
-    outline: none;
-
-    font-family: inherit;
-
-    box-shadow:
-        inset 0 0 12px rgba(0,255,136,0.08);
-}
-
-#modalInput:focus {
-    box-shadow:
-        0 0 12px #00ff88;
-}
-
-.cyber-modal-footer {
-    padding: 18px;
-
-    display: flex;
-    justify-content: flex-end;
-}
-
-#confirmModalBtn {
-    background: transparent;
-
-    border: 2px solid #ffd700;
-
-    color: #ffd700;
-
-    padding: 12px 18px;
-
-    cursor: pointer;
-
-    font-family: inherit;
-
-    transition: 0.2s;
-}
-
-#confirmModalBtn:hover {
-    background: #ffd700;
-    color: black;
-
-    box-shadow:
-        0 0 18px #ffd700;
-}
-
-.pins-panel {
-
-    position: fixed;
-
-    top: 80px;
-    right: 20px;
-
-    width: 400px;
-    max-height: 600px;
-
-    overflow-y: auto;
-
-    background: #050505;
-
-    border: 1px solid #00ff99;
-
-    padding: 1rem;
-
-    z-index: 9999;
-
-    box-shadow:
-        0 0 20px rgba(0,255,100,0.3);
-}
-
-.hidden {
-    display: none;
-}
+/* =========================
+   PIN ENTRIES
+========================= */
 
 .pin-entry {
 
-    padding: 12px 0;
+    background:
+            rgba(0,0,0,0.65);
 
-    border-bottom:
-        1px solid rgba(255,255,255,0.08);
+    border:
+            2px solid rgba(0,255,136,0.14);
+
+    border-left:
+            4px solid #00ff88;
+
+    border-radius: 10px;
+
+    padding: 14px;
+
+    margin-bottom: 14px;
+
+    box-shadow:
+            0 0 12px rgba(0,255,136,0.05);
+}
+
+.pin-top,
+.pin-entry-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 10px;
 }
 
 .pin-user {
 
-    color: #00ff99;
+    color: #00ffff;
+
+    font-weight: bold;
+
+    text-shadow:
+            0 0 8px rgba(0,255,255,0.22);
+}
+
+.pin-badge {
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+
+    padding: 3px 8px;
+
+    border-radius: 999px;
+
+    background: #00ff88;
+
+    color: black;
 
     font-weight: bold;
 }
 
 .pin-content {
 
-    color: white;
+    color: #d7ffe6;
 
-    margin-top: 6px;
+    line-height: 1.5;
 
     word-break: break-word;
+}
+
+/* =========================
+   EMPTY PINS
+========================= */
+
+.empty-pins {
+
+    text-align: center;
+
+    padding: 30px 10px;
+
+    color: rgba(255,255,255,0.45);
+
+    letter-spacing: 2px;
+}
+
+/* =========================
+   HIDDEN
+========================= */
+
+.hidden {
+
+    display: none !important;
+}
+
+/* =========================
+   PINS OPEN ANIMATION
+========================= */
+
+@keyframes pinsPanelOpen {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+                translateX(16px)
+                translateY(-6px)
+                scale(0.97);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+                translateX(0)
+                translateY(0)
+                scale(1);
+    }
+}
+
+/* =========================
+   GLOBAL CYBER SCROLLBARS
+========================= */
+
+.messages::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar,
+.pins-panel::-webkit-scrollbar {
+
+    width: 8px;
+}
+
+.messages::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track,
+.pins-panel::-webkit-scrollbar-track {
+
+    background:
+            rgba(255,255,255,0.03);
+}
+
+.messages::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb,
+.pins-panel::-webkit-scrollbar-thumb {
+
+    background:
+            rgba(0,255,136,0.22);
+
+    border-radius: 10px;
+}
+
+.messages::-webkit-scrollbar-thumb:hover,
+.sidebar::-webkit-scrollbar-thumb:hover,
+.pins-panel::-webkit-scrollbar-thumb:hover {
+
+    background:
+            rgba(0,255,136,0.45);
+}
+
+/* =========================
+   FIREFOX SCROLLBARS
+========================= */
+
+.messages,
+.sidebar,
+.pins-panel {
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+            rgba(0,255,136,0.35)
+            rgba(255,255,255,0.03);
+}
+
+/* =========================
+   TERMINAL CURSOR
+========================= */
+
+.cursor::after {
+
+    content: "_";
+
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+    0%, 50% {
+        opacity: 1;
+    }
+
+    51%, 100% {
+        opacity: 0;
+    }
 }
