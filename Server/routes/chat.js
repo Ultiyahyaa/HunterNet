@@ -68,7 +68,7 @@ router.post("/api/global/send", authRequired, async (req, res) => {
             content
         ]);
 
-        io.to("global").emit("message:new", {
+        io.to("global").emit("global:message:new", {
             ...result.rows[0],
             pinned: false
         });

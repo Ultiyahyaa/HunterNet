@@ -4,34 +4,52 @@ const authRequired = require("../middleware/auth");
 
 module.exports = (io) => {
 
-    const router = express.Router();
+    const router =
+        express.Router();
 
     /* =========================
        GET ROOMS
     ========================= */
 
-    router.get("/", authRequired, async (req, res) => {
+    router.get(
+        "/",
+        authRequired,
 
-        try {
+        async (req, res) => {
 
-            const result = await pool.query(`
-                SELECT id,
-                       name
-                FROM rooms
-                ORDER BY id ASC
-            `);
+            try {
 
-            res.json(result.rows);
+                const result =
+                    await pool.query(`
 
-        } catch (err) {
+                        SELECT
+                            r.id,
+                            r.name
 
-            console.log(err);
+                        FROM rooms r
 
-            res.status(500).json({
-                success: false
-            });
+                        WHERE $1 = ANY(r.members)
+
+                        ORDER BY r.id ASC
+
+                    `, [
+                        req.session.user.id
+                    ]);
+
+                res.json(
+                    result.rows
+                );
+
+            } catch (err) {
+
+                console.log(err);
+
+                res.status(500).json({
+                    success: false
+                });
+            }
         }
-    });
+    );
 
     /* =========================
        ROOM MESSAGES
@@ -45,6 +63,30 @@ module.exports = (io) => {
 
             try {
 
+                const memberCheck =
+                    await pool.query(`
+                        SELECT 1
+                        FROM rooms
+                        WHERE id = $1
+                          AND $2 = ANY(members)
+                    `, [
+
+                        req.params.roomId,
+
+                        req.session.user.id
+                    ]);
+
+                if (
+                    !memberCheck.rows.length
+                ) {
+
+                    return res.status(403).json({
+                        success: false,
+                        message:
+                            "Access denied"
+                    });
+                }
+
                 const result =
                     await pool.query(`
 
@@ -55,12 +97,14 @@ module.exports = (io) => {
                                rm.content,
                                rm.created_at,
 
-                               EXISTS (SELECT 1
-                                       FROM pinned_messages pm
-                                       WHERE pm.message_id = rm.id
-                                         AND pm.chat_type = 'room'
-                                         AND pm.chat_target = rm.room_id::text) AS pinned
-                    
+                               EXISTS (
+                                   SELECT 1
+                                   FROM pinned_messages pm
+                                   WHERE pm.message_id = rm.id
+                                   AND pm.chat_type = 'room'
+                                   AND pm.chat_target = rm.room_id::text
+                               ) AS pinned
+
                         FROM room_messages rm
 
                         WHERE rm.room_id = $1
@@ -87,7 +131,7 @@ module.exports = (io) => {
     );
 
     /* =========================
-       CREATE NEW ROOM
+       CREATE ROOM
     ========================= */
 
     router.post(
@@ -96,28 +140,156 @@ module.exports = (io) => {
 
         async (req, res) => {
 
-            const { name } = req.body;
+            const { name } =
+                req.body;
 
-            if (!name || !name.trim()) {
+            if (
+                !name ||
+                !name.trim()
+            ) {
+
                 return res.status(400).json({
                     success: false,
-                    message: "Room name is required"
+                    message:
+                        "Room name is required"
                 });
             }
 
             try {
 
-                const result = await pool.query(`
-                    INSERT INTO rooms (name)
-                    VALUES ($1)
-                    RETURNING id, name
+                const userId =
+                    Number(req.session.user.id);
+
+                const result =
+                    await pool.query(`
+                        INSERT INTO rooms
+                        (
+                            name,
+                            owner_id,
+                            created_by,
+                            members
+                        )
+
+                        VALUES ($1, $2, $3, ARRAY[$4::INTEGER])
+
+                        RETURNING id, name, members
+                    `, [
+
+                        name.trim(),
+
+                        userId,
+                        userId,
+                        userId,
+                    ]);
+
+                res.json({
+
+                    success: true,
+
+                    room:
+                        result.rows[0]
+                });
+
+            } catch (err) {
+
+                console.log(err);
+
+                res.status(500).json({
+                    success: false
+                });
+            }
+        }
+    );
+
+    /* =========================
+       INVITE USER
+    ========================= */
+
+    router.post(
+        "/:roomId/invite",
+        authRequired,
+
+        async (req, res) => {
+
+            const { username } =
+                req.body;
+
+            try {
+
+                const memberCheck =
+                    await pool.query(`
+                        SELECT 1
+                        FROM rooms
+                        WHERE id = $1
+                          AND $2 = ANY(members)
+                    `, [
+
+                        req.params.roomId,
+
+                        req.session.user.id
+                    ]);
+
+                if (
+                    !memberCheck.rows.length
+                ) {
+
+                    return res.status(403).json({
+                        success: false,
+                        message:
+                            "Access denied"
+                    });
+                }
+
+                const userResult =
+                    await pool.query(`
+                        SELECT id,
+                               username
+
+                        FROM users
+
+                        WHERE LOWER(username)
+                        = LOWER($1)
+                    `, [
+                        username.trim()
+                    ]);
+
+                if (
+                    !userResult.rows.length
+                ) {
+
+                    return res.status(404).json({
+                        success: false,
+                        message:
+                            "User not found"
+                    });
+                }
+
+                const targetUser =
+                    userResult.rows[0];
+
+                await pool.query(`
+                    UPDATE rooms
+
+                    SET members = array_append(
+                            members,
+                            $1
+                                  )
+
+                    WHERE id = $2
+                    AND NOT ($1 = ANY(members))
                 `, [
-                    name.trim()
+
+                    targetUser.id,
+
+                    req.params.roomId
                 ]);
 
                 res.json({
+
                     success: true,
-                    room: result.rows[0]
+
+                    username:
+                    targetUser.username
                 });
 
             } catch (err) {
@@ -141,19 +313,61 @@ module.exports = (io) => {
 
         async (req, res) => {
 
-            const {content} =
+            const { content } =
                 req.body;
 
+            const roomId =
+                Number(req.params.roomId);
+
+            const userId =
+                Number(req.session.user.id);
+
             try {
+
+                /* =========================
+                   VALIDATE MEMBERSHIP
+                ========================= */
+
+                const memberCheck =
+                    await pool.query(`
+                        SELECT id
+
+                        FROM rooms
+
+                        WHERE id = $1
+                          AND $2 = ANY(members)
+                    `, [
+
+                        roomId,
+
+                        userId
+                    ]);
+
+                if (
+                    !memberCheck.rows.length
+                ) {
+
+                    return res.status(403).json({
+                        success: false,
+                        message:
+                            "Access denied"
+                    });
+                }
+
+                /* =========================
+                   INSERT MESSAGE
+                ========================= */
 
                 const result =
                     await pool.query(`
 
                         INSERT INTO room_messages
-                        (room_id,
-                         user_id,
-                         username,
-                         content)
+                        (
+                            room_id,
+                            user_id,
+                            username,
+                            content
+                        )
 
                         VALUES ($1, $2, $3, $4)
 
@@ -161,25 +375,30 @@ module.exports = (io) => {
 
                     `, [
 
-                        req.params.roomId,
+                        roomId,
 
-                        req.session.user.id,
+                        userId,
 
                         req.session.user.username,
 
                         content
                     ]);
 
-                const message =
-                    {
-                        ...result.rows[0],
-                        pinned: false
-                    };
+                const message = {
+
+                    ...result.rows[0],
+
+                    pinned: false
+                };
+
+                /* =========================
+                   EMIT
+                ========================= */
 
                 io.to(
-                    `room:${req.params.roomId}`
+                    `room:${roomId}`
                 ).emit(
-                    "message:new",
+                    "room:message:new",
                     message
                 );
 

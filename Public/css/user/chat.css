@@ -474,6 +474,7 @@ PINNED MESSAGE
     box-shadow: 0 0 18px rgba(255, 215, 0, 0.12);
 }
 
+
 .message-pinned-badge,
 .pinned-label {
 
@@ -483,17 +484,21 @@ PINNED MESSAGE
 
     margin-left: 10px;
 
-    padding: 2px 8px;
+    padding: 3px 8px;
 
-    font-size: 11px;
-
-    border-radius: 999px;
+    font-size: 10px;
 
     letter-spacing: 1px;
+
+    font-weight: bold;
+
+    text-transform: uppercase;
 
     color: black;
 
     background: #00ff88;
+
+    border-radius: 5px;
 
     box-shadow: 0 0 10px rgba(0, 255, 136, 0.18);
 }

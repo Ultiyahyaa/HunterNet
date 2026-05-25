@@ -19,7 +19,8 @@ export function createChatCore(config) {
         messageInput,
         globalChat,
         usersList,
-        roomsList
+        roomsList,
+        inviteUserBtn
     } = elements;
 
     let currentChat = {
@@ -330,8 +331,72 @@ export function createChatCore(config) {
     ========================= */
 
     socket.on(
-        "message:new",
+        "global:message:new",
         (msg) => {
+
+            if (currentChat.type !== "global") {
+                return;
+            }
+
+            const exists =
+                document.querySelector(
+                    `[data-message-id="${msg.id}"]`
+                );
+
+            if (exists) return;
+
+            const element =
+                createMessageElement(msg);
+
+            messagesDiv.appendChild(
+                element
+            );
+
+            messagesDiv.scrollTop =
+                messagesDiv.scrollHeight;
+        }
+    );
+
+    socket.on(
+        "room:message:new",
+        (msg) => {
+
+            if (
+                currentChat.type !== "room" ||
+                String(currentChat.id) !== String(msg.room_id)
+            ) {
+                return;
+            }
+
+            const exists =
+                document.querySelector(
+                    `[data-message-id="${msg.id}"]`
+                );
+
+            if (exists) return;
+
+            const element =
+                createMessageElement(msg);
+
+            messagesDiv.appendChild(
+                element
+            );
+
+            messagesDiv.scrollTop =
+                messagesDiv.scrollHeight;
+        }
+    );
+
+    socket.on(
+        "dm:message:new",
+        (msg) => {
+
+            if (
+                currentChat.type !== "dm" ||
+                currentChat.roomId !== msg.roomId
+            ) {
+                return;
+            }
 
             const exists =
                 document.querySelector(
@@ -598,6 +663,22 @@ export function createChatCore(config) {
     ========================= */
 
     async function switchChat(chatData) {
+
+        if (inviteUserBtn) {
+
+            if (chatData.type === "room") {
+
+                inviteUserBtn.classList.remove(
+                    "hidden"
+                );
+
+            } else {
+
+                inviteUserBtn.classList.add(
+                    "hidden"
+                );
+            }
+        }
 
         currentChat = {
             ...chatData,

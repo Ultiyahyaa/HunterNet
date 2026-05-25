@@ -208,6 +208,15 @@ module.exports = (io) => {
                         content
                     ]);
 
+                const users = [
+
+                    req.session.user.id,
+
+                    req.params.userId
+                ]
+                    .sort()
+                    .join("-");
+
                 const message = {
 
                     ...result.rows[0],
@@ -220,22 +229,15 @@ module.exports = (io) => {
                     result.rows[0]
                         .sender_username,
 
+                    roomId: users,
+
                     pinned: false
                 };
-
-                const users = [
-
-                    req.session.user.id,
-
-                    req.params.userId
-                ]
-                    .sort()
-                    .join("-");
 
                 io.to(
                     `dm:${users}`
                 ).emit(
-                    "message:new",
+                    "dm:message:new",
                     message
                 );
 
