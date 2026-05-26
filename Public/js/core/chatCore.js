@@ -17,6 +17,7 @@ export function createChatCore(config) {
         messagesDiv,
         messageForm,
         messageInput,
+        imageInput,
         globalChat,
         usersList,
         roomsList,
@@ -30,6 +31,18 @@ export function createChatCore(config) {
     };
 
     const socket = io();
+
+    const attachBtn =
+        document.getElementById(
+            "attachBtn"
+        );
+
+    const attachmentPreview =
+        document.getElementById(
+            "attachmentPreview"
+        );
+
+    let selectedFiles = [];
 
     socket.emit("join:global");
 
@@ -225,6 +238,72 @@ export function createChatCore(config) {
         wrapper.appendChild(
             contentDiv
         );
+
+        if (
+            msg.attachments &&
+            msg.attachments.length
+        ) {
+
+            const gallery =
+                document.createElement(
+                    "div"
+                );
+
+            gallery.className =
+                "message-gallery";
+
+            msg.attachments.forEach(
+                attachment => {
+
+                    const img =
+                        document.createElement(
+                            "img"
+                        );
+
+                    img.src =
+                        attachment.image_url;
+
+                    img.className =
+                        "message-image";
+
+                    img.loading =
+                        "lazy";
+
+                    img.style.cursor =
+                        "pointer";
+
+                    img.addEventListener(
+                        "click",
+                        () => {
+
+                            if (
+                                window.openImageModal
+                            ) {
+
+                                window.openImageModal(
+                                    attachment.image_url
+                                );
+
+                            } else {
+
+                                window.open(
+                                    attachment.image_url,
+                                    "_blank"
+                                );
+                            }
+                        }
+                    );
+
+                    gallery.appendChild(
+                        img
+                    );
+                }
+            );
+
+            wrapper.appendChild(
+                gallery
+            );
+        }
 
         /* =========================
         ADMIN MENU
@@ -760,8 +839,8 @@ export function createChatCore(config) {
     }
 
     /* =========================
-LOAD ROOMS
-========================= */
+    LOAD ROOMS
+    ========================= */
 
     async function loadRooms() {
 
@@ -827,8 +906,8 @@ LOAD ROOMS
     }
 
     /* =========================
-LOAD DMS
-========================= */
+    LOAD DMS
+    ========================= */
 
     async function loadDMs() {
 
@@ -913,11 +992,152 @@ LOAD DMS
     );
 
     /* =========================
+FILE PICKER
+========================= */
+
+    attachBtn?.addEventListener(
+        "click",
+        () => {
+
+            imageInput?.click();
+        }
+    );
+
+    /* =========================
+    FILE SELECT
+    ========================= */
+
+    imageInput?.addEventListener(
+        "change",
+        (e) => {
+
+            const files =
+                Array.from(
+                    e.target.files
+                );
+
+            if (!files.length) {
+                return;
+            }
+
+            selectedFiles = [
+                ...selectedFiles,
+                ...files
+            ];
+
+            renderAttachmentPreview();
+
+            imageInput.value = "";
+        }
+    );
+
+    /* =========================
+    RENDER ATTACHMENTS
+    ========================= */
+
+    function renderAttachmentPreview() {
+
+        if (!attachmentPreview) {
+            return;
+        }
+
+        attachmentPreview.innerHTML = "";
+
+        if (!selectedFiles.length) {
+
+            attachmentPreview.classList.add(
+                "hidden"
+            );
+
+            return;
+        }
+
+        attachmentPreview.classList.remove(
+            "hidden"
+        );
+
+        selectedFiles.forEach(
+            (file, index) => {
+
+                const reader =
+                    new FileReader();
+
+                reader.onload =
+                    (e) => {
+
+                        const item =
+                            document.createElement(
+                                "div"
+                            );
+
+                        item.className =
+                            "attachment-item";
+
+                        item.innerHTML = `
+
+                        <img
+                            src="${e.target.result}"
+                            class="attachment-thumb"
+                        >
+
+                        <button
+                            type="button"
+                            class="remove-attachment"
+                            data-index="${index}">
+                            ×
+                        </button>
+                    `;
+
+                        attachmentPreview.appendChild(
+                            item
+                        );
+                    };
+
+                reader.readAsDataURL(
+                    file
+                );
+            }
+        );
+    }
+
+    /* =========================
+    REMOVE ATTACHMENT
+    ========================= */
+
+    attachmentPreview?.addEventListener(
+        "click",
+        (e) => {
+
+            const removeBtn =
+                e.target.closest(
+                    ".remove-attachment"
+                );
+
+            if (!removeBtn) {
+                return;
+            }
+
+            const index =
+                Number(
+                    removeBtn.dataset.index
+                );
+
+            selectedFiles.splice(
+                index,
+                1
+            );
+
+            renderAttachmentPreview();
+        }
+    );
+
+    /* =========================
     SEND
     ========================= */
 
     messageForm?.addEventListener(
         "submit",
+
         async (e) => {
 
             e.preventDefault();
@@ -925,7 +1145,19 @@ LOAD DMS
             const text =
                 messageInput.value.trim();
 
-            if (!text) return;
+            const files = selectedFiles;
+
+            /* =========================
+               PREVENT EMPTY MESSAGE
+            ========================= */
+
+            if (
+                !text &&
+                !files.length
+            ) {
+
+                return;
+            }
 
             let url = null;
 
@@ -962,21 +1194,50 @@ LOAD DMS
 
             if (!url) return;
 
-            await safeFetch(url, {
+            const formData =
+                new FormData();
 
-                method: "POST",
+            formData.append(
+                "content",
+                text
+            );
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+            for (
+                const file
+                of files
+                ) {
 
-                body: JSON.stringify({
-                    content: text
-                })
-            });
+                formData.append(
+                    "images",
+                    file
+                );
+            }
+
+            const result =
+                await safeFetch(
+                    url,
+                    {
+
+                        method: "POST",
+
+                        body: formData
+                    }
+                );
+
+            if (!result) {
+                return;
+            }
 
             messageInput.value = "";
+
+            selectedFiles = [];
+
+            renderAttachmentPreview();
+
+            if (imageInput) {
+
+                imageInput.value = "";
+            }
         }
     );
 

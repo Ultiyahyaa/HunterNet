@@ -95,16 +95,44 @@
 
         <form id="messageForm" class="message-form">
 
-            <input
-                type="text"
-                id="messageInput"
-                placeholder="Enter transmission..."
-                required
-            >
+            <!-- IMAGE PREVIEW -->
+            <div
+                    id="attachmentPreview"
+                    class="attachment-preview hidden">
+            </div>
 
-            <button type="submit">
-                SEND
-            </button>
+            <div class="message-input-row">
+
+                <!-- HIDDEN FILE INPUT -->
+                <input
+                        type="file"
+                        id="imageInput"
+                        accept="image/*"
+                        multiple
+                        hidden
+                >
+
+                <!-- ATTACH BUTTON -->
+                <button
+                        type="button"
+                        id="attachBtn"
+                        class="attach-btn">
+                    +
+                </button>
+
+                <!-- MESSAGE INPUT -->
+                <input
+                        type="text"
+                        id="messageInput"
+                        placeholder="Enter transmission..."
+                >
+
+                <!-- SEND -->
+                <button type="submit">
+                    SEND
+                </button>
+
+            </div>
 
         </form>
 

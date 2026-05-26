@@ -1,6 +1,7 @@
 const express = require("express");
 const pool = require("../database/database");
 const authRequired = require("../middleware/auth");
+const upload = require("../middleware/uploadChatImages");
 
 module.exports = (io) => {
 
@@ -103,11 +104,29 @@ module.exports = (io) => {
                                    WHERE pm.message_id = rm.id
                                    AND pm.chat_type = 'room'
                                    AND pm.chat_target = rm.room_id::text
-                               ) AS pinned
+                               ) AS pinned,
+
+                               COALESCE(
+                                   json_agg(
+                                       json_build_object(
+                                           'id', ma.id,
+                                           'image_url', ma.image_url,
+                                           'uploaded_by', ma.uploaded_by
+                                       )
+                                       ORDER BY ma.id
+                                   ) FILTER (WHERE ma.id IS NOT NULL),
+                                   '[]'::json
+                               ) AS attachments
 
                         FROM room_messages rm
 
+                        LEFT JOIN message_attachments ma
+                            ON ma.message_id = rm.id
+                            AND ma.chat_type = 'room'
+
                         WHERE rm.room_id = $1
+
+                        GROUP BY rm.id, rm.room_id, rm.user_id, rm.username, rm.content, rm.created_at
 
                         ORDER BY rm.created_at ASC
 
@@ -309,12 +328,15 @@ module.exports = (io) => {
 
     router.post(
         "/:roomId/send",
+
         authRequired,
 
-        async (req, res) => {
+        upload.array(
+            "images",
+            8
+        ),
 
-            const { content } =
-                req.body;
+        async (req, res) => {
 
             const roomId =
                 Number(req.params.roomId);
@@ -322,11 +344,10 @@ module.exports = (io) => {
             const userId =
                 Number(req.session.user.id);
 
-            try {
+            const content =
+                req.body.content || "";
 
-                /* =========================
-                   VALIDATE MEMBERSHIP
-                ========================= */
+            try {
 
                 const memberCheck =
                     await pool.query(`
@@ -335,7 +356,7 @@ module.exports = (io) => {
                         FROM rooms
 
                         WHERE id = $1
-                          AND $2 = ANY(members)
+                          AND $2 = ANY (members)
                     `, [
 
                         roomId,
@@ -348,26 +369,32 @@ module.exports = (io) => {
                 ) {
 
                     return res.status(403).json({
-                        success: false,
-                        message:
-                            "Access denied"
+                        success: false
                     });
                 }
 
-                /* =========================
-                   INSERT MESSAGE
-                ========================= */
+                if (
+                    !content.trim()
+                    &&
+                    (!req.files ||
+                        !req.files.length)
+                ) {
+
+                    return res.status(400).json({
+                        success: false,
+                        message:
+                            "Message cannot be empty"
+                    });
+                }
 
                 const result =
                     await pool.query(`
 
                         INSERT INTO room_messages
-                        (
-                            room_id,
-                            user_id,
-                            username,
-                            content
-                        )
+                        (room_id,
+                         user_id,
+                         username,
+                         content)
 
                         VALUES ($1, $2, $3, $4)
 
@@ -384,27 +411,68 @@ module.exports = (io) => {
                         content
                     ]);
 
-                const message = {
+                const message =
+                    result.rows[0];
 
-                    ...result.rows[0],
+                let attachments = [];
+
+                if (
+                    req.files &&
+                    req.files.length
+                ) {
+
+                    for (const file of req.files) {
+
+                        const imageUrl =
+                            `/uploads/chat/${file.filename}`;
+
+                        const attachment =
+                            await pool.query(`
+                                INSERT INTO message_attachments
+                                (chat_type,
+                                 message_id,
+                                 image_url,
+                                 uploaded_by)
+
+                                VALUES ($1, $2, $3, $4)
+
+                                RETURNING *
+                            `, [
+
+                                "room",
+
+                                message.id,
+
+                                imageUrl,
+
+                                userId
+                            ]);
+
+                        attachments.push(
+                            attachment.rows[0]
+                        );
+                    }
+                }
+
+                const finalMessage = {
+
+                    ...message,
+
+                    attachments,
 
                     pinned: false
                 };
 
-                /* =========================
-                   EMIT
-                ========================= */
-
-                io.to(
-                    `room:${roomId}`
-                ).emit(
+                io.roomEmit(
+                    `room:${roomId}`,
                     "room:message:new",
-                    message
+                    finalMessage
                 );
 
                 res.json({
                     success: true,
-                    message
+                    message:
+                    finalMessage
                 });
 
             } catch (err) {

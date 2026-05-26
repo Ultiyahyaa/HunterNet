@@ -1,6 +1,7 @@
 const express = require("express");
 const pool = require("../database/database");
 const authRequired = require("../middleware/auth");
+const upload = require("../middleware/uploadChatImages");
 
 module.exports = (io) => {
 
@@ -129,9 +130,25 @@ module.exports = (io) => {
                                dm.content,
                                dm.created_at,
 
-                               false              AS pinned
+                               false              AS pinned,
+
+                               COALESCE(
+                                   json_agg(
+                                       json_build_object(
+                                           'id', ma.id,
+                                           'image_url', ma.image_url,
+                                           'uploaded_by', ma.uploaded_by
+                                       )
+                                       ORDER BY ma.id
+                                   ) FILTER (WHERE ma.id IS NOT NULL),
+                                   '[]'::json
+                               ) AS attachments
 
                         FROM direct_messages dm
+
+                        LEFT JOIN message_attachments ma
+                            ON ma.message_id = dm.id
+                            AND ma.chat_type = 'dm'
 
                         WHERE (
                             dm.sender_id = $1
@@ -144,6 +161,8 @@ module.exports = (io) => {
                                 AND
                             dm.receiver_id = $1
                             )
+
+                        GROUP BY dm.id, dm.sender_id, dm.sender_username, dm.content, dm.created_at
 
                         ORDER BY dm.created_at ASC
 
@@ -177,12 +196,34 @@ module.exports = (io) => {
         "/:userId/send",
         authRequired,
 
+        upload.array("images", 8),
+
         async (req, res) => {
 
             const {content} =
                 req.body;
 
+            const userId =
+                Number(req.session.user.id);
+
+            const receiverId =
+                Number(req.params.userId);
+
             try {
+
+                if (
+                    !content.trim()
+                    &&
+                    (!req.files ||
+                        !req.files.length)
+                ) {
+
+                    return res.status(400).json({
+                        success: false,
+                        message:
+                            "Message cannot be empty"
+                    });
+                }
 
                 const result =
                     await pool.query(`
@@ -199,37 +240,81 @@ module.exports = (io) => {
 
                     `, [
 
-                        req.session.user.id,
+                        userId,
 
-                        req.params.userId,
+                        receiverId,
 
                         req.session.user.username,
 
                         content
                     ]);
 
+                const message = result.rows[0];
+
+                let attachments = [];
+
+                if (
+                    req.files &&
+                    req.files.length
+                ) {
+
+                    for (const file of req.files) {
+
+                        const imageUrl =
+                            `/uploads/chat/${file.filename}`;
+
+                        const attachment =
+                            await pool.query(`
+                                INSERT INTO message_attachments
+                                (chat_type,
+                                 message_id,
+                                 image_url,
+                                 uploaded_by)
+
+                                VALUES ($1, $2, $3, $4)
+
+                                RETURNING *
+                            `, [
+
+                                "dm",
+
+                                message.id,
+
+                                imageUrl,
+
+                                userId
+                            ]);
+
+                        attachments.push(
+                            attachment.rows[0]
+                        );
+                    }
+                }
+
                 const users = [
 
-                    req.session.user.id,
+                    userId,
 
-                    req.params.userId
+                    receiverId
                 ]
                     .sort()
                     .join("-");
 
-                const message = {
+                const finalMessage = {
 
-                    ...result.rows[0],
+                    ...message,
 
                     user_id:
-                    result.rows[0]
+                    message
                         .sender_id,
 
                     username:
-                    result.rows[0]
+                    message
                         .sender_username,
 
                     roomId: users,
+
+                    attachments,
 
                     pinned: false
                 };
@@ -238,12 +323,12 @@ module.exports = (io) => {
                     `dm:${users}`
                 ).emit(
                     "dm:message:new",
-                    message
+                    finalMessage
                 );
 
                 res.json({
                     success: true,
-                    message
+                    message: finalMessage
                 });
 
             } catch (err) {

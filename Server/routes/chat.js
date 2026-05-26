@@ -2,6 +2,7 @@ const express = require("express");
 const pool = require("../database/database");
 const authRequired = require("../middleware/auth");
 const adminOnly = require("../middleware/admin");
+const upload = require("../middleware/uploadChatImages");
 
 module.exports = (io) => {
 
@@ -27,9 +28,27 @@ router.get("/api/global", authRequired, async (req, res) => {
                     SELECT 1
                     FROM pinned_messages pm
                     WHERE pm.message_id = gm.id
-                ) AS pinned
+                ) AS pinned,
+
+                COALESCE(
+                    json_agg(
+                        json_build_object(
+                            'id', ma.id,
+                            'image_url', ma.image_url,
+                            'uploaded_by', ma.uploaded_by
+                        )
+                        ORDER BY ma.id
+                    ) FILTER (WHERE ma.id IS NOT NULL),
+                    '[]'::json
+                ) AS attachments
 
             FROM global_messages gm
+
+            LEFT JOIN message_attachments ma
+                ON ma.message_id = gm.id
+                AND ma.chat_type = 'global'
+
+            GROUP BY gm.id, gm.user_id, gm.username, gm.content, gm.created_at
 
             ORDER BY gm.created_at ASC
         `);
@@ -51,11 +70,26 @@ router.get("/api/global", authRequired, async (req, res) => {
    SEND GLOBAL MESSAGE
 ========================= */
 
-router.post("/api/global/send", authRequired, async (req, res) => {
+router.post("/api/global/send", authRequired, upload.array("images", 8), async (req, res) => {
 
     const { content } = req.body;
+    const userId = Number(req.session.user.id);
 
     try {
+
+        if (
+            !content.trim()
+            &&
+            (!req.files ||
+                !req.files.length)
+        ) {
+
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Message cannot be empty"
+            });
+        }
 
         const result = await pool.query(`
             INSERT INTO global_messages
@@ -63,15 +97,63 @@ router.post("/api/global/send", authRequired, async (req, res) => {
             VALUES ($1, $2, $3)
             RETURNING *
         `, [
-            req.session.user.id,
+            userId,
             req.session.user.username,
             content
         ]);
 
-        io.to("global").emit("global:message:new", {
-            ...result.rows[0],
+        const message = result.rows[0];
+
+        let attachments = [];
+
+        if (
+            req.files &&
+            req.files.length
+        ) {
+
+            for (const file of req.files) {
+
+                const imageUrl =
+                    `/uploads/chat/${file.filename}`;
+
+                const attachment =
+                    await pool.query(`
+                        INSERT INTO message_attachments
+                        (chat_type,
+                         message_id,
+                         image_url,
+                         uploaded_by)
+
+                        VALUES ($1, $2, $3, $4)
+
+                        RETURNING *
+                    `, [
+
+                        "global",
+
+                        message.id,
+
+                        imageUrl,
+
+                        userId
+                    ]);
+
+                attachments.push(
+                    attachment.rows[0]
+                );
+            }
+        }
+
+        const finalMessage = {
+
+            ...message,
+
+            attachments,
+
             pinned: false
-        });
+        };
+
+        io.to("global").emit("global:message:new", finalMessage);
 
         res.json({
             success: true
@@ -169,9 +251,27 @@ router.get(
                         SELECT 1
                         FROM pinned_messages pm
                         WHERE pm.message_id = gm.id
-                    ) AS pinned
+                    ) AS pinned,
+
+                    COALESCE(
+                        json_agg(
+                            json_build_object(
+                                'id', ma.id,
+                                'image_url', ma.image_url,
+                                'uploaded_by', ma.uploaded_by
+                            )
+                            ORDER BY ma.id
+                        ) FILTER (WHERE ma.id IS NOT NULL),
+                        '[]'::json
+                    ) AS attachments
 
                 FROM global_messages gm
+
+                LEFT JOIN message_attachments ma
+                    ON ma.message_id = gm.id
+                    AND ma.chat_type = 'global'
+
+                GROUP BY gm.id, gm.user_id, gm.username, gm.content, gm.created_at
 
                 ORDER BY gm.created_at ASC
             `);

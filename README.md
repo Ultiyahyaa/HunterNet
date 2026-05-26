@@ -51,8 +51,8 @@ This project attempts to modernize that concept while preserving the atmosphere 
 
 ## Frontend
 
-* HTML5
-* CSS3
+* HTML
+* CSS
 * JavaScript
 
 ## Backend
@@ -141,16 +141,14 @@ git clone <repo-url>
 cd hunternet
 
 npm install
-
-npm start
 ```
 
 ---
 
-# Development
+# Execution
 
 ```bash
-npm run dev
+node server/server.js
 ```
 
 ---

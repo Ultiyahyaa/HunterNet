@@ -20,30 +20,22 @@ CREATE CHAT
 ========================= */
 
 const logoutBtn = document.getElementById("logoutBtn");
+
+const attachBtn = document.getElementById("attachBtn");
+const imageInput = document.getElementById("imageInput");
+const attachmentPreview = document.getElementById("attachmentPreview");
+
 const createRoomBtn = document.getElementById("createRoomBtn");
 const contactUserBtn = document.getElementById("contactUserBtn");
 const inviteUserBtn = document.getElementById("inviteUserBtn");
+
 const cyberModal = document.getElementById("cyberModal");
+const modalTitle = document.getElementById("modalTitle");
+const modalInput = document.getElementById("modalInput");
+const confirmModalBtn = document.getElementById("confirmModalBtn");
+const closeModalBtn = document.getElementById("closeModalBtn");
 
-const modalTitle =
-    document.getElementById(
-        "modalTitle"
-    );
-
-const modalInput =
-    document.getElementById(
-        "modalInput"
-    );
-
-const confirmModalBtn =
-    document.getElementById(
-        "confirmModalBtn"
-    );
-
-const closeModalBtn =
-    document.getElementById(
-        "closeModalBtn"
-    );
+let selectedImages = [];
 
 const chat = createChatCore({
 
@@ -67,6 +59,11 @@ const chat = createChatCore({
         messageInput:
             document.getElementById(
                 "messageInput"
+            ),
+
+        imagesInput:
+            document.getElementById(
+                "imagesInput"
             ),
 
         globalChat:
@@ -439,6 +436,283 @@ cyberModal?.addEventListener(
         }
     }
 );
+
+/* =========================
+OPEN FILE PICKER
+========================= */
+
+attachBtn?.addEventListener(
+    "click",
+    () => {
+
+        imageInput.click();
+    }
+);
+
+/* =========================
+SELECT IMAGES
+========================= */
+
+imageInput?.addEventListener(
+    "change",
+    () => {
+
+        const files =
+            Array.from(
+                imageInput.files
+            );
+
+        if (!files.length) {
+            return;
+        }
+
+        selectedImages = [
+            ...selectedImages,
+            ...files
+        ];
+
+        renderAttachments();
+
+        imageInput.value = "";
+    }
+);
+
+/* =========================
+RENDER ATTACHMENTS
+========================= */
+
+function renderAttachments() {
+
+    attachmentPreview.innerHTML = "";
+
+    if (!selectedImages.length) {
+
+        attachmentPreview.classList.add(
+            "hidden"
+        );
+
+        return;
+    }
+
+    attachmentPreview.classList.remove(
+        "hidden"
+    );
+
+    selectedImages.forEach(
+        (file, index) => {
+
+            const reader =
+                new FileReader();
+
+            reader.onload =
+                (e) => {
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+                    div.className =
+                        "attachment-item";
+
+                    const img = 
+                        document.createElement(
+                            "img"
+                        );
+                    
+                    img.src =
+                        e.target.result;
+                    
+                    img.className =
+                        "attachment-thumb";
+                    
+                    img.addEventListener(
+                        "click",
+                        () => openImageModal(
+                            e.target.result
+                        )
+                    );
+
+                    const btn =
+                        document.createElement(
+                            "button"
+                        );
+                    
+                    btn.type = "button";
+                    btn.className =
+                        "remove-attachment";
+                    btn.dataset.index = index;
+                    btn.textContent = "×";
+                    
+                    btn.addEventListener(
+                        "click",
+                        (event) => {
+
+                            event.preventDefault();
+                            event.stopPropagation();
+
+                            const idx =
+                                Number(
+                                    event.target
+                                        .dataset.index
+                                );
+
+                            selectedImages.splice(
+                                idx,
+                                1
+                            );
+
+                            renderAttachments();
+                        }
+                    );
+
+                    div.appendChild(img);
+                    div.appendChild(btn);
+
+                    attachmentPreview.appendChild(
+                        div
+                    );
+                };
+
+            reader.readAsDataURL(
+                file
+            );
+        }
+    );
+}
+
+/* =========================
+REMOVE ATTACHMENT
+========================= */
+
+attachmentPreview?.addEventListener(
+    "click",
+    (e) => {
+
+        const btn =
+            e.target.closest(
+                ".remove-attachment"
+            );
+
+        if (!btn) {
+            return;
+        }
+
+        const index =
+            Number(
+                btn.dataset.index
+            );
+
+        selectedImages.splice(
+            index,
+            1
+        );
+
+        renderAttachments();
+    }
+);
+
+/* =========================
+IMAGE MODAL (LIGHTBOX)
+========================= */
+
+let imageModal = null;
+
+function initImageModal() {
+
+    imageModal = 
+        document.createElement("div");
+
+    imageModal.className =
+        "image-modal";
+
+    imageModal.innerHTML = `
+        <div class="image-modal-content">
+            <img 
+                class="image-modal-image" 
+                src="" 
+                alt="Expanded image"
+            >
+            <button 
+                class="image-modal-close" 
+                aria-label="Close image">
+                ×
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(
+        imageModal
+    );
+
+    const closeBtn = 
+        imageModal.querySelector(
+            ".image-modal-close"
+        );
+
+    closeBtn.addEventListener(
+        "click",
+        closeImageModal
+    );
+
+    imageModal.addEventListener(
+        "click",
+        (e) => {
+
+            if (
+                e.target === imageModal
+            ) {
+
+                closeImageModal();
+            }
+        }
+    );
+
+    document.addEventListener(
+        "keydown",
+        (e) => {
+
+            if (
+                e.key === "Escape" &&
+                imageModal.classList.contains(
+                    "active"
+                )
+            ) {
+
+                closeImageModal();
+            }
+        }
+    );
+}
+
+function openImageModal(src) {
+
+    if (!imageModal) {
+        initImageModal();
+    }
+
+    const img = 
+        imageModal.querySelector(
+            ".image-modal-image"
+        );
+
+    img.src = src;
+
+    imageModal.classList.add(
+        "active"
+    );
+}
+
+function closeImageModal() {
+
+    imageModal?.classList.remove(
+        "active"
+    );
+}
+
+/* Make modal accessible globally */
+window.openImageModal = openImageModal;
+window.closeImageModal = closeImageModal;
 
 /* =========================
 PINS PANEL

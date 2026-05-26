@@ -255,6 +255,108 @@ closePins?.addEventListener(
     }
 );
 
+/* =========================
+IMAGE MODAL (LIGHTBOX)
+========================= */
+
+let imageModal = null;
+
+function initImageModal() {
+
+    imageModal = 
+        document.createElement("div");
+
+    imageModal.className =
+        "image-modal";
+
+    imageModal.innerHTML = `
+        <div class="image-modal-content">
+            <img 
+                class="image-modal-image" 
+                src="" 
+                alt="Expanded image"
+            >
+            <button 
+                class="image-modal-close" 
+                aria-label="Close image">
+                ×
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(
+        imageModal
+    );
+
+    const closeBtn = 
+        imageModal.querySelector(
+            ".image-modal-close"
+        );
+
+    closeBtn.addEventListener(
+        "click",
+        closeImageModal
+    );
+
+    imageModal.addEventListener(
+        "click",
+        (e) => {
+
+            if (
+                e.target === imageModal
+            ) {
+
+                closeImageModal();
+            }
+        }
+    );
+
+    document.addEventListener(
+        "keydown",
+        (e) => {
+
+            if (
+                e.key === "Escape" &&
+                imageModal.classList.contains(
+                    "active"
+                )
+            ) {
+
+                closeImageModal();
+            }
+        }
+    );
+}
+
+function openImageModal(src) {
+
+    if (!imageModal) {
+        initImageModal();
+    }
+
+    const img = 
+        imageModal.querySelector(
+            ".image-modal-image"
+        );
+
+    img.src = src;
+
+    imageModal.classList.add(
+        "active"
+    );
+}
+
+function closeImageModal() {
+
+    imageModal?.classList.remove(
+        "active"
+    );
+}
+
+/* Make modal accessible globally */
+window.openImageModal = openImageModal;
+window.closeImageModal = closeImageModal;
+
 logoutBtn.addEventListener("click", async () => {
     const res = await fetch("/admin/api/logout", {
         method: "POST",
