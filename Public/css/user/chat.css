@@ -402,18 +402,12 @@ body::before {
 ========================= */
 
 .messages {
-
     flex: 1;
-
     overflow-y: auto;
-
     padding: 20px;
-
     display: flex;
     flex-direction: column;
-
     gap: 12px;
-
     min-height: 0;
 }
 
@@ -937,14 +931,21 @@ PINNED MESSAGE
 }
 
 .attach-btn {
+
     width: 42px;
     height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     background: #111;
     color: #00ff9d;
-    font-size: 24px;
+    font-size: 28px;
+    line-height: 1;
     cursor: pointer;
     flex-shrink: 0;
+    padding: 0;
 }
 
 .attachment-preview {

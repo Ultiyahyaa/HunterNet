@@ -3,6 +3,8 @@ const pool = require("../database/database");
 const authRequired = require("../middleware/auth");
 const adminOnly = require("../middleware/admin");
 const upload = require("../middleware/uploadChatImages");
+const fs = require("fs").promises;
+const path = require("path");
 
 module.exports = (io) => {
 
@@ -308,14 +310,40 @@ router.delete(
 
         try {
 
+            const attachments = await pool.query(`
+                SELECT image_url
+                FROM message_attachments
+                WHERE chat_type = 'global'
+                  AND message_id = $1
+            `, [id]);
+
+            if (attachments.rows.length) {
+                for (const { image_url } of attachments.rows) {
+                    const filePath = path.join(
+                        __dirname,
+                        "..",
+                        "public",
+                        image_url.replace(/^\//, "")
+                    );
+
+                    await fs.unlink(filePath).catch(() => null);
+                }
+            }
+
             await pool.query(`
-                DELETE FROM global_messages
-                WHERE id = $1
+                DELETE FROM message_attachments
+                WHERE chat_type = 'global'
+                  AND message_id = $1
             `, [id]);
 
             await pool.query(`
                 DELETE FROM pinned_messages
                 WHERE message_id = $1
+            `, [id]);
+
+            await pool.query(`
+                DELETE FROM global_messages
+                WHERE id = $1
             `, [id]);
 
             io.emit("message:delete", id);
