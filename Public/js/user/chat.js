@@ -471,6 +471,8 @@ imageInput?.addEventListener(
             ...files
         ];
 
+        chat.setAttachments(selectedImages);
+
         renderAttachments();
 
         imageInput.value = "";
@@ -582,6 +584,15 @@ function renderAttachments() {
 }
 
 /* =========================
+CLEAR SELECTED IMAGES
+========================= */
+
+window.clearSelectedImages = () => {
+    selectedImages = [];
+    renderAttachments();
+};
+
+/* =========================
 REMOVE ATTACHMENT
 ========================= */
 
@@ -607,6 +618,10 @@ attachmentPreview?.addEventListener(
             index,
             1
         );
+
+        chat.setAttachments(selectedImages);
+
+        chat.setAttachments(selectedImages);
 
         renderAttachments();
     }

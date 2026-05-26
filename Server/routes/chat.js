@@ -78,7 +78,7 @@ router.post("/api/global/send", authRequired, upload.array("images", 8), async (
     try {
 
         if (
-            !content.trim()
+            (!content || !content.trim())
             &&
             (!req.files ||
                 !req.files.length)

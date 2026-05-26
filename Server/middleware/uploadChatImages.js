@@ -7,31 +7,38 @@ const path =
 const crypto =
     require("crypto");
 
+const fs =
+    require("fs");
+
+const uploadPath =
+    path.join(
+        __dirname,
+        "../../public/uploads/chat"
+    );
+
+/* =========================
+CREATE FOLDER IF MISSING
+========================= */
+
+if (!fs.existsSync(uploadPath)) {
+
+    fs.mkdirSync(
+        uploadPath,
+        { recursive: true }
+    );
+}
+
 const storage =
     multer.diskStorage({
 
         destination:
-            (
-                req,
-                file,
-                cb
-            ) => {
+            (req, file, cb) => {
 
-                cb(
-                    null,
-                    path.join(
-                        __dirname,
-                        "../public/uploads/chat"
-                    )
-                );
+                cb(null, uploadPath);
             },
 
         filename:
-            (
-                req,
-                file,
-                cb
-            ) => {
+            (req, file, cb) => {
 
                 const ext =
                     path.extname(
@@ -56,13 +63,13 @@ const fileFilter =
         cb
     ) => {
 
-        const allowed =
-            [
-                "image/png",
-                "image/jpeg",
-                "image/webp",
-                "image/gif"
-            ];
+        const allowed = [
+
+            "image/png",
+            "image/jpeg",
+            "image/webp",
+            "image/gif"
+        ];
 
         if (
             allowed.includes(

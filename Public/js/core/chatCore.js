@@ -1238,6 +1238,11 @@ FILE PICKER
 
                 imageInput.value = "";
             }
+
+            // Notify caller to clear their selectedImages
+            if (window.clearSelectedImages) {
+                window.clearSelectedImages();
+            }
         }
     );
 
@@ -1269,6 +1274,15 @@ FILE PICKER
         switchChat,
 
         getCurrentChat: () =>
-            currentChat
+            currentChat,
+
+        setAttachments: (files) => {
+            selectedFiles = files;
+        },
+
+        clearAttachments: () => {
+            selectedFiles = [];
+            renderAttachmentPreview();
+        }
     };
 }
