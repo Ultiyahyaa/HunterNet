@@ -69,11 +69,23 @@ app.use("/chat", chatRoutes);
 app.use("/threads", threadsRoutes);
 
 
-app.get("/home", (req, res) => {
+app.get([
+    "/",
+    "/home",
+    "/articles",
+    "/privacy",
+    "/leaks",
+    "/about"
+], (req, res) => {
+
     res.sendFile(
-      path.join(__dirname, "../Public/pages/public/index.html")
-    )
-})
+        path.join(
+            __dirname,
+            "../Public/pages/public/index.html"
+        )
+    );
+
+});
 
 app.get("/login", (req, res) => {
     res.sendFile(

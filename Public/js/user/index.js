@@ -66,9 +66,7 @@ function loadPage(pageName, pushHistory = true) {
             history.pushState(
                 { page: pageName },
                 "",
-                pageName === "home"
-                    ? "/"
-                    : `#${pageName}`
+                `/${pageName}`
             );
 
         }
@@ -285,23 +283,21 @@ function animateStats() {
    INITIAL LOAD
 ========================= */
 
-const hash =
-    window.location.hash
-        .replace("#", "");
+const path =
+    window.location.pathname
+        .replace(/^\/+/, "");
 
 const validPages = [
-
     "home",
     "articles",
     "privacy",
     "leaks",
     "about"
-
 ];
 
 const startingPage =
-    validPages.includes(hash)
-        ? hash
+    validPages.includes(path)
+        ? path
         : "home";
 
 loadPage(
