@@ -179,40 +179,74 @@ function buildTicker() {
    RANDOM TICKER UPDATES
 ========================= */
 
-const replacementHeadlines = [
-
-    "[REPORT] Global Privacy Index Updated",
-    "[WATCH] International Data Policy Under Review",
-    "[NOTICE] Transparency Initiative Expanded",
-    "[TRACKING] Public Archive Mirror Verified",
-    "[ALERT] New Encryption Standards Released",
-    "[ANALYSIS] Cross-Border Information Flow Study Published",
-    "[UPDATE] Transparency Index Increased To 94.7%",
-    "[ALERT] Public Data Repository Expanded",
-    "[REPORT] Cross-Network Audit Completed",
-    "[TRACKING] Research Node #42 Active",
-    "[NOTICE] Secure Communications White-paper Released"
-
+const types = [
+    "ALERT", "REPORT", "WATCH", "NOTICE",
+    "ANALYSIS", "TRACKING", "UPDATE", "ARCHIVE"
 ];
+
+const subjects = [
+    "Global Privacy Index",
+    "International Data Policy",
+    "Public Records Network",
+    "Cross-Border Surveillance Grid",
+    "Digital Rights Framework",
+    "Transparency Initiative",
+    "Encryption Standard Model",
+    "Metadata Retention Policy",
+    "Research Node Cluster",
+    "Public Archive Mirror"
+];
+
+const actions = [
+    "Updated",
+    "Expanded",
+    "Reviewed",
+    "Recalibrated",
+    "Synchronized",
+    "Audited",
+    "Published",
+    "Verified",
+    "Revised"
+];
+
+const objects = [
+    "across global nodes",
+    "under active review",
+    "following new compliance cycle",
+    "within threshold parameters",
+    "across distributed systems",
+    "under transparency mandate",
+    "in real-time audit stream",
+    "across secure channels"
+];
+
+const numbers = () =>
+    (Math.random() * 100).toFixed(1);
+
+const randomFrom = (arr) =>
+    arr[Math.floor(Math.random() * arr.length)];
+
+function generateHeadline() {
+    const type = randomFrom(types);
+    const subject = randomFrom(subjects);
+    const action = randomFrom(actions);
+    const object = randomFrom(objects);
+
+    // optional spice: sometimes include stats
+    const includeStat = Math.random() < 0.35;
+
+    if (includeStat) {
+        return `[${type}] ${subject} ${action} (${numbers()}%)`;
+    }
+
+    return `[${type}] ${subject} ${action} ${object}`;
+}
 
 setInterval(() => {
 
-    const randomHeadline =
-        Math.floor(
-            Math.random() *
-            headlines.length
-        );
+    const randomHeadlineIndex = Math.floor(Math.random() * headlines.length);
 
-    const replacement =
-        replacementHeadlines[
-            Math.floor(
-                Math.random() *
-                replacementHeadlines.length
-            )
-            ];
-
-    headlines[randomHeadline] =
-        replacement;
+    headlines[randomHeadlineIndex] = generateHeadline();
 
     buildTicker();
 

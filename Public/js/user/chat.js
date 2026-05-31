@@ -264,6 +264,10 @@ async function renderRoomSettings() {
 }
 
 async function fetchRoomMembers(roomId) {
+    if (!roomId) {
+        return null;
+    }
+
     try {
         const response = await fetch(`/chat/api/rooms/${roomId}/members`, {
             credentials: "include"
@@ -272,11 +276,16 @@ async function fetchRoomMembers(roomId) {
         const result = await response.json();
 
         if (!response.ok || !result.success) {
+            const message = result?.message || 'Failed to load members';
+            roomSettingsBody.innerHTML = `<div class="settings-message settings-error">${message}</div>`;
+            roomSettingsFooter.innerHTML = "";
             return null;
         }
 
         return result.members || [];
     } catch (err) {
+        roomSettingsBody.innerHTML = `<div class="settings-message settings-error">Unable to load room members.</div>`;
+        roomSettingsFooter.innerHTML = "";
         return null;
     }
 }

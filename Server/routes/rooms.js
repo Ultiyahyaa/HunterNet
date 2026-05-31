@@ -69,12 +69,12 @@ module.exports = (io) => {
                         SELECT 1
                         FROM rooms
                         WHERE id = $1
-                          AND $2 = ANY(members)
+                          AND members @> ARRAY[$2]::INTEGER[]
                     `, [
 
-                        req.params.roomId,
+                        Number(req.params.roomId),
 
-                        req.session.user.id
+                        Number(req.session.user.id)
                     ]);
 
                 if (
@@ -240,12 +240,12 @@ module.exports = (io) => {
                         SELECT 1
                         FROM rooms
                         WHERE id = $1
-                          AND $2 = ANY(members)
+                          AND members @> ARRAY[$2]::INTEGER[]
                     `, [
 
-                        req.params.roomId,
+                        Number(req.params.roomId),
 
-                        req.session.user.id
+                        Number(req.session.user.id)
                     ]);
 
                 if (!memberCheck.rows.length) {
@@ -330,15 +330,18 @@ module.exports = (io) => {
 
         async (req, res) => {
             try {
+                const roomId = Number(req.params.roomId);
+                const userId = Number(req.session.user.id);
+
                 const memberCheck =
                     await pool.query(`
                         SELECT 1
                         FROM rooms
                         WHERE id = $1
-                          AND $2 = ANY(members)
+                          AND members @> ARRAY[$2]::INTEGER[]
                     `, [
-                        req.params.roomId,
-                        req.session.user.id
+                        roomId,
+                        userId
                     ]);
 
                 if (!memberCheck.rows.length) {
@@ -350,16 +353,15 @@ module.exports = (io) => {
 
                 const members =
                     await pool.query(`
-                        SELECT id, username
-                        FROM users
-                        WHERE id = ANY(
-                            SELECT members
-                            FROM rooms
-                            WHERE id = $1
-                        )
-                        ORDER BY username ASC
+                        SELECT u.id,
+                               u.username
+                        FROM users u
+                        JOIN rooms r
+                          ON u.id = ANY(r.members)
+                        WHERE r.id = $1
+                        ORDER BY u.username ASC
                     `, [
-                        req.params.roomId
+                        roomId
                     ]);
 
                 res.json({
@@ -369,7 +371,8 @@ module.exports = (io) => {
             } catch (err) {
                 console.log(err);
                 res.status(500).json({
-                    success: false
+                    success: false,
+                    message: "Server error"
                 });
             }
         }
@@ -381,15 +384,18 @@ module.exports = (io) => {
 
         async (req, res) => {
             try {
+                const roomId = Number(req.params.roomId);
+                const userId = Number(req.session.user.id);
+
                 const memberCheck =
                     await pool.query(`
                         SELECT 1
                         FROM rooms
                         WHERE id = $1
-                          AND $2 = ANY(members)
+                          AND members @> ARRAY[$2]::INTEGER[]
                     `, [
-                        req.params.roomId,
-                        req.session.user.id
+                        roomId,
+                        userId
                     ]);
 
                 if (!memberCheck.rows.length) {
@@ -406,7 +412,7 @@ module.exports = (io) => {
                     RETURNING id
                 `, [
                     Number(req.params.memberId),
-                    req.params.roomId
+                    roomId
                 ]);
 
                 if (!removed.rows.length) {
@@ -462,7 +468,7 @@ module.exports = (io) => {
                         FROM rooms
 
                         WHERE id = $1
-                          AND $2 = ANY (members)
+                          AND members @> ARRAY[$2]::INTEGER[]
                     `, [
 
                         roomId,
