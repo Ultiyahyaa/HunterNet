@@ -296,6 +296,207 @@ router.get(
 );
 
 /* =========================
+ADMIN ROOMS
+========================= */
+
+router.get(
+    "/api/admin/rooms",
+    authRequired,
+    adminOnly,
+
+    async (req, res) => {
+
+        try {
+
+            const result = await pool.query(`
+                SELECT
+                    r.id,
+                    r.name
+                FROM rooms r
+                ORDER BY r.id ASC
+            `);
+
+            res.json(result.rows);
+
+        } catch (err) {
+
+            console.log(err);
+
+            res.status(500).json({
+                success: false
+            });
+        }
+    }
+);
+
+/* =========================
+ADMIN ROOM MESSAGES
+========================= */
+
+router.get(
+    "/api/admin/rooms/:roomId/messages",
+    authRequired,
+    adminOnly,
+
+    async (req, res) => {
+
+        try {
+
+            const result = await pool.query(`
+                SELECT rm.id,
+                       rm.room_id,
+                       rm.user_id,
+                       rm.username,
+                       rm.content,
+                       rm.created_at,
+                       EXISTS (
+                           SELECT 1
+                           FROM pinned_messages pm
+                           WHERE pm.message_id = rm.id
+                             AND pm.chat_type = 'room'
+                             AND pm.chat_target = rm.room_id::text
+                       ) AS pinned,
+                       COALESCE(
+                           json_agg(
+                               json_build_object(
+                                   'id', ma.id,
+                                   'image_url', ma.image_url,
+                                   'uploaded_by', ma.uploaded_by
+                               )
+                               ORDER BY ma.id
+                           ) FILTER (WHERE ma.id IS NOT NULL),
+                           '[]'::json
+                       ) AS attachments
+                FROM room_messages rm
+                LEFT JOIN message_attachments ma
+                    ON ma.message_id = rm.id
+                    AND ma.chat_type = 'room'
+                WHERE rm.room_id = $1
+                GROUP BY rm.id, rm.room_id, rm.user_id, rm.username, rm.content, rm.created_at
+                ORDER BY rm.created_at ASC
+            `, [req.params.roomId]);
+
+            res.json(result.rows);
+
+        } catch (err) {
+
+            console.log(err);
+
+            res.status(500).json({
+                success: false
+            });
+        }
+    }
+);
+
+/* =========================
+ADMIN USER CONTACTS
+========================= */
+
+router.get(
+    "/api/admin/user/:id/contacts",
+    authRequired,
+    adminOnly,
+
+    async (req, res) => {
+
+        const userId = Number(req.params.id);
+
+        try {
+
+            const result = await pool.query(`
+                SELECT DISTINCT
+                    other.id,
+                    other.username
+                FROM direct_messages dm
+                JOIN users other ON (
+                    CASE
+                        WHEN dm.sender_id = $1 THEN dm.receiver_id
+                        ELSE dm.sender_id
+                    END
+                ) = other.id
+                WHERE dm.sender_id = $1
+                   OR dm.receiver_id = $1
+                ORDER BY other.username ASC
+            `, [userId]);
+
+            res.json(result.rows);
+
+        } catch (err) {
+
+            console.log(err);
+
+            res.status(500).json({
+                success: false
+            });
+        }
+    }
+);
+
+/* =========================
+ADMIN DM THREAD
+========================= */
+
+router.get(
+    "/api/admin/dms/:userId/:contactId",
+    authRequired,
+    adminOnly,
+
+    async (req, res) => {
+
+        const userId = Number(req.params.userId);
+        const contactId = Number(req.params.contactId);
+
+        try {
+
+            const result = await pool.query(`
+                SELECT dm.id,
+                       dm.sender_id AS user_id,
+                       dm.sender_username AS username,
+                       dm.content,
+                       dm.created_at,
+                       false AS pinned,
+                       COALESCE(
+                           json_agg(
+                               json_build_object(
+                                   'id', ma.id,
+                                   'image_url', ma.image_url,
+                                   'uploaded_by', ma.uploaded_by
+                               )
+                               ORDER BY ma.id
+                           ) FILTER (WHERE ma.id IS NOT NULL),
+                           '[]'::json
+                       ) AS attachments
+                FROM direct_messages dm
+                LEFT JOIN message_attachments ma
+                    ON ma.message_id = dm.id
+                    AND ma.chat_type = 'dm'
+                WHERE (
+                    dm.sender_id = $1
+                    AND dm.receiver_id = $2
+                )
+                OR (
+                    dm.sender_id = $2
+                    AND dm.receiver_id = $1
+                )
+                GROUP BY dm.id, dm.sender_id, dm.sender_username, dm.content, dm.created_at
+                ORDER BY dm.created_at ASC
+            `, [userId, contactId]);
+
+            res.json(result.rows);
+
+        } catch (err) {
+
+            console.log(err);
+
+            res.status(500).json({
+                success: false
+            });
+        }
+    }
+);
+
+/* =========================
 DELETE MESSAGE
 ========================= */
 

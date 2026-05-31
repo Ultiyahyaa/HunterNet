@@ -1,4 +1,4 @@
-# HunterNet
+    # HunterNet
 
 > *"Reading doesn't make you an expert."*
 > — Witness1
@@ -148,7 +148,7 @@ npm install
 # Execution
 
 ```bash
-node server/server.js
+npm start
 ```
 
 ---

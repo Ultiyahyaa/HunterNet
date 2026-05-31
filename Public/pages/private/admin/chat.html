@@ -2,13 +2,13 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>HunterNet Chat</title>
+    <title>HunterNet Chat</title>
 
-<link rel="stylesheet" href="/css/user/chat.css">
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/admin/chat.css">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -16,8 +16,8 @@
 <!-- NAVBAR -->
 <div class="navbar">
 
-    <div class="logo" onclick="window.location.href='/dashboard'">
-        HunterNet
+    <div class="logo" onclick="window.location.href='/admin'">
+        HunterNet ADMINISTRATOR
     </div>
 
     <button class="logout-btn" id="logoutBtn">
@@ -39,6 +39,7 @@
 
             <div id="globalChat" class="channel-item global active">
                 # Global Chat
+                
             </div>
 
         </div>
@@ -59,13 +60,26 @@
         <!-- USERS -->
         <div class="sidebar-section">
 
-            <h2>Private Messages</h2>
+            <h2>Users</h2>
 
-                <button id="contactUserBtn" class="channel-item create-room">
-                    + Contact User Privately
-                </button>
+            <button id="contactUserBtn" class="channel-item create-room">
+                + Contact User Privately
+            </button>
 
             <div id="usersList"></div>
+
+        </div>
+
+        <!-- CONTACTS -->
+        <div class="sidebar-section">
+
+            <h2>Selected User Contacts</h2>
+
+            <div id="contactInfo" class="channel-item create-room">
+                Select a user to inspect contacts
+            </div>
+
+            <div id="contactsList"></div>
 
         </div>
 
@@ -75,64 +89,27 @@
     <div class="chat-container">
 
         <div class="chat-header">
-            <h2 id="chatTitle">
-                # Global Chat
-            </h2>
+            <h2 id="chatTitle"># Global Chat</h2>
 
-            <div class="chat-header-actions">
-                <button id="inviteUserBtn" class="pins-btn hidden">
-                    INVITE
-                </button>
-
-                <button id="pinsBtn" class="pins-btn">
-                    PINS
-                </button>
-            </div>
-
+            <button id="pinsBtn" class="pins-btn">
+                PINS
+            </button>
         </div>
 
         <div id="messages" class="messages"></div>
 
         <form id="messageForm" class="message-form">
 
-            <!-- IMAGE PREVIEW -->
-            <div
-                    id="attachmentPreview"
-                    class="attachment-preview hidden">
-            </div>
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Enter transmission..."
+                required
+            >
 
-            <div class="message-input-row">
-
-                <!-- HIDDEN FILE INPUT -->
-                <input
-                        type="file"
-                        id="imageInput"
-                        accept="image/*"
-                        multiple
-                        hidden
-                >
-
-                <!-- ATTACH BUTTON -->
-                <button
-                        type="button"
-                        id="attachBtn"
-                        class="attach-btn">
-                    +
-                </button>
-
-                <!-- MESSAGE INPUT -->
-                <input
-                        type="text"
-                        id="messageInput"
-                        placeholder="Enter transmission..."
-                >
-
-                <!-- SEND -->
-                <button type="submit">
-                    SEND
-                </button>
-
-            </div>
+            <button type="submit">
+                SEND
+            </button>
 
         </form>
 
@@ -192,11 +169,10 @@
     </div>
 
     <div id="pinsList"></div>
-
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
-<script type="module" src="/js/user/chat.js"></script>
+<script type="module" src="/js/admin/chat.js"></script>
 
 </body>
 </html>

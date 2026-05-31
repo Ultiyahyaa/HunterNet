@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HunterNet Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/user/dashboard.css">
+</head>
+
+<body>
+<!-- NAVBAR -->
+<div class="navbar">
+
+    <div class="logo" onclick="window.location.href='/dashboard'">
+        HunterNet
+    </div>
+
+    <button id="logoutBtn" class="logout-btn">
+        LOG OUT
+    </button>
+
+</div>
+
+<!-- HEADER -->
+<div class="header">
+
+    <h1>Member Dashboard</h1>
+
+    <p class="cursor">
+        Secure connection established, welcome back,
+        [<span id="dashboardUsername">User</span>].
+        Access your tools, communications, and resources below.
+    </p>
+
+</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+
+    STATUS: ONLINE<br>
+    NODE: HN-042<br>
+    ENCRYPTION: ACTIVE<br>
+    CLEARANCE LEVEL: VERIFIED USER
+
+</div>
+
+<!-- DASHBOARD GRID -->
+<div class="dashboard-grid">
+
+    <!-- PUBLIC SITE -->
+    <div class="card" onclick="window.location.href='/home'">
+        <h2>Public Site</h2>
+
+        <p>
+            Return to the public-facing
+            Anonymous Liberty homepage.
+        </p>
+
+    </div>
+
+    <!-- CHAT -->
+    <div class="card" id="chatBtn">
+
+        <h2>Global Chat</h2>
+
+        <p>
+            Access public communications and
+            encrypted discussion channels.
+        </p>
+
+    </div>
+
+    <div class="card" id="boardsBtn">
+        <h2>Intel Feed</h2>
+
+        <p>
+            Browse community message boards, share tips,
+            and discuss other topics with fellow members.
+        </p>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="card" id="SettingsBtn">
+        <h2>Settings</h2>
+
+        <p>
+            Manage account preferences,
+            security settings, and credentials.
+        </p>
+    </div>
+
+    <!-- FILES -->
+    <div class="card">
+        <h2>Data Archives</h2>
+
+        <p>
+            Browse restricted reports,
+            leaked documents, and secure files.
+        </p>
+    </div>
+
+    <!-- NETWORK -->
+    <div class="card">
+        <h2>Network Status</h2>
+
+        <p>
+            Monitor node activity,
+            server uptime, and encrypted relays.
+        </p>
+    </div>
+
+</div>
+
+<script src="/js/user/dashboard.js"></script>
+
+</body>
+</html>

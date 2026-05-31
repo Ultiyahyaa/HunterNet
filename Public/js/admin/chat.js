@@ -1,10 +1,15 @@
 import { createChatCore } from "../core/chatCore.js";
 
 const logoutBtn = document.getElementById("logoutBtn");
+const chatTitle = document.getElementById("chatTitle");
 const pinsBtn = document.getElementById("pinsBtn");
 const pinsPanel = document.getElementById("pinsPanel");
 const closePins = document.getElementById("closePins");
 const pinsList = document.getElementById("pinsList");
+const usersList = document.getElementById("usersList");
+const contactsList = document.getElementById("contactsList");
+const contactInfo = document.getElementById("contactInfo");
+const roomsList = document.getElementById("roomsList");
 
 const chat = createChatCore({
 
@@ -14,13 +19,16 @@ const chat = createChatCore({
         messageForm: document.getElementById("messageForm"),
         messageInput: document.getElementById("messageInput"),
         globalChat: document.getElementById("globalChat"),
-        usersList: document.getElementById("usersList")
+        roomsList
     },
 
-        api: {
-            global: "/chat/api/admin/global",
-            sendGlobal: "/chat/api/global/send"
-        },
+    api: {
+        global: "/chat/api/admin/global",
+        sendGlobal: "/chat/api/global/send",
+        rooms: "/chat/api/admin/rooms",
+        roomMessages: (id) => `/chat/api/admin/rooms/${id}/messages`,
+        sendRoom: (id) => `/chat/api/rooms/${id}/send`
+    },
 
     isAdmin: true,
 
@@ -86,7 +94,7 @@ const chat = createChatCore({
                     ?.textContent
                     ?.trim();
 
-            await fetch(
+            const res = await fetch(
                 "/chat/api/admin/pin",
                 {
 
@@ -118,11 +126,14 @@ const chat = createChatCore({
                 }
             );
 
+            if (res.ok) {
+                await chat.reloadCurrentChat();
+            }
         },
 
         onUnpin: async (messageId) => {
 
-            await fetch(
+            const res = await fetch(
                 `/chat/api/admin/pin/${messageId}`,
                 {
 
@@ -132,9 +143,184 @@ const chat = createChatCore({
                         "include"
                 }
             );
+
+            if (res.ok) {
+                await chat.reloadCurrentChat();
+            }
         }
     }
 });
+
+const adminSocket = io();
+let adminDmRoomId = null;
+let selectedAdminUser = null;
+let selectedAdminContact = null;
+
+const coreSwitchChat = chat.switchChat;
+chat.switchChat = async (chatData) => {
+    exitAdminDmView();
+    
+    // Join appropriate socket room for live updates
+    if (chatData.type === "room") {
+        adminSocket.emit("join:room", chatData.id);
+    } else if (chatData.type === "global") {
+        adminSocket.emit("join:global");
+    }
+    
+    return await coreSwitchChat(chatData);
+};
+
+function showMessageForm() {
+    document.getElementById("messageForm").style.display = "flex";
+}
+
+function hideMessageForm() {
+    document.getElementById("messageForm").style.display = "none";
+}
+
+function clearContactSelection() {
+    selectedAdminUser = null;
+    selectedAdminContact = null;
+    contactsList.innerHTML = "";
+    contactInfo.textContent = "Select a user to inspect contacts";
+    document.querySelectorAll(".contact-item").forEach(el => el.classList.remove("active"));
+    document.querySelectorAll(".user-item").forEach(el => el.classList.remove("active"));
+}
+
+function exitAdminDmView() {
+    if (!selectedAdminUser && !selectedAdminContact) return;
+
+    selectedAdminUser = null;
+    selectedAdminContact = null;
+    adminDmRoomId = null;
+    showMessageForm();
+    contactInfo.textContent = "Select a user to inspect contacts";
+    document.querySelectorAll(".contact-item").forEach(el => el.classList.remove("active"));
+}
+
+async function loadUsers() {
+    const res = await fetch("/admin/api/users", {
+        credentials: "include"
+    });
+
+    if (!res.ok) {
+        usersList.innerHTML = "<div class='channel-item'>Unable to load users.</div>";
+        return;
+    }
+
+    const payload = await res.json();
+    const users = Array.isArray(payload)
+        ? payload
+        : payload?.users || [];
+
+    usersList.innerHTML = "";
+
+    if (!users.length) {
+        usersList.innerHTML = "<div class='channel-item'>No users found.</div>";
+        return;
+    }
+
+    users.forEach(user => {
+        const div = document.createElement("div");
+        div.className = "channel-item user user-item";
+        div.dataset.userId = user.id;
+        div.textContent = `@ ${user.username}`;
+
+        div.addEventListener("click", () => {
+            selectAdminUser(user, div);
+        });
+
+        usersList.appendChild(div);
+    });
+}
+
+function setActiveContact(element) {
+    document.querySelectorAll(".contact-item").forEach(el => el.classList.remove("active"));
+    element?.classList.add("active");
+}
+
+async function selectAdminUser(user, element) {
+    selectedAdminUser = user;
+    selectedAdminContact = null;
+    adminDmRoomId = null;
+    contactInfo.textContent = `Selected: @ ${user.username}`;
+    document.querySelectorAll(".user-item").forEach(el => el.classList.remove("active"));
+    element.classList.add("active");
+    await loadContactsForUser(user.id);
+}
+
+async function loadContactsForUser(userId) {
+    const res = await fetch(`/chat/api/admin/user/${userId}/contacts`, {
+        credentials: "include"
+    });
+
+    if (!res.ok) {
+        contactsList.innerHTML = "<div class='channel-item'>Unable to load contacts.</div>";
+        return;
+    }
+
+    const contacts = await res.json();
+
+    contactsList.innerHTML = "";
+
+    if (!contacts.length) {
+        contactsList.innerHTML = "<div class='channel-item'>No contacts found.</div>";
+        return;
+    }
+
+    contacts.forEach(contact => {
+        const div = document.createElement("div");
+        div.className = "channel-item user contact-item";
+        div.dataset.contactId = contact.id;
+        div.textContent = `@ ${contact.username}`;
+
+        div.addEventListener("click", () => {
+            selectAdminContact(contact, div);
+        });
+
+        contactsList.appendChild(div);
+    });
+}
+
+async function selectAdminContact(contact, element) {
+    if (!selectedAdminUser) return;
+
+    selectedAdminContact = contact;
+    adminDmRoomId = [selectedAdminUser.id, contact.id].sort().join("-");
+    setActiveContact(element);
+    hideMessageForm();
+    chat.renderMessages([]);
+    chatTitle.textContent = `@ ${selectedAdminUser.username} ↔ @ ${contact.username}`;
+
+    await joinAdminDmRoom(adminDmRoomId);
+    await loadAdminDmThread(selectedAdminUser.id, contact.id);
+}
+
+async function joinAdminDmRoom(roomId) {
+    if (!roomId) return;
+    adminSocket.emit("join:dm", roomId);
+}
+
+async function loadAdminDmThread(userId, contactId) {
+    const res = await fetch(`/chat/api/admin/dms/${userId}/${contactId}`, {
+        credentials: "include"
+    });
+
+    if (!res.ok) {
+        chat.renderMessages([]);
+        return;
+    }
+
+    const messages = await res.json();
+    chat.renderMessages(messages);
+}
+
+adminSocket.on("dm:message:new", (msg) => {
+    if (adminDmRoomId !== msg.roomId) return;
+    loadAdminDmThread(selectedAdminUser?.id, selectedAdminContact?.id);
+});
+
+loadUsers();
 
 /* =========================
 PINS PANEL
@@ -230,7 +416,7 @@ pinsList?.addEventListener(
         const messageId =
             btn.dataset.id;
 
-        await fetch(
+        const res = await fetch(
             `/chat/api/admin/pin/${messageId}`,
             {
 
@@ -241,8 +427,11 @@ pinsList?.addEventListener(
             }
         );
 
-        btn.closest(".pin-entry")
-            ?.remove();
+        if (res.ok) {
+            btn.closest(".pin-entry")
+                ?.remove();
+            await chat.reloadCurrentChat();
+        }
     }
 );
 

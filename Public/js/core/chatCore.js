@@ -21,7 +21,8 @@ export function createChatCore(config) {
         globalChat,
         usersList,
         roomsList,
-        inviteUserBtn
+        inviteUserBtn,
+        roomSettingsBtn
     } = elements;
 
     let currentChat = {
@@ -759,6 +760,38 @@ export function createChatCore(config) {
             }
         }
 
+        if (roomSettingsBtn) {
+
+            if (chatData.type === "room") {
+
+                inviteUserBtn.classList.remove(
+                    "hidden"
+                );
+
+            } else {
+
+                inviteUserBtn.classList.add(
+                    "hidden"
+                );
+            }
+        }
+
+        if (roomSettingsBtn) {
+
+            if (chatData.type === "room") {
+
+                roomSettingsBtn.classList.remove(
+                    "hidden"
+                );
+
+            } else {
+
+                roomSettingsBtn.classList.add(
+                    "hidden"
+                );
+            }
+        }
+
         currentChat = {
             ...chatData,
             target:
@@ -1228,6 +1261,14 @@ FILE PICKER
                 return;
             }
 
+            if ((currentChat.type === "dm" || currentChat.type === "room") && result.message) {
+                const element =
+                    createMessageElement(result.message);
+                messagesDiv.appendChild(element);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                updateTimestamps();
+            }
+
             messageInput.value = "";
 
             selectedFiles = [];
@@ -1275,6 +1316,17 @@ FILE PICKER
 
         getCurrentChat: () =>
             currentChat,
+
+        reloadCurrentChat: async () => {
+            await loadMessages(
+                (() => {
+                    if (currentChat.type === "global") return api.global;
+                    if (currentChat.type === "room") return api.roomMessages(currentChat.id);
+                    if (currentChat.type === "dm") return api.dmMessages(currentChat.id);
+                    return null;
+                })()
+            );
+        },
 
         setAttachments: (files) => {
             selectedFiles = files;

@@ -68,54 +68,55 @@ app.use("/chat/api/dms", dmRoutes)
 app.use("/chat", chatRoutes);
 app.use("/threads", threadsRoutes);
 
-/* =========================
-PROTECTED ROUTES
-========================= */
 
 app.get("/home", (req, res) => {
     res.sendFile(
-      path.join(__dirname, "../Public/index.html")
+      path.join(__dirname, "../Public/pages/public/index.html")
     )
 })
 
 app.get("/login", (req, res) => {
     res.sendFile(
-      path.join(__dirname, "../Public/private/user/auth.html")
+      path.join(__dirname, "../Public/pages/private/user/auth.html")
     )
 })
 
+/* =========================
+PROTECTED ROUTES
+========================= */
+
 app.get("/dashboard", authRequired,(req, res) => {
     res.sendFile(
-      path.join(__dirname, "../Public/private/user/dashboard.html")
+      path.join(__dirname, "../Public/pages/private/user/dashboard.html")
     )
 })
 
 app.get("/chat", authRequired, (req, res) => {
     res.sendFile(
-      path.join(__dirname, "../Public/private/user/chat.html")
+      path.join(__dirname, "../Public/pages/private/user/chat.html")
     )
 })
 
 app.get("/settings", authRequired, (req, res) => {
     res.sendFile(
-      path.join(__dirname, "../Public/private/user/settings.html")
+      path.join(__dirname, "../Public/pages/private/user/settings.html")
     )
 })
 
 app.get("/boards", authRequired, (req, res) => {
     res.sendFile(
-      path.join(__dirname, "../Public/private/user/threads.html")
+      path.join(__dirname, "../Public/pages/private/user/threads.html")
     )
 })
 
 app.get("/adminLogin", authRequired, (req, res) => {
     res.sendFile(
-      path.join(__dirname, "../Public/private/admin/auth.html")
+      path.join(__dirname, "../Public/pages/private/admin/auth.html")
     )
 })
 
 app.use("/admin", adminOnly, express.static(
-    path.join(__dirname, "../Public/private/admin"),
+    path.join(__dirname, "../Public/pages/private/admin"),
     {
       extensions: ["html"],
       index: "dashboard.html"

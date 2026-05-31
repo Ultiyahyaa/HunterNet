@@ -248,9 +248,7 @@ module.exports = (io) => {
                         req.session.user.id
                     ]);
 
-                if (
-                    !memberCheck.rows.length
-                ) {
+                if (!memberCheck.rows.length) {
 
                     return res.status(403).json({
                         success: false,
@@ -315,6 +313,114 @@ module.exports = (io) => {
 
                 console.log(err);
 
+                res.status(500).json({
+                    success: false
+                });
+            }
+        }
+    );
+
+    /* =========================
+       ROOM MEMBERS
+    ========================= */
+
+    router.get(
+        "/:roomId/members",
+        authRequired,
+
+        async (req, res) => {
+            try {
+                const memberCheck =
+                    await pool.query(`
+                        SELECT 1
+                        FROM rooms
+                        WHERE id = $1
+                          AND $2 = ANY(members)
+                    `, [
+                        req.params.roomId,
+                        req.session.user.id
+                    ]);
+
+                if (!memberCheck.rows.length) {
+                    return res.status(403).json({
+                        success: false,
+                        message: "Access denied"
+                    });
+                }
+
+                const members =
+                    await pool.query(`
+                        SELECT id, username
+                        FROM users
+                        WHERE id = ANY(
+                            SELECT members
+                            FROM rooms
+                            WHERE id = $1
+                        )
+                        ORDER BY username ASC
+                    `, [
+                        req.params.roomId
+                    ]);
+
+                res.json({
+                    success: true,
+                    members: members.rows
+                });
+            } catch (err) {
+                console.log(err);
+                res.status(500).json({
+                    success: false
+                });
+            }
+        }
+    );
+
+    router.delete(
+        "/:roomId/members/:memberId",
+        authRequired,
+
+        async (req, res) => {
+            try {
+                const memberCheck =
+                    await pool.query(`
+                        SELECT 1
+                        FROM rooms
+                        WHERE id = $1
+                          AND $2 = ANY(members)
+                    `, [
+                        req.params.roomId,
+                        req.session.user.id
+                    ]);
+
+                if (!memberCheck.rows.length) {
+                    return res.status(403).json({
+                        success: false,
+                        message: "Access denied"
+                    });
+                }
+
+                const removed = await pool.query(`
+                    UPDATE rooms
+                    SET members = array_remove(members, $1)
+                    WHERE id = $2
+                    RETURNING id
+                `, [
+                    Number(req.params.memberId),
+                    req.params.roomId
+                ]);
+
+                if (!removed.rows.length) {
+                    return res.status(404).json({
+                        success: false,
+                        message: "Member not found"
+                    });
+                }
+
+                res.json({
+                    success: true
+                });
+            } catch (err) {
+                console.log(err);
                 res.status(500).json({
                     success: false
                 });

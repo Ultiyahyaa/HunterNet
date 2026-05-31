@@ -132,16 +132,20 @@ body {
 ========================= */
 
 .hero {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    min-height: 0;
     max-width: 1000px;
-
     margin: 80px auto;
-
     padding: 40px;
 
     border: 2px solid #00ff88;
 
     background: rgba(0, 0, 0, 0.85);
-
     box-shadow: 0 0 20px rgba(0, 255, 100, 0.25),
     inset 0 0 15px rgba(0, 255, 100, 0.08);
 }
@@ -179,14 +183,24 @@ body {
 
 .post {
     margin-bottom: 40px;
-
     padding: 30px;
 
+    border: 2px solid rgba(0, 255, 100, 0.2);
     border-left: 4px solid #00ff88;
+    border-radius: 10px;
 
     background: rgba(0, 0, 0, 0.75);
-
     box-shadow: 0 0 12px rgba(0, 255, 100, 0.15);
+
+    transition: 0.2s;
+}
+
+.post:hover {
+
+    border-color: rgba(0, 255, 136, 0.45);
+    border-left: 4px solid #00ff88;
+
+    box-shadow: 0 0 16px rgba(0, 255, 136, 0.12);
 }
 
 .post h2 {

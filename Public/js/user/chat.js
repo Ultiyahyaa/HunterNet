@@ -28,14 +28,23 @@ const attachmentPreview = document.getElementById("attachmentPreview");
 const createRoomBtn = document.getElementById("createRoomBtn");
 const contactUserBtn = document.getElementById("contactUserBtn");
 const inviteUserBtn = document.getElementById("inviteUserBtn");
+const roomSettingsBtn = document.getElementById("roomSettingsBtn");
 
 const cyberModal = document.getElementById("cyberModal");
 const modalTitle = document.getElementById("modalTitle");
 const modalInput = document.getElementById("modalInput");
 const confirmModalBtn = document.getElementById("confirmModalBtn");
 const closeModalBtn = document.getElementById("closeModalBtn");
+const roomSettingsPanel = document.getElementById("roomSettingsPanel");
+const settingsTitle = document.getElementById("settingsTitle");
+const roomSettingsBody = document.querySelector("#roomSettingsPanel .roomSettings-body");
+const roomSettingsFooter = document.querySelector("#roomSettingsPanel .roomSettings-footer");
+const closeSettingsBtn = document.getElementById("closeSettingsBtn");
 
-let selectedImages = [];
+const pinsBtn = document.getElementById("pinsBtn");
+const pinsPanel = document.getElementById("pinsPanel");
+const closePins = document.getElementById("closePins");
+const pinsList = document.getElementById("pinsList");
 
 const chat = createChatCore({
 
@@ -81,7 +90,9 @@ const chat = createChatCore({
                 "roomsList"
             ),
 
-        inviteUserBtn
+        inviteUserBtn,
+
+        roomSettingsBtn,
     },
 
     api: {
@@ -114,7 +125,26 @@ const chat = createChatCore({
     isAdmin: false
 });
 
-let modalAction = null;
+let selectedImages = [];
+let activeModal = null;
+
+const modalConfigs = {
+    createRoom: {
+        title: "Create New Room",
+        placeholder: "ENTER ROOM NAME",
+        confirmText: "CREATE"
+    },
+    createDM: {
+        title: "Contact User Privately",
+        placeholder: "ENTER USERNAME",
+        confirmText: "START CHAT"
+    },
+    inviteUser: {
+        title: "Invite User To Room",
+        placeholder: "ENTER USERNAME",
+        confirmText: "INVITE"
+    }
+};
 
 /* =========================
 MODAL
@@ -122,69 +152,171 @@ MODAL
 
 function openModal(action) {
 
-    modalAction = action;
-
-    if (action === "createRoom") {
-
-        modalTitle.textContent =
-            "Create New Room";
-
-        modalInput.placeholder =
-            "ENTER ROOM NAME";
+    if (action === "roomSettings") {
+        roomSettingsPanel?.classList.remove("hidden");
+        activeModal = action;
+        renderRoomSettings();
+        return;
     }
 
-    else if (
-        action === "createDM"
-    ) {
+    const config = modalConfigs[action];
 
-        modalTitle.textContent =
-            "Contact User Privately";
-
-        modalInput.placeholder =
-            "ENTER USERNAME";
+    if (!config) {
+        return;
     }
 
-    else if (
-        action === "inviteUser"
-    ) {
-
-        modalTitle.textContent =
-            "Invite User To Room";
-
-        modalInput.placeholder =
-            "ENTER USERNAME";
-    }
-
+    modalTitle.textContent = config.title;
+    modalInput.placeholder = config.placeholder;
+    confirmModalBtn.textContent = config.confirmText;
     modalInput.value = "";
 
-    cyberModal.classList.remove(
-        "hidden"
-    );
-
+    cyberModal?.classList.remove("hidden");
     modalInput.focus();
+    activeModal = action;
 }
 
-function closeModal() {
+function closeModal(action = null) {
 
-    cyberModal.classList.add(
-        "hidden"
-    );
+    const modalToClose =
+        action === "roomSettings"
+            ? roomSettingsPanel
+            : cyberModal;
 
-    modalAction = null;
+    if (!modalToClose) {
+        return;
+    }
 
-    modalInput.value = "";
+    modalToClose.classList.add("hidden");
+    if (modalToClose === cyberModal) {
+        modalInput.value = "";
+    }
+
+    activeModal = null;
+}
+
+async function renderRoomSettings() {
+    const current = chat.getCurrentChat();
+
+    if (!current || current.type !== "room") {
+        roomSettingsBody.innerHTML = `<div class="settings-message">Room settings are only available for rooms.</div>`;
+        roomSettingsFooter.innerHTML = "";
+        return;
+    }
+
+    const roomName = current.name.replace(/^#\s*/, "");
+
+    settingsTitle.textContent = `${roomName} Settings`;
+    roomSettingsBody.innerHTML = `
+        <div class="settings-section">
+            <div class="settings-section-header">
+                <div>
+                    <h3>Members</h3>
+                    <p class="settings-subtitle">Current members who can access this room.</p>
+                </div>
+                <span class="settings-count">Loading…</span>
+            </div>
+            <ul class="settings-members-list">
+                <li class="settings-loading">Loading members...</li>
+            </ul>
+        </div>
+    `;
+
+    roomSettingsFooter.innerHTML = `<div class="settings-footer-note">You can remove room members here. Your own membership cannot be removed from this panel.</div>`;
+
+    const members = await fetchRoomMembers(current.id);
+
+    const list = roomSettingsBody.querySelector(".settings-members-list");
+    const count = roomSettingsBody.querySelector(".settings-count");
+
+    if (!members) {
+        roomSettingsBody.innerHTML = `<div class="settings-message settings-error">Unable to load room members.</div>`;
+        roomSettingsFooter.innerHTML = "";
+        return;
+    }
+
+    if (count) {
+        count.textContent = `${members.length} member${members.length === 1 ? "" : "s"}`;
+    }
+
+    if (!members.length) {
+        list.innerHTML = `<li class="settings-empty">No members found for this room.</li>`;
+        return;
+    }
+
+    list.innerHTML = members.map((member) => {
+        const isCurrentUser = String(member.id) === String(window.currentUserId);
+        return `
+            <li class="settings-member-item">
+                <div class="settings-member-meta">
+                    <span class="settings-member-name">${member.username}</span>
+                    ${isCurrentUser ? `<span class="settings-member-role">You</span>` : ""}
+                </div>
+                <button
+                    class="settings-remove-btn"
+                    data-member-id="${member.id}"
+                    ${isCurrentUser ? "disabled" : ""}
+                >
+                    ${isCurrentUser ? "Current" : "Remove"}
+                </button>
+            </li>
+        `;
+    }).join("");
+}
+
+async function fetchRoomMembers(roomId) {
+    try {
+        const response = await fetch(`/chat/api/rooms/${roomId}/members`, {
+            credentials: "include"
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            return null;
+        }
+
+        return result.members || [];
+    } catch (err) {
+        return null;
+    }
+}
+
+async function handleRemoveRoomMember(memberId) {
+    const current = chat.getCurrentChat();
+
+    if (!current || current.type !== "room") {
+        return;
+    }
+
+    const confirmation = window.confirm("Remove this member from the room?");
+    if (!confirmation) {
+        return;
+    }
+
+    const response = await fetch(`/chat/api/rooms/${current.id}/members/${memberId}`, {
+        method: "DELETE",
+        credentials: "include"
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+        alert(result.message || "Unable to remove member.");
+        return;
+    }
+
+    await renderRoomSettings();
 }
 
 /* =========================
 HANDLE MODAL
 ========================= */
 
-async function handleModalConfirm() {
+async function processModalAction() {
 
-    const value =
-        modalInput.value.trim();
+    const value = modalInput.value.trim();
 
-    if (!value) {
+    if (!value || !activeModal) {
         return;
     }
 
@@ -193,7 +325,7 @@ async function handleModalConfirm() {
     ========================= */
 
     if (
-        modalAction ===
+        activeModal ===
         "createRoom"
     ) {
 
@@ -255,7 +387,7 @@ async function handleModalConfirm() {
     ========================= */
 
     if (
-        modalAction ===
+        activeModal ===
         "createDM"
     ) {
 
@@ -320,7 +452,7 @@ async function handleModalConfirm() {
     ========================= */
 
     if (
-        modalAction ===
+        activeModal ===
         "inviteUser"
     ) {
 
@@ -416,26 +548,63 @@ inviteUserBtn?.addEventListener(
 
 closeModalBtn?.addEventListener(
     "click",
-    closeModal
+    () => closeModal()
 );
 
 confirmModalBtn?.addEventListener(
     "click",
-    handleModalConfirm
+    processModalAction
 );
 
 cyberModal?.addEventListener(
     "click",
     (e) => {
-
-        if (
-            e.target === cyberModal
-        ) {
-
+        if (e.target === cyberModal) {
             closeModal();
         }
     }
 );
+
+roomSettingsBtn?.addEventListener(
+    "click",
+    () => openModal("roomSettings")
+);
+
+closeSettingsBtn?.addEventListener(
+    "click",
+    () => closeModal("roomSettings")
+);
+
+roomSettingsPanel?.addEventListener(
+    "click",
+    (e) => {
+        if (e.target === roomSettingsPanel) {
+            closeModal("roomSettings");
+        }
+    }
+);
+
+roomSettingsBody?.addEventListener(
+    "click",
+    (e) => {
+        const removeBtn = e.target.closest(
+            ".settings-remove-btn"
+        );
+
+        if (!removeBtn) {
+            return;
+        }
+
+        const memberId = removeBtn.dataset.memberId;
+
+        if (!memberId) {
+            return;
+        }
+
+        handleRemoveRoomMember(Number(memberId));
+    }
+);
+
 
 /* =========================
 OPEN FILE PICKER
@@ -517,17 +686,17 @@ function renderAttachments() {
                     div.className =
                         "attachment-item";
 
-                    const img = 
+                    const img =
                         document.createElement(
                             "img"
                         );
-                    
+
                     img.src =
                         e.target.result;
-                    
+
                     img.className =
                         "attachment-thumb";
-                    
+
                     img.addEventListener(
                         "click",
                         () => openImageModal(
@@ -539,13 +708,13 @@ function renderAttachments() {
                         document.createElement(
                             "button"
                         );
-                    
+
                     btn.type = "button";
                     btn.className =
                         "remove-attachment";
                     btn.dataset.index = index;
                     btn.textContent = "×";
-                    
+
                     btn.addEventListener(
                         "click",
                         (event) => {
@@ -635,7 +804,7 @@ let imageModal = null;
 
 function initImageModal() {
 
-    imageModal = 
+    imageModal =
         document.createElement("div");
 
     imageModal.className =
@@ -660,7 +829,7 @@ function initImageModal() {
         imageModal
     );
 
-    const closeBtn = 
+    const closeBtn =
         imageModal.querySelector(
             ".image-modal-close"
         );
@@ -706,7 +875,7 @@ function openImageModal(src) {
         initImageModal();
     }
 
-    const img = 
+    const img =
         imageModal.querySelector(
             ".image-modal-image"
         );
@@ -728,30 +897,6 @@ function closeImageModal() {
 /* Make modal accessible globally */
 window.openImageModal = openImageModal;
 window.closeImageModal = closeImageModal;
-
-/* =========================
-PINS PANEL
-========================= */
-
-const pinsBtn =
-    document.getElementById(
-        "pinsBtn"
-    );
-
-const pinsPanel =
-    document.getElementById(
-        "pinsPanel"
-    );
-
-const closePins =
-    document.getElementById(
-        "closePins"
-    );
-
-const pinsList =
-    document.getElementById(
-        "pinsList"
-    );
 
 /* =========================
 OPEN PINS
