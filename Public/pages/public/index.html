@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -14,100 +15,478 @@
 
 <body>
 
-<!-- NAVBAR -->
+<!-- =========================
+     NAVBAR
+========================= -->
+
 <div class="navbar">
 
-    <div class="logo">
+    <div class="logo" data-page="home">
         Anonymous Liberty
     </div>
 
     <div class="nav-links">
-        <a href="">Home</a>
-        <a href="#articles">Articles</a>
-        <a href="#privacy">Privacy</a>
-        <a href="#leaks">Leaks</a>
-        <a href="#about">About</a>
+
+        <a href="#" data-page="home" class="active">
+            Home
+        </a>
+
+        <a href="#" data-page="articles">
+            Articles
+        </a>
+
+        <a href="#" data-page="privacy">
+            Privacy
+        </a>
+
+        <a href="#" data-page="leaks">
+            Leaks
+        </a>
+
+        <a href="#" data-page="about">
+            About
+        </a>
+
     </div>
 
-    <button class="login-btn" id="loginBtn" onclick="window.location.href='/login'">LOGIN</button>
-    <script src="/js/user/index.js"></script>
+    <button
+            class="login-btn"
+            id="loginBtn"
+            onclick="window.location.href='/login'">
+
+        LOGIN
+
+    </button>
 
 </div>
 
-<!-- HERO -->
-<div class="hero">
+<!-- =========================
+     MAIN CONTENT AREA
+========================= -->
 
-    <h1>Anonymous Liberty</h1>
+<div id="page-container">
 
-    <div class="subtitle">
-        Defending Digital Rights in the Information Age
-    </div>
-
-    <p>
-        We report on surveillance, censorship, online privacy,
-        encryption technologies, and the future of digital freedom.
-    </p>
+    <!--
+        JS will inject pages here.
+        Home page loads by default.
+    -->
 
 </div>
 
-<!-- BLOG POSTS -->
-<div class="blog-container">
+<!-- =========================
+     PAGE TEMPLATES
+========================= -->
 
-    <div class="post">
+<template id="home-template">
 
-        <h2>The Rise of Internet Surveillance</h2>
+    <!-- NEWS TICKER -->
 
-        <div class="post-meta">
-            Posted by admin // 1.30.2002
+    <div class="ticker">
+
+        <div class="ticker-label">
+            LIVE
+        </div>
+
+        <div class="ticker-wrapper">
+
+            <div class="ticker-track" id="tickerTrack">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- HERO -->
+
+    <div class="page-header">
+
+        <h1>Anonymous Liberty</h1>
+
+        <div class="subtitle">
+            Defending Digital Rights in the Information Age
         </div>
 
         <p>
-            Modern governments and corporations now collect more user data
-            than at any point in history. From ISP logging to mass tracking,
-            digital privacy has become one of the defining issues of the
-            modern internet.
+
+            Anonymous Liberty monitors surveillance,
+            censorship, online privacy rights,
+            encryption technology, and public
+            transparency initiatives worldwide.
+
+        </p>
+
+        <div class="status-bar">
+
+            Network Status: ONLINE |
+            Research Nodes: 47 |
+            Public Reports: 12,841 |
+            Transparency Index: 94.7%
+
+        </div>
+
+    </div>
+
+    <!-- STATS -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-number">
+                14923
+            </div>
+
+            <div class="stat-label">
+                Privacy Complaints Logged
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-number">
+                6771
+            </div>
+
+            <div class="stat-label">
+                Data Breaches Tracked
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-number">
+                287
+            </div>
+
+            <div class="stat-label">
+                Government Requests Analyzed
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-number">
+                91
+            </div>
+
+            <div class="stat-label">
+                Encryption Adoption (%)
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- INCIDENTS -->
+
+    <div class="incident-panel">
+
+        <h2>
+            Recent Monitoring Activity
+        </h2>
+
+        <div class="incident">
+            [04.27.2002] ISP Metadata Retention Policy Expanded
+        </div>
+
+        <div class="incident">
+            [04.25.2002] Social Platform Tracking Audit Published
+        </div>
+
+        <div class="incident">
+            [04.22.2002] International Encryption Report Released
+        </div>
+
+        <div class="incident">
+            [04.20.2002] Telecommunications Oversight Review Updated
+        </div>
+
+    </div>
+
+    <!-- FEATURED REPORT -->
+
+    <div class="section">
+
+        <h2>
+            Featured Report
+        </h2>
+
+        <div class="post">
+
+            <h3>
+                State of Digital Freedom 2002
+            </h3>
+
+            <p>
+
+                Annual assessment covering global
+                censorship trends, encryption adoption,
+                government transparency initiatives,
+                and citizen privacy protections.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Anonymous Liberty Network // Secure Transmission Active
+    </div>
+
+</template>
+
+<!-- =========================
+     ARTICLES PAGE
+========================= -->
+
+<template id="articles-template">
+
+    <div class="page-header">
+
+        <h1>
+            Research Archive
+        </h1>
+
+        <p>
+            Investigations, reports, and transparency studies.
         </p>
 
     </div>
 
-    <div class="post">
+    <div class="blog-container">
 
-        <h2>Encrypted Communication Matters</h2>
+        <div class="post">
 
-        <div class="post-meta">
-            Posted by admin // 01.15.2002
+            <h2>
+                Internet Surveillance Report
+            </h2>
+
+            <div class="post-meta">
+                Published // 04.21.2002
+            </div>
+
+            <p>
+                Analysis of emerging surveillance technologies
+                and their impact on civil liberties.
+            </p>
+
         </div>
 
+        <div class="post">
+
+            <h2>
+                Encryption Adoption Survey
+            </h2>
+
+            <div class="post-meta">
+                Published // 03.17.2002
+            </div>
+
+            <p>
+                Trends showing increasing adoption
+                of secure communication platforms.
+            </p>
+
+        </div>
+
+        <div class="post">
+
+            <h2>
+                Transparency Index Review
+            </h2>
+
+            <div class="post-meta">
+                Published // 02.03.2002
+            </div>
+
+            <p>
+                Measuring institutional openness
+                across public agencies.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Anonymous Liberty Network // Archive Node
+    </div>
+
+</template>
+
+<!-- =========================
+     PRIVACY PAGE
+========================= -->
+
+<template id="privacy-template">
+
+    <div class="page-header">
+
+        <h1>
+            Privacy Resources
+        </h1>
+
         <p>
-            End-to-end encryption protects journalists, activists,
-            whistleblowers, and ordinary citizens from surveillance
-            and data exploitation.
+            Educational guides and best practices.
         </p>
 
     </div>
 
-    <div class="post">
+    <div class="resource-grid">
 
-        <h2>Corporate Data Harvesting Explained</h2>
+        <div class="resource-card">
 
-        <div class="post-meta">
-            Posted by admin // 07.21.2001
+            <h3>
+                Secure Messaging
+            </h3>
+
+            <p>
+                Learn secure communication methods.
+            </p>
+
         </div>
 
+        <div class="resource-card">
+
+            <h3>
+                Password Security
+            </h3>
+
+            <p>
+                Strong password and credential practices.
+            </p>
+
+        </div>
+
+        <div class="resource-card">
+
+            <h3>
+                Browser Privacy
+            </h3>
+
+            <p>
+                Protect browsing activity and metadata.
+            </p>
+
+        </div>
+
+        <div class="resource-card">
+
+            <h3>
+                Data Awareness
+            </h3>
+
+            <p>
+                Understand how personal data is collected.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Anonymous Liberty Network // Privacy Resources
+    </div>
+
+</template>
+
+<!-- =========================
+     LEAKS PAGE
+========================= -->
+
+<template id="leaks-template">
+
+    <div class="page-header">
+
+        <h1>
+            Public Records Repository
+        </h1>
+
         <p>
-            Most social media platforms build extensive advertising profiles
-            based on your activity, location, purchases, and online behavior.
+            Indexed public reports and disclosures.
         </p>
 
     </div>
 
-</div>
+    <div class="database">
 
-<!-- FOOTER -->
+        <div class="database-entry">
+            Telecommunications Oversight Review
+        </div>
 
-<div class="footer">
-    Anonymous Liberty Network // Secure Transmission Active
-</div>
+        <div class="database-entry">
+            Data Collection Transparency Study
+        </div>
+
+        <div class="database-entry">
+            Public Information Audit
+        </div>
+
+        <div class="database-entry">
+            Information Access Assessment
+        </div>
+
+        <div class="database-entry">
+            International Reporting Index
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Anonymous Liberty Network // Repository Access
+    </div>
+
+</template>
+
+<!-- =========================
+     ABOUT PAGE
+========================= -->
+
+<template id="about-template">
+
+    <div class="page-header">
+
+        <h1>
+            About Anonymous Liberty
+        </h1>
+
+    </div>
+
+    <div class="about-section">
+
+        <p>
+
+            Anonymous Liberty is an independent
+            research organization dedicated to
+            promoting transparency, digital rights,
+            privacy awareness, and responsible
+            technology governance.
+
+        </p>
+
+        <p>
+
+            Through research initiatives,
+            monitoring projects, and public
+            reporting, we seek to provide
+            objective information regarding
+            the evolving digital landscape.
+
+        </p>
+
+    </div>
+
+    <div class="footer">
+        Anonymous Liberty Network // Established 1998
+    </div>
+
+</template>
+
+<script src="/js/user/index.js"></script>
 
 </body>
 </html>
