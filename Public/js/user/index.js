@@ -220,6 +220,8 @@ const objects = [
     "across secure channels"
 ];
 
+const regions = ["EU Node", "NA Grid", "APAC Relay", "Global Mesh"];
+
 const numbers = () =>
     (Math.random() * 100).toFixed(1);
 
@@ -236,10 +238,10 @@ function generateHeadline() {
     const includeStat = Math.random() < 0.35;
 
     if (includeStat) {
-        return `[${type}] ${subject} ${action} (${numbers()}%)`;
+        return `[${type}] ${subject} ${action} (${numbers()}%) in ${randomFrom(regions)}\``;
     }
 
-    return `[${type}] ${subject} ${action} ${object}`;
+    return `[${type}] ${subject} ${action} in ${randomFrom(regions)}`;
 }
 
 setInterval(() => {
