@@ -35,6 +35,8 @@ const modalTitle = document.getElementById("modalTitle");
 const modalInput = document.getElementById("modalInput");
 const confirmModalBtn = document.getElementById("confirmModalBtn");
 const closeModalBtn = document.getElementById("closeModalBtn");
+const modalNote = document.getElementById("modalNote");
+
 const roomSettingsPanel = document.getElementById("roomSettingsPanel");
 const settingsTitle = document.getElementById("settingsTitle");
 const roomSettingsBody = document.querySelector("#roomSettingsPanel .roomSettings-body");
@@ -191,6 +193,9 @@ function closeModal(action = null) {
         modalInput.value = "";
     }
 
+    modalNote.classList.add("hidden");
+    modalNote.innerHTML = "";
+
     activeModal = null;
 }
 
@@ -256,7 +261,7 @@ async function renderRoomSettings() {
                     data-member-id="${member.id}"
                     ${isCurrentUser ? "disabled" : ""}
                 >
-                    ${isCurrentUser ? "Current" : "Remove"}
+                    ${isCurrentUser ? "Current" : "REMOVE"}
                 </button>
             </li>
         `;
@@ -503,19 +508,14 @@ async function processModalAction() {
             !result.success
         ) {
 
-            alert(
-                result.message ||
-                "Failed to invite user"
-            );
+            modalNote.innerHTML = `Failed to invite ${value} to the room.`;
+            modalNote.classList.remove("hidden");
 
             return;
         }
 
-        alert(
-            `${result.username} added to room`
-        );
-
-        closeModal();
+        modalNote.innerHTML = `${value} has been invited to the room.`;
+        modalNote.classList.remove("hidden");
 
         return;
     }
