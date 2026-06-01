@@ -24,7 +24,7 @@ body {
 }
 
 /* =========================
-   SCANLINES (DASHBOARD STYLE)
+   SCANLINES
 ========================= */
 
 body::before {
@@ -261,7 +261,7 @@ body::before {
 }
 
 /* =========================
-   CREATE ROOM = GOLD
+   CREATE ROOM/CONTACT USER
 ========================= */
 
 .create-room {
@@ -291,7 +291,7 @@ body::before {
 }
 
 /* =========================
-   CHAT AREA (DASHBOARD STYLE MODULE)
+    CHAT AREA
 ========================= */
 
 .chat-container {
@@ -305,7 +305,7 @@ body::before {
 }
 
 /* =========================
-CHAT HEADER
+    CHAT HEADER
 ========================= */
 
 .chat-header {
@@ -333,13 +333,37 @@ CHAT HEADER
 
     flex: 1;
 
-    color: #ffd700;
-
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.25);
 }
 
 /* =========================
-   MESSAGES (CRITICAL FIX + STYLE MATCH)
+    CHAT OPTIONS
+========================= */
+
+.chat-options {
+    background: rgba(0, 0, 0, 0.75);
+    border: 2px solid rgba(255, 215, 0, 0.35);
+    color: #ffd700;
+    padding: 10px 18px;
+    font-family: inherit;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.08);
+}
+
+.chat-options:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 215, 0, 0.08);
+    border-color: #ffd700;
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.28);
+}
+
+/* =========================
+MESSAGES
 ========================= */
 
 .messages {
@@ -357,7 +381,7 @@ CHAT HEADER
 
     padding: 12px;
 
-    border: 2px solid rgba(0, 255, 100, 0.2);
+    border: 2px solid rgba(255, 215, 0, 0.25);
 
     border-radius: 10px;
 
@@ -514,17 +538,6 @@ PIN CONTENT
     word-break: break-word;
 }
 
-.pins-btn:hover {
-
-    transform: translateY(-1px);
-
-    background: rgba(255, 215, 0, 0.08);
-
-    border-color: #ffd700;
-
-    box-shadow: 0 0 18px rgba(255, 215, 0, 0.28);
-}
-
 /* =========================
 PINS PANEL HEADER
 ========================= */
@@ -608,54 +621,6 @@ CLOSE PINS BUTTON
     color: rgba(255, 255, 255, 0.45);
 
     letter-spacing: 2px;
-}
-
-/* =========================
-PINS SCROLLBAR
-========================= */
-
-.pins-panel::-webkit-scrollbar {
-    width: 8px;
-}
-
-.pins-panel::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.03);
-}
-
-.pins-panel::-webkit-scrollbar-thumb {
-    background: rgba(255, 215, 0, 0.25);
-    border-radius: 10px;
-}
-
-.pins-panel::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 215, 0, 0.45);
-}
-
-/* =========================
-PINS BUTTON
-========================= */
-
-.pins-btn {
-    background: rgba(0, 0, 0, 0.75);
-    border: 2px solid rgba(255, 215, 0, 0.35);
-    color: #ffd700;
-    padding: 10px 18px;
-    font-family: inherit;
-    font-size: 14px;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: border-color 0.15s ease,
-    box-shadow 0.15s ease,
-    background 0.15s ease,
-    transform 0.15s ease;
-    box-shadow: 0 0 12px rgba(255, 215, 0, 0.08);
-}
-
-.pins-btn:hover {
-    transform: translateY(-1px);
-    background: rgba(255, 215, 0, 0.08);
-    border-color: #ffd700;
-    box-shadow: 0 0 18px rgba(255, 215, 0, 0.28);
 }
 
 /* =========================
@@ -774,58 +739,52 @@ PIN CONTENT
 GLOBAL CYBER SCROLLBARS
 ========================= */
 
-/* WIDTH */
-
 .messages::-webkit-scrollbar,
 .sidebar::-webkit-scrollbar,
-.pins-panel::-webkit-scrollbar {
+.pins-panel::-webkit-scrollbar,
+.roomSettings ::-webkit-scrollbar {
 
     width: 8px;
 }
 
-/* TRACK */
-
 .messages::-webkit-scrollbar-track,
 .sidebar::-webkit-scrollbar-track,
-.pins-panel::-webkit-scrollbar-track {
+.pins-panel::-webkit-scrollbar-track,
+.roomSettings ::-webkit-scrollbar-track {
 
     background: rgba(255, 255, 255, 0.03);
-
-    border-radius: 10px;
 }
-
-/* THUMB */
 
 .messages::-webkit-scrollbar-thumb,
 .sidebar::-webkit-scrollbar-thumb,
-.pins-panel::-webkit-scrollbar-thumb {
+.pins-panel::-webkit-scrollbar-thumb,
+.roomSettings ::-webkit-scrollbar-thumb {
 
-    background: linear-gradient(
-            to bottom,
-            rgba(255, 215, 0, 0.22),
-            rgba(255, 215, 0, 0.12)
-    );
+    background: rgba(255, 215, 0, 0.12);
 
     border-radius: 10px;
-
-    border: 1px solid rgba(255, 215, 0, 0.15);
-
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.08);
 }
-
-/* HOVER */
 
 .messages::-webkit-scrollbar-thumb:hover,
 .sidebar::-webkit-scrollbar-thumb:hover,
-.pins-panel::-webkit-scrollbar-thumb:hover {
+.pins-panel::-webkit-scrollbar-thumb:hover,
+.roomSettings ::-webkit-scrollbar-thumb:hover {
 
-    background: linear-gradient(
-            to bottom,
-            rgba(255, 215, 0, 0.45),
-            rgba(255, 215, 0, 0.25)
-    );
+    background: rgba(255, 215, 0, 0.45);
+}
 
-    box-shadow: 0 0 14px rgba(255, 215, 0, 0.22);
+/* =========================
+   FIREFOX SCROLLBARS
+========================= */
+
+.messages,
+.sidebar,
+.pins-panel,
+.roomSettings {
+
+    scrollbar-width: thin;
+
+    scrollbar-color: rgba(255, 215, 0, 0.35) rgba(255, 255, 255, 0.03);
 }
 
 /* =========================
@@ -963,6 +922,101 @@ GLOBAL CYBER SCROLLBARS
         max-height: 350px;
     }
 }
+
+.message-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#messageInput {
+    font-family: inherit;
+}
+
+.attach-btn {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: #111;
+    color: #00ff9d;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.attachment-preview {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 10px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid #1f1f1f;
+    border-radius: 10px;
+}
+
+.attachment-item {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.attachment-thumb {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #333;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.attachment-thumb:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 255, 100, 0.3);
+}
+
+.remove-attachment {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 2px;
+    background: #ff3333;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    padding: 0;
+}
+
+.attachment-item:hover .remove-attachment {
+    opacity: 1;
+}
+
+.remove-attachment:hover {
+    background: #ff5555;
+    box-shadow: 0 0 8px rgba(255, 51, 51, 0.5);
+}
+
 
 /* =========================
    IMAGE MODAL (LIGHTBOX)
@@ -1152,6 +1206,202 @@ GLOBAL CYBER SCROLLBARS
 
     box-shadow: 0 0 18px #ffd700;
 }
+
+/* =========================
+ROOM SETTINGS MODAL
+========================= */
+
+.roomSettings{
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    z-index: 10000;
+}
+
+.roomSettings-box {
+    width: min(520px, 95vw);
+    max-height: min(82vh, 760px);
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    border-left: 4px solid #ffd700;
+    border-radius: 18px;
+    box-shadow: 0 0 18px #ffd700;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    animation: roomSettingsOpen 0.18s ease-in;
+}
+
+
+.roomSettings-header,
+.roomSettings-footer {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.12);
+}
+
+.roomSettings-header h2 {
+
+    margin: 0;
+    color: #00ff88;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+.roomSettings-body {
+
+    padding: 20px;
+    max-height: calc(82vh - 132px);
+    overflow-y: auto;
+}
+
+.settings-section {
+    margin-bottom: 18px;
+}
+
+.settings-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.settings-section-header h3 {
+    margin: 0 0 4px;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.settings-subtitle {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.settings-count {
+    color: #00ff88;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.settings-members-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.settings-member-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 255, 136, 0.14);
+    border-radius: 14px;
+}
+
+.settings-member-meta {
+    display: grid;
+    gap: 4px;
+}
+
+.settings-member-name {
+    font-size: 15px;
+    color: #ffffff;
+}
+
+.settings-member-role {
+    font-size: 13px;
+    color: rgba(0, 255, 136, 0.8);
+}
+
+.settings-remove-btn {
+    background: transparent;
+    border: 2px solid #00ff88;
+    color: #00ff88;
+    padding: 10px 14px;
+    border-radius: 12px;
+
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+}
+
+.settings-remove-btn:hover {
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.settings-remove-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.settings-empty,
+.settings-loading,
+.settings-message {
+    color: rgba(255, 255, 255, 0.75);
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.settings-footer-note {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+#closeSettingsBtn {
+
+    background: transparent;
+    border: 2px solid #00ff88;
+    color: #00ff88;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: 0.2s;
+}
+
+#closeSettingsBtn:hover {
+
+    background: rgba(0, 255, 136, 0.08);
+}
+
+/* =========================
+ROOM SETTINGS MODAL OPEN ANIMATION
+========================= */
+
+@keyframes roomSettingsOpen {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateX(0) translateY(10px) scale(0.97);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateX(0) translateY(0) scale(1);
+    }
+}
+
 
 /* =========================
 MESSAGE BASE

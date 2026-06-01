@@ -62,10 +62,6 @@
 
             <h2>Users</h2>
 
-            <button id="contactUserBtn" class="channel-item create-room">
-                + Contact User Privately
-            </button>
-
             <div id="usersList"></div>
 
         </div>
@@ -89,27 +85,67 @@
     <div class="chat-container">
 
         <div class="chat-header">
-            <h2 id="chatTitle"># Global Chat</h2>
+            <h2 id="chatTitle">
+                # Global Chat
+            </h2>
 
-            <button id="pinsBtn" class="pins-btn">
-                PINS
-            </button>
+            <div class="chat-header-actions">
+                <button id="inviteUserBtn" class="chat-options hidden">
+                    INVITE
+                </button>
+
+                <button id="pinsBtn" class="chat-options">
+                    PINS
+                </button>
+
+                <button id="roomSettingsBtn" class="chat-options hidden">
+                    SETTINGS
+                </button>
+            </div>
         </div>
 
         <div id="messages" class="messages"></div>
 
         <form id="messageForm" class="message-form">
 
-            <input
-                type="text"
-                id="messageInput"
-                placeholder="Enter transmission..."
-                required
-            >
+            <!-- IMAGE PREVIEW -->
+            <div
+                    id="attachmentPreview"
+                    class="attachment-preview hidden">
+            </div>
 
-            <button type="submit">
-                SEND
-            </button>
+            <div class="message-input-row">
+
+                <!-- HIDDEN FILE INPUT -->
+                <input
+                        type="file"
+                        id="imageInput"
+                        accept="image/*"
+                        multiple
+                        hidden
+                >
+
+                <!-- ATTACH BUTTON -->
+                <button
+                        type="button"
+                        id="attachBtn"
+                        class="attach-btn">
+                    +
+                </button>
+
+                <!-- MESSAGE INPUT -->
+                <input
+                        type="text"
+                        id="messageInput"
+                        placeholder="Enter transmission..."
+                >
+
+                <!-- SEND -->
+                <button type="submit">
+                    SEND
+                </button>
+
+            </div>
 
         </form>
 
@@ -169,6 +205,34 @@
     </div>
 
     <div id="pinsList"></div>
+</div>
+
+<!-- Room Settings -->
+<div id="roomSettingsPanel" class="roomSettings hidden">
+
+    <div class="roomSettings-box">
+
+        <div class="roomSettings-header">
+
+            <h2 id="settingsTitle">
+                Room Settings
+            </h2>
+
+            <button id="closeSettingsBtn">
+                X
+            </button>
+
+        </div>
+
+        <div class="roomSettings-body">
+
+        </div>
+
+        <div class="roomSettings-footer">
+        </div>
+
+    </div>
+
 </div>
 
 <script src="/socket.io/socket.io.js"></script>

@@ -28,7 +28,6 @@ body {
 ========================= */
 
 body::before {
-
     content: "";
 
     position: fixed;
@@ -50,7 +49,6 @@ body::before {
 ========================= */
 
 .navbar {
-
     position: sticky;
     top: 0;
 
@@ -70,7 +68,6 @@ body::before {
 }
 
 .logo {
-
     color: #00ff88;
 
     font-size: 32px;
@@ -315,14 +312,12 @@ body::before {
 ========================= */
 
 .chat-container {
-
     flex: 1;
 
     display: flex;
     flex-direction: column;
 
     height: 100%;
-
     overflow: hidden;
 }
 
@@ -1132,6 +1127,7 @@ GLOBAL CYBER SCROLLBARS
 
     scrollbar-color: rgba(0, 255, 136, 0.35) rgba(255, 255, 255, 0.03);
 }
+
 
 /* =========================
    TERMINAL CURSOR

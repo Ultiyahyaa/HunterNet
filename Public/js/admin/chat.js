@@ -1,25 +1,47 @@
 import { createChatCore } from "../core/chatCore.js";
 
 const logoutBtn = document.getElementById("logoutBtn");
-const chatTitle = document.getElementById("chatTitle");
-const pinsBtn = document.getElementById("pinsBtn");
-const pinsPanel = document.getElementById("pinsPanel");
-const closePins = document.getElementById("closePins");
-const pinsList = document.getElementById("pinsList");
-const usersList = document.getElementById("usersList");
 const contactsList = document.getElementById("contactsList");
 const contactInfo = document.getElementById("contactInfo");
-const roomsList = document.getElementById("roomsList");
 
 const chat = createChatCore({
 
     elements: {
+
         chatTitle: document.getElementById("chatTitle"),
         messagesDiv: document.getElementById("messages"),
         messageForm: document.getElementById("messageForm"),
         messageInput: document.getElementById("messageInput"),
+        imageInput: document.getElementById("imageInput"),
         globalChat: document.getElementById("globalChat"),
-        roomsList
+        usersList: document.getElementById("usersList"),
+        roomsList: document.getElementById("roomsList"),
+
+        inviteUserBtn: document.getElementById("inviteUserBtn"),
+        roomSettingsBtn: document.getElementById("roomSettingsBtn"),
+
+        createRoomBtn: document.getElementById("createRoomBtn"),
+        contactUserBtn: document.getElementById("contactUserBtn"),
+
+        cyberModal: document.getElementById("cyberModal"),
+        modalTitle: document.getElementById("modalTitle"),
+        modalInput: document.getElementById("modalInput"),
+        confirmModalBtn: document.getElementById("confirmModalBtn"),
+        closeModalBtn: document.getElementById("closeModalBtn"),
+        modalNote: document.getElementById("modalNote"),
+
+        roomSettingsPanel: document.getElementById("roomSettingsPanel"),
+        settingsTitle: document.getElementById("settingsTitle"),
+        roomSettingsBody: document.querySelector("#roomSettingsPanel .roomSettings-body"),
+        roomSettingsFooter: document.querySelector("#roomSettingsPanel .roomSettings-footer"),
+        closeSettingsBtn: document.getElementById("closeSettingsBtn"),
+
+        pinsBtn: document.getElementById("pinsBtn"),
+        pinsPanel: document.getElementById("pinsPanel"),
+        closePins: document.getElementById("closePins"),
+        pinsList: document.getElementById("pinsList"),
+
+        attachmentPreview: document.getElementById("attachmentPreview")
     },
 
     api: {
@@ -44,7 +66,6 @@ const chat = createChatCore({
                 }
             );
 
-            chat.reloadCurrentChat();
         },
 
         onInspect: async (userId) => {
@@ -125,10 +146,6 @@ const chat = createChatCore({
                     })
                 }
             );
-
-            if (res.ok) {
-                await chat.reloadCurrentChat();
-            }
         },
 
         onUnpin: async (messageId) => {
@@ -144,9 +161,6 @@ const chat = createChatCore({
                 }
             );
 
-            if (res.ok) {
-                await chat.reloadCurrentChat();
-            }
         }
     }
 });
@@ -337,31 +351,18 @@ pinsBtn?.addEventListener(
         const current =
             chat.getCurrentChat();
 
-        const params =
-            new URLSearchParams({
-
-                type:
-                    current.type,
-
-                target:
-                    current.target || ""
-            });
-
-        const res =
-            await fetch(
-
-                `/chat/api/pins?${params}`,
-
-                {
-                    credentials:
-                        "include"
-                }
+        const pins =
+            await chat.fetchPins(
+                current.type,
+                current.target
             );
 
-        const pins =
-            await res.json();
-
         pinsList.innerHTML = "";
+
+        if (!pins || !pins.length) {
+            pinsList.innerHTML = "<div class='channel-item'>No pinned messages.</div>";
+            return;
+        }
 
         pins.forEach(pin => {
 
@@ -430,121 +431,11 @@ pinsList?.addEventListener(
         if (res.ok) {
             btn.closest(".pin-entry")
                 ?.remove();
-            await chat.reloadCurrentChat();
         }
     }
 );
 
-closePins?.addEventListener(
-    "click",
-    () => {
-        pinsPanel.classList.add(
-            "hidden"
-        );
-    }
-);
 
-/* =========================
-IMAGE MODAL (LIGHTBOX)
-========================= */
-
-let imageModal = null;
-
-function initImageModal() {
-
-    imageModal = 
-        document.createElement("div");
-
-    imageModal.className =
-        "image-modal";
-
-    imageModal.innerHTML = `
-        <div class="image-modal-content">
-            <img 
-                class="image-modal-image" 
-                src="" 
-                alt="Expanded image"
-            >
-            <button 
-                class="image-modal-close" 
-                aria-label="Close image">
-                ×
-            </button>
-        </div>
-    `;
-
-    document.body.appendChild(
-        imageModal
-    );
-
-    const closeBtn = 
-        imageModal.querySelector(
-            ".image-modal-close"
-        );
-
-    closeBtn.addEventListener(
-        "click",
-        closeImageModal
-    );
-
-    imageModal.addEventListener(
-        "click",
-        (e) => {
-
-            if (
-                e.target === imageModal
-            ) {
-
-                closeImageModal();
-            }
-        }
-    );
-
-    document.addEventListener(
-        "keydown",
-        (e) => {
-
-            if (
-                e.key === "Escape" &&
-                imageModal.classList.contains(
-                    "active"
-                )
-            ) {
-
-                closeImageModal();
-            }
-        }
-    );
-}
-
-function openImageModal(src) {
-
-    if (!imageModal) {
-        initImageModal();
-    }
-
-    const img = 
-        imageModal.querySelector(
-            ".image-modal-image"
-        );
-
-    img.src = src;
-
-    imageModal.classList.add(
-        "active"
-    );
-}
-
-function closeImageModal() {
-
-    imageModal?.classList.remove(
-        "active"
-    );
-}
-
-/* Make modal accessible globally */
-window.openImageModal = openImageModal;
-window.closeImageModal = closeImageModal;
 
 logoutBtn.addEventListener("click", async () => {
     const res = await fetch("/admin/api/logout", {

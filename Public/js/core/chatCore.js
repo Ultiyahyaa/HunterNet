@@ -4,12 +4,12 @@ CORE CHAT ENGINE (SHARED)
 
 export function createChatCore(config) {
 
-
     const {
         elements,
         api,
         isAdmin = false,
-        adminHandlers = {}
+        adminHandlers = {},
+        currentUserId
     } = config;
 
     const {
@@ -21,14 +21,58 @@ export function createChatCore(config) {
         globalChat,
         usersList,
         roomsList,
+
         inviteUserBtn,
-        roomSettingsBtn
+        roomSettingsBtn,
+
+        createRoomBtn,
+        contactUserBtn,
+
+        cyberModal,
+        modalTitle,
+        modalInput,
+        confirmModalBtn,
+        closeModalBtn,
+        modalNote,
+
+        roomSettingsPanel,
+        settingsTitle,
+        roomSettingsBody,
+        roomSettingsFooter,
+        closeSettingsBtn,
+
+        pinsBtn,
+        pinsPanel,
+        closePins,
+        pinsList,
+
+        attachmentPreview
     } = elements;
 
     let currentChat = {
         type: "global",
         id: null,
         name: "Global Chat"
+    };
+
+    let activeModal = null;
+
+    const modalConfigs = {
+        createRoom: {
+            title: "Create New Room",
+            placeholder: "ENTER ROOM NAME",
+            confirmText: "CREATE"
+        },
+        createDM: {
+            title: "Contact User Privately",
+            placeholder: "ENTER USERNAME",
+            confirmText: "START CHAT"
+        },
+        inviteUser: {
+            title: "Invite User To Room",
+            placeholder: "ENTER USERNAME",
+            confirmText: "INVITE"
+        }
     };
 
     const socket = io();
@@ -38,10 +82,6 @@ export function createChatCore(config) {
             "attachBtn"
         );
 
-    const attachmentPreview =
-        document.getElementById(
-            "attachmentPreview"
-        );
 
     let selectedFiles = [];
 
@@ -134,6 +174,30 @@ export function createChatCore(config) {
             return null;
         }
     }
+
+    function buildApiPaths() {
+        const defaultApi = {
+            createRoom:
+                api.createRoom || (api.rooms ? `${api.rooms}/create` : undefined),
+            startDm:
+                api.startDm || (api.dms ? `${api.dms}/start` : undefined),
+            roomInvite:
+                api.roomInvite || (api.rooms ? ((roomId) => `${api.rooms}/${roomId}/invite`) : undefined),
+            roomMembers:
+                api.roomMembers || (api.rooms ? ((roomId) => `${api.rooms}/${roomId}/members`) : undefined),
+            roomRemoveMember:
+                api.roomRemoveMember || (api.rooms ? ((roomId, memberId) => `${api.rooms}/${roomId}/members/${memberId}`) : undefined),
+            pins:
+                api.pins || "/chat/api/pins"
+        };
+
+        return {
+            ...api,
+            ...defaultApi
+        };
+    }
+
+    const resolvedApi = buildApiPaths();
 
     /* =========================
     CREATE MESSAGE NODE
@@ -404,6 +468,404 @@ export function createChatCore(config) {
         element?.classList.add(
             "active"
         );
+    }
+
+    /* =========================
+    ROOM FUNCTIONS
+    ========================= */
+
+    async function createRoom(name) {
+        if (!name || !name.trim() || !resolvedApi.createRoom) {
+            return {
+                success: false,
+                message: "Room creation is not available"
+            };
+        }
+
+        return safeFetch(resolvedApi.createRoom, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({name: name.trim()})
+        });
+    }
+
+    async function inviteRoom(roomId, username) {
+        if (!roomId || !username || !username.trim() || !resolvedApi.roomInvite) {
+            return {
+                success: false,
+                message: "Room invite is not available"
+            };
+        }
+
+        return safeFetch(resolvedApi.roomInvite(roomId), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({username: username.trim()})
+        });
+    }
+
+    async function getRoomMembers(roomId) {
+        if (!roomId || !resolvedApi.roomMembers) {
+            return null;
+        }
+
+        return safeFetch(resolvedApi.roomMembers(roomId));
+    }
+
+    async function removeRoomMember(roomId, memberId) {
+        if (!roomId || !memberId || !resolvedApi.roomRemoveMember) {
+            return {
+                success: false,
+                message: "Room member removal is not available"
+            };
+        }
+
+        return safeFetch(resolvedApi.roomRemoveMember(roomId, memberId), {
+            method: "DELETE"
+        });
+    }
+
+    async function fetchRoomMembers(roomId) {
+        if (!roomId) {
+            return null;
+        }
+
+        const result = await getRoomMembers(roomId);
+
+        if (!result || !result.success) {
+            const message = result?.message || 'Failed to load members';
+            roomSettingsBody.innerHTML = `<div class="settings-message settings-error">${message}</div>`;
+            roomSettingsFooter.innerHTML = "";
+            return null;
+        }
+
+        return result.members || [];
+    }
+
+    async function handleRemoveRoomMember(memberId) {
+        const current = currentChat;
+
+        if (!current || current.type !== "room") {
+            return;
+        }
+
+        const confirmation = window.confirm("Remove this member from the room?");
+        if (!confirmation) {
+            return;
+        }
+
+        const result = await removeRoomMember(current.id, memberId);
+
+        if (!result || !result.success) {
+            alert(result?.message || "Unable to remove member.");
+            return;
+        }
+
+        await renderRoomSettings();
+    }
+
+
+    /* =========================
+    DM FUNCTIONS
+    ========================= */
+
+
+    async function startDM(username) {
+        if (!username || !username.trim() || !resolvedApi.startDm) {
+            return {
+                success: false,
+                message: "Direct messaging is not available"
+            };
+        }
+
+        return safeFetch(resolvedApi.startDm, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({username: username.trim()})
+        });
+    }
+
+    /* =========================
+    PINS FUNCTIONS
+    ========================= */
+
+    async function fetchPins(type, target) {
+        const params = new URLSearchParams({
+            type,
+            target: target || ""
+        });
+
+        return safeFetch(`${resolvedApi.pins}?${params}`);
+    }
+
+    /* =========================
+    MODAL
+    ========================= */
+
+    function openModal(action) {
+
+        if (action === "roomSettings") {
+            roomSettingsPanel?.classList.remove("hidden");
+            activeModal = action;
+            renderRoomSettings();
+            return;
+        }
+
+        const config = modalConfigs[action];
+
+        if (!config) {
+            return;
+        }
+
+        modalTitle.textContent = config.title;
+        modalInput.placeholder = config.placeholder;
+        confirmModalBtn.textContent = config.confirmText;
+        modalInput.value = "";
+
+        cyberModal?.classList.remove("hidden");
+        modalInput?.focus();
+        activeModal = action;
+    }
+
+    function closeModal(action = null) {
+
+        const modalToClose =
+            action === "roomSettings"
+                ? roomSettingsPanel
+                : cyberModal;
+
+        if (!modalToClose) {
+            return;
+        }
+
+        modalToClose.classList.add("hidden");
+        if (modalToClose === cyberModal) {
+            modalInput.value = "";
+        }
+
+        modalNote?.classList.add(
+            "hidden"
+        );
+
+        if (modalNote) {
+            modalNote.innerHTML = "";
+        }
+
+        activeModal = null;
+    }
+
+    async function renderRoomSettings() {
+        const current = currentChat
+
+        if (!current || current.type !== "room") {
+            roomSettingsBody.innerHTML = `<div class="settings-message">Room settings are only available for rooms.</div>`;
+            roomSettingsFooter.innerHTML = "";
+            return;
+        }
+
+        const roomName = current.name.replace(/^#\s*/, "");
+
+        settingsTitle.textContent = `${roomName} Settings`;
+        roomSettingsBody.innerHTML = `
+        <div class="settings-section">
+            <div class="settings-section-header">
+                <div>
+                    <h3>Members</h3>
+                    <p class="settings-subtitle">Current members who can access this room.</p>
+                </div>
+                <span class="settings-count">Loading…</span>
+            </div>
+            <ul class="settings-members-list">
+                <li class="settings-loading">Loading members...</li>
+            </ul>
+        </div>
+    `;
+
+        roomSettingsFooter.innerHTML = `<div class="settings-footer-note">You can remove room members here. Your own membership cannot be removed from this panel.</div>`;
+
+        const members = await fetchRoomMembers(current.id);
+
+        const list = roomSettingsBody.querySelector(".settings-members-list");
+        const count = roomSettingsBody.querySelector(".settings-count");
+
+        if (!members) {
+            roomSettingsBody.innerHTML = `<div class="settings-message settings-error">Unable to load room members.</div>`;
+            roomSettingsFooter.innerHTML = "";
+            return;
+        }
+
+        if (count) {
+            count.textContent = `${members.length} member${members.length === 1 ? "" : "s"}`;
+        }
+
+        if (!members.length) {
+            list.innerHTML = `<li class="settings-empty">No members found for this room.</li>`;
+            return;
+        }
+
+        list.innerHTML = members.map((member) => {
+            const isCurrentUser = String(member.id) === String(window.currentUserId);
+            return `
+            <li class="settings-member-item">
+                <div class="settings-member-meta">
+                    <span class="settings-member-name">${member.username}</span>
+                    ${isCurrentUser ? `<span class="settings-member-role">You</span>` : ""}
+                </div>
+                <button
+                    class="settings-remove-btn"
+                    data-member-id="${member.id}"
+                    ${isCurrentUser ? "disabled" : ""}
+                >
+                    ${isCurrentUser ? "Current" : "REMOVE"}
+                </button>
+            </li>
+        `;
+        }).join("");
+    }
+
+    /* =========================
+    HANDLE MODAL
+    ========================= */
+
+    async function processModalAction() {
+
+        const value = modalInput.value.trim();
+
+        if (!value || !activeModal) {
+            return;
+        }
+
+        /* =========================
+        CREATE ROOM
+        ========================= */
+
+        if (
+            activeModal ===
+            "createRoom"
+        ) {
+
+            const result =
+                await createRoom(value);
+
+            if (
+                !result ||
+                !result.success
+            ) {
+
+                alert(
+                    result?.message ||
+                    "Failed to create room"
+                );
+
+                return;
+            }
+
+            await loadRooms();
+
+            await switchChat({
+
+                type: "room",
+                id: result.room.id,
+
+                name:
+                    `# ${result.room.name}`
+            });
+
+            closeModal();
+
+            return;
+        }
+
+        /* =========================
+        CREATE DM
+        ========================= */
+
+        if (
+            activeModal ===
+            "createDM"
+        ) {
+
+            const result =
+                await startDM(value);
+
+            if (
+                !result ||
+                !result.success
+            ) {
+
+                alert(
+                    result?.message ||
+                    "User not found"
+                );
+
+                return;
+            }
+
+            await loadDMs();
+
+            await switchChat({
+                type: "dm",
+                id: result.id,
+
+                roomId:
+                result.roomId,
+
+                name:
+                    `@ ${result.username}`
+            });
+
+            closeModal();
+
+            return;
+        }
+
+        /* =========================
+        INVITE USER
+        ========================= */
+
+        if (
+            activeModal ===
+            "inviteUser"
+        ) {
+
+            const current =
+                currentChat
+
+            if (
+                current.type !==
+                "room"
+            ) {
+                return;
+            }
+
+            const result =
+                await inviteRoom(
+                    current.id,
+                    value
+                );
+
+            if (
+                !result ||
+                !result.success
+            ) {
+
+                modalNote.innerHTML = `Failed to invite ${value} to the room.`;
+                modalNote.classList.remove("hidden");
+
+                return;
+            }
+
+            modalNote.innerHTML = `${value} has been invited to the room.`;
+            modalNote.classList.remove("hidden");
+
+
+        }
     }
 
     /* =========================
@@ -718,7 +1180,7 @@ export function createChatCore(config) {
                         inspectBtn.dataset.user
                     );
 
-                    return;
+
                 }
             }
         );
@@ -745,22 +1207,6 @@ export function createChatCore(config) {
     async function switchChat(chatData) {
 
         if (inviteUserBtn) {
-
-            if (chatData.type === "room") {
-
-                inviteUserBtn.classList.remove(
-                    "hidden"
-                );
-
-            } else {
-
-                inviteUserBtn.classList.add(
-                    "hidden"
-                );
-            }
-        }
-
-        if (roomSettingsBtn) {
 
             if (chatData.type === "room") {
 
@@ -909,13 +1355,10 @@ export function createChatCore(config) {
                 () => {
 
                     switchChat({
-
                         type: "room",
-
                         id: room.id,
 
-                        name:
-                            `# ${room.name}`,
+                        name: `# ${room.name}`,
 
                         element: div
                     });
@@ -1134,6 +1577,109 @@ FILE PICKER
     }
 
     /* =========================
+    IMAGE MODAL (LIGHTBOX)
+    ========================= */
+
+    let imageModal = null;
+
+    function initImageModal() {
+
+        imageModal =
+            document.createElement("div");
+
+        imageModal.className =
+            "image-modal";
+
+        imageModal.innerHTML = `
+        <div class="image-modal-content">
+            <img 
+                class="image-modal-image" 
+                src="" 
+                alt="Expanded image"
+            >
+            <button 
+                class="image-modal-close" 
+                aria-label="Close image">
+                ×
+            </button>
+        </div>
+    `;
+
+        document.body.appendChild(
+            imageModal
+        );
+
+        const closeBtn =
+            imageModal.querySelector(
+                ".image-modal-close"
+            );
+
+        closeBtn.addEventListener(
+            "click",
+            closeImageModal
+        );
+
+        imageModal.addEventListener(
+            "click",
+            (e) => {
+
+                if (
+                    e.target === imageModal
+                ) {
+
+                    closeImageModal();
+                }
+            }
+        );
+
+        document.addEventListener(
+            "keydown",
+            (e) => {
+
+                if (
+                    e.key === "Escape" &&
+                    imageModal.classList.contains(
+                        "active"
+                    )
+                ) {
+
+                    closeImageModal();
+                }
+            }
+        );
+    }
+
+    function openImageModal(src) {
+
+        if (!imageModal) {
+            initImageModal();
+        }
+
+        const img =
+            imageModal.querySelector(
+                ".image-modal-image"
+            );
+
+        img.src = src;
+
+        imageModal.classList.add(
+            "active"
+        );
+    }
+
+    function closeImageModal() {
+
+        imageModal?.classList.remove(
+            "active"
+        );
+    }
+
+    /* Make modal accessible globally */
+    window.openImageModal = openImageModal;
+    window.closeImageModal = closeImageModal;
+
+
+    /* =========================
     REMOVE ATTACHMENT
     ========================= */
 
@@ -1279,13 +1825,182 @@ FILE PICKER
 
                 imageInput.value = "";
             }
+        }
+    );
 
-            // Notify caller to clear their selectedImages
-            if (window.clearSelectedImages) {
-                window.clearSelectedImages();
+    /* =========================
+BUTTONS
+========================= */
+
+    createRoomBtn?.addEventListener(
+        "click",
+        () => openModal("createRoom")
+    );
+
+    contactUserBtn?.addEventListener(
+        "click",
+        () => openModal("createDM")
+    );
+
+    inviteUserBtn?.addEventListener(
+        "click",
+        () => {
+
+            const current =
+                currentChat;
+
+            if (
+                current.type !==
+                "room"
+            ) {
+                return;
+            }
+
+            openModal(
+                "inviteUser"
+            );
+        }
+    );
+
+    closeModalBtn?.addEventListener(
+        "click",
+        () => closeModal()
+    );
+
+    confirmModalBtn?.addEventListener(
+        "click",
+        processModalAction
+    );
+
+    cyberModal?.addEventListener(
+        "click",
+        (e) => {
+            if (e.target === cyberModal) {
+                closeModal();
             }
         }
     );
+
+    roomSettingsBtn?.addEventListener(
+        "click",
+        () => openModal("roomSettings")
+    );
+
+    closeSettingsBtn?.addEventListener(
+        "click",
+        () => closeModal("roomSettings")
+    );
+
+    roomSettingsPanel?.addEventListener(
+        "click",
+        (e) => {
+            if (e.target === roomSettingsPanel) {
+                closeModal("roomSettings");
+            }
+        }
+    );
+
+    roomSettingsBody?.addEventListener(
+        "click",
+        (e) => {
+            const removeBtn = e.target.closest(
+                ".settings-remove-btn"
+            );
+
+            if (!removeBtn) {
+                return;
+            }
+
+            const memberId = removeBtn.dataset.memberId;
+
+            if (!memberId) {
+                return;
+            }
+
+            handleRemoveRoomMember(Number(memberId));
+        }
+    );
+
+    /* =========================
+    OPEN PINS
+    ========================= */
+
+    pinsBtn?.addEventListener(
+        "click",
+        async () => {
+
+            pinsPanel?.classList.remove(
+                "hidden"
+            );
+
+            const current =
+                currentChat;
+
+
+            const pins =
+                await fetchPins(
+                    currentChat.type,
+                    currentChat.target
+                );
+
+            pinsList.innerHTML = "";
+
+            if (!pins.length) {
+
+                pinsList.innerHTML = `
+                <div class="empty-pins">
+                    NO PINNED MESSAGES
+                </div>
+            `;
+
+                return;
+            }
+
+            pins.forEach(pin => {
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.className =
+                    "pin-entry";
+
+                div.innerHTML = `
+                <div class="pin-top">
+
+                    <div class="pin-user">
+                        ${pin.username}
+                    </div>
+
+                </div>
+
+                <div class="pin-content">
+                    ${pin.content}
+                </div>
+            `;
+
+                pinsList?.appendChild(
+                    div
+                );
+            });
+        }
+    );
+
+    /* =========================
+    CLOSE PINS
+    ========================= */
+
+    closePins?.addEventListener(
+        "click",
+        () => {
+
+            pinsPanel?.classList.add(
+                "hidden"
+            );
+        }
+    );
+
 
     /* =========================
     INIT
@@ -1328,9 +2043,17 @@ FILE PICKER
             );
         },
 
-        setAttachments: (files) => {
-            selectedFiles = files;
-        },
+        createRoom,
+
+        startDM,
+
+        inviteRoom,
+
+        getRoomMembers,
+
+        removeRoomMember,
+
+        fetchPins,
 
         clearAttachments: () => {
             selectedFiles = [];
