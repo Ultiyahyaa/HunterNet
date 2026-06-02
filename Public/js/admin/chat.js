@@ -45,11 +45,16 @@ const chat = createChatCore({
     },
 
     api: {
-        global: "/chat/api/admin/global",
+        global: "/chat/api/global",
         sendGlobal: "/chat/api/global/send",
-        rooms: "/chat/api/admin/rooms",
-        roomMessages: (id) => `/chat/api/admin/rooms/${id}/messages`,
-        sendRoom: (id) => `/chat/api/rooms/${id}/send`
+
+        rooms: "/chat/api/rooms",
+        roomMessages: (id) => `/chat/api/rooms/${id}/messages`,
+        sendRoom: (id) => `/chat/api/rooms/${id}/send`,
+
+        dms: "/chat/api/dms",
+        dmMessages: (id) => `/chat/api/dms/${id}`,
+        sendDm: (id) => `/chat/api/dms/${id}/send`
     },
 
     isAdmin: true,
@@ -57,15 +62,32 @@ const chat = createChatCore({
     adminHandlers: {
 
         onDelete: async (id) => {
+            console.log(
+                "DELETE CHAT:",
+                chat.getCurrentChat()
+            );
+
+            const current =
+                chat.getCurrentChat();
+
+            console.log(
+                "CURRENT TYPE:",
+                current
+            );
 
             await fetch(
                 `/chat/api/admin/message/${id}`,
                 {
                     method: "DELETE",
-                    credentials: "include"
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        chatType: current.type
+                    })
                 }
             );
-
         },
 
         onInspect: async (userId) => {
@@ -202,14 +224,26 @@ function clearContactSelection() {
 }
 
 function exitAdminDmView() {
-    if (!selectedAdminUser && !selectedAdminContact) return;
+
+    if (!selectedAdminUser && !selectedAdminContact)
+        return;
+
+    chat.clearAdminChat();
 
     selectedAdminUser = null;
     selectedAdminContact = null;
     adminDmRoomId = null;
+
     showMessageForm();
-    contactInfo.textContent = "Select a user to inspect contacts";
-    document.querySelectorAll(".contact-item").forEach(el => el.classList.remove("active"));
+
+    contactInfo.textContent =
+        "Select a user to inspect contacts";
+
+    document
+        .querySelectorAll(".contact-item")
+        .forEach(el =>
+            el.classList.remove("active")
+        );
 }
 
 async function loadUsers() {
@@ -249,6 +283,18 @@ async function loadUsers() {
 }
 
 function setActiveContact(element) {
+    console.log("SET ACTIVE CONTACT", element);
+
+    document.querySelectorAll(".contact-item")
+        .forEach(el => el.classList.remove("active"));
+
+    element?.classList.add("active");
+
+    console.log(
+        "OVERRIDE CHAT:",
+        chat.getCurrentChat()
+    );
+
     document.querySelectorAll(".contact-item").forEach(el => el.classList.remove("active"));
     element?.classList.add("active");
 }
@@ -257,9 +303,11 @@ async function selectAdminUser(user, element) {
     selectedAdminUser = user;
     selectedAdminContact = null;
     adminDmRoomId = null;
+
     contactInfo.textContent = `Selected: @ ${user.username}`;
     document.querySelectorAll(".user-item").forEach(el => el.classList.remove("active"));
     element.classList.add("active");
+
     await loadContactsForUser(user.id);
 }
 
@@ -297,17 +345,41 @@ async function loadContactsForUser(userId) {
 }
 
 async function selectAdminContact(contact, element) {
+
+    console.log("CONTACT OBJECT:", contact);
+
     if (!selectedAdminUser) return;
 
     selectedAdminContact = contact;
-    adminDmRoomId = [selectedAdminUser.id, contact.id].sort().join("-");
+
+    adminDmRoomId =
+        [selectedAdminUser.id, contact.id]
+            .sort()
+            .join("-");
+
+    chat.setAdminChat({
+        type: "dm",
+        id: contact.id,
+        roomId: adminDmRoomId,
+        target: contact.id,
+        name: `@ ${contact.username}`
+    });
+
     setActiveContact(element);
+
     hideMessageForm();
+
     chat.renderMessages([]);
-    chatTitle.textContent = `@ ${selectedAdminUser.username} ↔ @ ${contact.username}`;
+
+    chatTitle.textContent =
+        `@ ${selectedAdminUser.username} ↔ @ ${contact.username}`;
 
     await joinAdminDmRoom(adminDmRoomId);
-    await loadAdminDmThread(selectedAdminUser.id, contact.id);
+
+    await loadAdminDmThread(
+        selectedAdminUser.id,
+        contact.id
+    );
 }
 
 async function joinAdminDmRoom(roomId) {

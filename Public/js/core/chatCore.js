@@ -55,6 +55,8 @@ export function createChatCore(config) {
         name: "Global Chat"
     };
 
+    let adminOverrideChat = null;
+
     let activeModal = null;
 
     const modalConfigs = {
@@ -1259,6 +1261,8 @@ export function createChatCore(config) {
                 api.global
             );
 
+            console.log(currentChat);
+
             return;
         }
 
@@ -1281,6 +1285,8 @@ export function createChatCore(config) {
                     chatData.id
                 )
             );
+
+            console.log(currentChat);
 
             return;
         }
@@ -1314,6 +1320,9 @@ export function createChatCore(config) {
                     chatData.id
                 )
             );
+
+            console.log(currentChat);
+
         }
     }
 
@@ -2030,7 +2039,7 @@ BUTTONS
         switchChat,
 
         getCurrentChat: () =>
-            currentChat,
+            adminOverrideChat || currentChat,
 
         reloadCurrentChat: async () => {
             await loadMessages(
@@ -2058,6 +2067,14 @@ BUTTONS
         clearAttachments: () => {
             selectedFiles = [];
             renderAttachmentPreview();
-        }
+        },
+
+        setAdminChat(chatData) {
+            adminOverrideChat = chatData;
+        },
+
+        clearAdminChat() {
+            adminOverrideChat = null;
+        },
     };
 }

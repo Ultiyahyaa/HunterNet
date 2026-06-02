@@ -7,6 +7,8 @@
 }
 
 body {
+    display: flex;
+    flex-direction: column;
     margin: 0;
     height: 100vh;
 
@@ -51,6 +53,7 @@ body::before {
 .navbar {
     position: sticky;
     top: 0;
+    flex: 0 0 auto;
 
     display: flex;
     justify-content: space-between;
@@ -117,11 +120,8 @@ body::before {
 ========================= */
 
 .chat-layout {
-
+    flex: 1;
     display: flex;
-
-    height: calc(100vh - 70px);
-
     overflow: hidden;
 }
 
@@ -496,9 +496,7 @@ PINNED MESSAGE
 ========================= */
 
 .message-form {
-
     display: flex;
-
     gap: 10px;
 
     padding: 20px;
@@ -509,7 +507,6 @@ PINNED MESSAGE
 }
 
 .message-form input {
-
     flex: 1;
 
     background: black;
@@ -526,12 +523,10 @@ PINNED MESSAGE
 }
 
 .message-form input:focus {
-
     box-shadow: 0 0 12px #00ff88;
 }
 
 .message-form button {
-
     background: transparent;
 
     border: 2px solid #00ff88;
@@ -765,7 +760,6 @@ MODAL
 ======================== */
 
 .cyber-modal {
-
     position: fixed;
     inset: 0;
     display: flex;
@@ -792,7 +786,6 @@ MODAL
 
 .cyber-modal-header,
 .cyber-modal-footer {
-
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -801,11 +794,12 @@ MODAL
 }
 
 .cyber-modal-header h2 {
-
     margin: 0;
+
     color: #00ff88;
-    font-size: 18px;
-    letter-spacing: 1px;
+
+    text-shadow: 0 0 10px #00ff88;
+
 }
 
 .cyber-modal-body {
@@ -843,7 +837,6 @@ MODAL
 
 #confirmModalBtn,
 #closeModalBtn {
-
     background: transparent;
     border: 2px solid #00ff88;
     color: #00ff88;
@@ -855,8 +848,10 @@ MODAL
 
 #confirmModalBtn:hover,
 #closeModalBtn:hover {
+    background: #00ff88;
+    color: black;
 
-    background: rgba(0, 255, 136, 0.08);
+    box-shadow: 0 0 18px #00ff88;
 }
 
 /* =========================

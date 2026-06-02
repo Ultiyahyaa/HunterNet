@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const pool = require("../database/database")
-const adminOnly = require("../middleware/admin")
+  const adminOnly = require("../middleware/admin")
 
 // Get all users (admin dashboard)
 router.get("/api/users", adminOnly, async (req, res) => {

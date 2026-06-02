@@ -61,30 +61,16 @@ const chat = createChatCore({
     },
 
     api: {
+        global: "/chat/api/global",
+        sendGlobal: "/chat/api/global/send",
 
-        global:
-            "/chat/api/global",
+        rooms: "/chat/api/rooms",
+        roomMessages: (id) => `/chat/api/rooms/${id}/messages`,
+        sendRoom: (id) => `/chat/api/rooms/${id}/send`,
 
-        sendGlobal:
-            "/chat/api/global/send",
-
-        rooms:
-            "/chat/api/rooms",
-
-        roomMessages: (id) =>
-            `/chat/api/rooms/${id}/messages`,
-
-        sendRoom: (id) =>
-            `/chat/api/rooms/${id}/send`,
-
-        dms:
-            "/chat/api/dms",
-
-        dmMessages: (id) =>
-            `/chat/api/dms/${id}`,
-
-        sendDm: (id) =>
-            `/chat/api/dms/${id}/send`
+        dms: "/chat/api/dms",
+        dmMessages: (id) => `/chat/api/dms/${id}`,
+        sendDm: (id) => `/chat/api/dms/${id}/send`
     },
 
     isAdmin: false,

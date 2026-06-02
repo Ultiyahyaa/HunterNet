@@ -7,6 +7,8 @@
 }
 
 body {
+    display: flex;
+    flex-direction: column;
     margin: 0;
     height: 100vh;
 
@@ -51,6 +53,7 @@ body::before {
 .navbar {
     position: sticky;
     top: 0;
+    flex: 0 0 auto;
 
     display: flex;
     justify-content: space-between;
@@ -111,9 +114,8 @@ body::before {
 ========================= */
 
 .chat-layout {
+    flex: 1;
     display: flex;
-    height: calc(100vh - 70px);
-
     overflow: hidden;
 }
 
@@ -870,18 +872,14 @@ GLOBAL CYBER SCROLLBARS
 
 .cyber-modal {
     position: fixed;
-
     inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     background: rgba(0, 0, 0, 0.75);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    z-index: 5000;
-
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
+    z-index: 10000;
 }
 
 .hidden {
@@ -1082,22 +1080,23 @@ GLOBAL CYBER SCROLLBARS
 }
 
 .cyber-modal-box {
-    width: 420px;
+    width: min(420px, 90vw);
+    background: rgba(0, 0, 0, 0.95);
 
-    background: #050505;
-
-    border: 2px solid #ffd700;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-left: 4px solid #ffd700;
+    border-radius: 18px;
 
     box-shadow: 0 0 25px rgba(255, 215, 0, 0.25),
     inset 0 0 15px rgba(255, 215, 0, 0.08);
+    overflow: hidden;
 
-    animation: modalAppear 0.18s ease-out;
+    animation: modalOpen 0.18s ease-out;
 }
 
-@keyframes modalAppear {
+@keyframes modalOpen {
 
     from {
-        opacity: 0;
         transform: translateY(-10px) scale(0.97);
     }
 
@@ -1107,16 +1106,13 @@ GLOBAL CYBER SCROLLBARS
     }
 }
 
-.cyber-modal-header {
+.cyber-modal-header,
+.cyber-modal-footer{
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    padding: 15px 18px;
-
-    border-bottom: 1px solid rgba(0, 255, 136, 0.2);
-
-    background: rgba(0, 255, 136, 0.05);
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
 }
 
 .cyber-modal-header h2 {
@@ -1125,30 +1121,6 @@ GLOBAL CYBER SCROLLBARS
     color: #ffd700;
 
     text-shadow: 0 0 10px #ffd700;
-}
-
-#closeModalBtn {
-    background: transparent;
-
-    border: 2px solid #ff5555;
-
-    color: #ff5555;
-
-    width: 36px;
-    height: 36px;
-
-    cursor: pointer;
-
-    font-family: inherit;
-
-    transition: 0.2s;
-}
-
-#closeModalBtn:hover {
-    background: #ff5555;
-    color: black;
-
-    box-shadow: 0 0 15px #ff5555;
 }
 
 .cyber-modal-body {
@@ -1177,30 +1149,19 @@ GLOBAL CYBER SCROLLBARS
     box-shadow: 0 0 12px #ffd700;
 }
 
-.cyber-modal-footer {
-    padding: 18px;
-
-    display: flex;
-    justify-content: flex-end;
-}
-
-#confirmModalBtn {
+#confirmModalBtn,
+#closeModalBtn {
     background: transparent;
-
     border: 2px solid #ffd700;
-
     color: #ffd700;
-
-    padding: 12px 18px;
-
+    padding: 10px 16px;
     cursor: pointer;
-
     font-family: inherit;
-
     transition: 0.2s;
 }
 
-#confirmModalBtn:hover {
+#confirmModalBtn:hover,
+#closeModalBtn:hover {
     background: #ffd700;
     color: black;
 

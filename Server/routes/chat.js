@@ -500,26 +500,27 @@ router.get(
 DELETE MESSAGE
 ========================= */
 
-router.delete(
-    "/api/admin/message/:id",
-    authRequired,
-    adminOnly,
+    router.delete(
+        "/api/admin/message/:id",
+        authRequired,
+        adminOnly,
 
-    async (req, res) => {
+        async (req, res) => {
 
-        const { id } = req.params;
+            const { id } = req.params;
+            const { chatType } = req.body;
 
-        try {
+            try {
 
-            const attachments = await pool.query(`
-                SELECT image_url
-                FROM message_attachments
-                WHERE chat_type = 'global'
-                  AND message_id = $1
-            `, [id]);
+                const attachments = await pool.query(`
+                    SELECT image_url
+                    FROM message_attachments
+                    WHERE chat_type = $1
+                      AND message_id = $2
+                `, [chatType, id]);
 
-            if (attachments.rows.length) {
                 for (const { image_url } of attachments.rows) {
+
                     const filePath = path.join(
                         __dirname,
                         "..",
@@ -527,42 +528,67 @@ router.delete(
                         image_url.replace(/^\//, "")
                     );
 
-                    await fs.unlink(filePath).catch(() => null);
+                    await fs.unlink(filePath)
+                        .catch(() => null);
                 }
+
+                await pool.query(`
+                    DELETE FROM message_attachments
+                    WHERE chat_type = $1
+                      AND message_id = $2
+                `, [chatType, id]);
+
+                await pool.query(`
+                    DELETE FROM pinned_messages
+                    WHERE message_id = $1
+                `, [id]);
+
+                switch (chatType) {
+
+                    case "global":
+
+                        await pool.query(`
+                        DELETE FROM global_messages
+                        WHERE id = $1
+                    `, [id]);
+
+                        break;
+
+                    case "room":
+
+                        await pool.query(`
+                        DELETE FROM room_messages
+                        WHERE id = $1
+                    `, [id]);
+
+                        break;
+
+                    case "dm":
+
+                        await pool.query(`
+                        DELETE FROM direct_messages
+                        WHERE id = $1
+                    `, [id]);
+
+                        break;
+                }
+
+                io.emit("message:delete", id);
+
+                res.json({
+                    success: true
+                });
+
+            } catch (err) {
+
+                console.log(err);
+
+                res.status(500).json({
+                    success: false
+                });
             }
-
-            await pool.query(`
-                DELETE FROM message_attachments
-                WHERE chat_type = 'global'
-                  AND message_id = $1
-            `, [id]);
-
-            await pool.query(`
-                DELETE FROM pinned_messages
-                WHERE message_id = $1
-            `, [id]);
-
-            await pool.query(`
-                DELETE FROM global_messages
-                WHERE id = $1
-            `, [id]);
-
-            io.emit("message:delete", id);
-
-            res.json({
-                success: true
-            });
-
-        } catch (err) {
-
-            console.log(err);
-
-            res.status(500).json({
-                success: false
-            });
         }
-    }
-);
+    );
 
 /* =========================
 GET USER INFO
