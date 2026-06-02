@@ -1,4 +1,4 @@
-    # HunterNet
+# HunterNet
 
 > *"Reading doesn't make you an expert."*
 > — Witness1
