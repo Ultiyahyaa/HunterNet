@@ -238,10 +238,10 @@ function generateHeadline() {
     const includeStat = Math.random() < 0.35;
 
     if (includeStat) {
-        return `[${type}] ${subject} ${action} (${numbers()}%) in ${randomFrom(regions)}\``;
+        return `[${type}] ${subject} ${action} ${object} (${numbers()}%) in ${randomFrom(regions)}\``;
     }
 
-    return `[${type}] ${subject} ${action} in ${randomFrom(regions)}`;
+    return `[${type}] ${subject} ${action} ${object} in ${randomFrom(regions)}`;
 }
 
 setInterval(() => {
