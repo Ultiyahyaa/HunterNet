@@ -133,22 +133,129 @@ Just like the original lore.
 
 ---
 
-# Installation
+# Repository Setup
+
+## Clone the Repository
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/Ultiyahyaa/HunterNet.git
+```
 
-cd hunternet
+```bash
+cd HunterNet
+```
 
+---
+
+## Install Dependencies
+
+```bash
 npm install
 ```
 
 ---
 
-# Execution
+## Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+DB_USER = postgres                  [postgres is default, change if using a different user]
+DB_HOST = localhost                 [localhost is default, change if nessessary]
+DB_NAME = {INSERT DB NAME}
+DB_PASSWORD = {INSERT DB PASSWORD}
+DB_PORT = 5432                      [5432 is default, change if nessessary]
+
+SESSION_SECRET = {INSERT KEY}       [Never Reveal this to others, add it to your .gitignore]
+```
+
+---
+
+## Git Ignore
+
+```gitignore
+/.env               [Obvious]
+/Public/uploads     [Prevent chat upload images from popping up in commit tab]
+```
+
+---
+
+# PostgreSQL Setup 
+
+HunterNet requires a PostgreSQL database.
+
+## 1. Create Database
+
+```sql
+CREATE DATABASE HunterNet;
+```
+
+---
+
+## 2. Import Schema [NOT AVAILABLE AS OF CURRENT]
+
+The full database schema is located at:
+
+```
+Server/database/schema.sql
+```
+
+### Run schema:
+
+```bash
+psql -U <insert-user> -d <insert-db-name> -f Server/database/schema.sql
+```
+
+---
+
+## 3. (Optional) Verify Tables
+
+You should see core tables like:
+
+* users
+* threads
+* posts
+* boards
+* rooms
+* messages
+
+---
+
+# Running the App
 
 ```bash
 npm start
+```
+
+---
+
+# Render Deployment
+
+* Create a **Web Service** from this repo
+* Add a **PostgreSQL database**
+* Set environment variables
+* Start command:
+
+  ```bash
+  npm start
+  ```
+* Ensure **WebSockets are enabled**
+
+---
+
+# Project Structure
+
+```
+HunterNet/
+├── Public/        # Frontend (HTML/CSS/JS)
+├── Server/        # Backend (Express + Socket.IO)
+│   ├── database/  # DB connection + schema
+│   ├── routes/    # API endpoints
+│   ├── sockets/   # realtime systems
+│   └── server.js
+├── .env
+├── package.json
+└── README.md
 ```
 
 ---
