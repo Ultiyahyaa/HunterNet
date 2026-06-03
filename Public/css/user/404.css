@@ -1,0 +1,251 @@
+/* =========================
+   404 PAGE
+========================= */
+
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+
+    margin: 0;
+    padding: 0;
+
+    min-height: 100vh;
+
+    background: #050505;
+
+    color: #d7ffd9;
+
+    font-family: 'Share Tech Mono', monospace;
+
+    background-image:
+            linear-gradient(
+                    rgba(0,255,100,.03) 1px,
+                    transparent 1px
+            ),
+            linear-gradient(
+                    90deg,
+                    rgba(0,255,100,.03) 1px,
+                    transparent 1px
+            );
+
+    background-size: 4px 4px;
+
+    overflow-x: hidden;
+
+    animation: flicker 6s infinite;
+}
+
+/* =========================
+   SCANLINES
+========================= */
+
+body::before {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+            repeating-linear-gradient(
+                    to bottom,
+                    rgba(255,255,255,.015),
+                    rgba(255,255,255,.015) 1px,
+                    transparent 1px,
+                    transparent 3px
+            );
+
+    z-index: 9999;
+}
+
+.error-terminal {
+
+    max-width: 900px;
+    margin: 80px auto;
+    padding: 10px;
+
+    text-align: center;
+
+    border: 2px solid #ff4444;
+
+    background: rgba(10,0,0,.9);
+
+    box-shadow:
+            0 0 25px rgba(255,50,50,.25),
+            inset 0 0 20px rgba(255,0,0,.08);
+}
+
+.error-code {
+
+    font-size: 120px;
+
+    color: #ff5555;
+
+    text-shadow:
+            0 0 20px #ff0000,
+            0 0 40px #ff0000;
+}
+
+.error-subtitle {
+
+    font-size: 28px;
+
+    color: #ff7777;
+
+    margin-bottom: 30px;
+}
+
+.error-message {
+
+    color: #9dffcb;
+
+    margin-bottom: 35px;
+
+    line-height: 1.8;
+}
+
+.error-console {
+
+    text-align: left;
+
+    max-width: 700px;
+
+    margin: 40px auto;
+
+    padding: 20px;
+
+    background: rgba(15,0,0,.8);
+
+    border: 1px solid rgba(255,0,0,.25);
+
+    height: 250px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;
+    scrollbar-color: #ff4444 rgba(255,0,0,.1);
+}
+
+.error-console div {
+
+    padding: 6px 0;
+}
+
+.error-line {
+
+    color: #ff9999;
+
+    margin-bottom: 6px;
+
+    opacity: 0;
+
+    animation:
+            terminalLine .3s forwards;
+}
+
+.error-success {
+    color: #ffaa55;
+}
+
+.error-fail {
+    color: #ff4444;
+    font-weight: bold;
+}
+
+.error-classification {
+
+    margin-top: 30px;
+
+    color: #00ffff;
+
+    letter-spacing: 2px;
+}
+
+.error-home-btn {
+
+    margin-top: 30px;
+
+    background: transparent;
+
+    border: 2px solid #00ff88;
+
+    color: #00ff88;
+
+    padding: 12px 24px;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.error-home-btn:hover {
+
+    background: #00ff88;
+
+    color: black;
+
+    box-shadow:
+            0 0 20px #00ff88;
+}
+
+.error-footer {
+
+    margin-top: 40px;
+
+    color: #77cc99;
+
+    font-size: 12px;
+}
+
+/* Chrome */
+.error-console::-webkit-scrollbar {
+    width: 8px;
+}
+
+.error-console::-webkit-scrollbar-track {
+    background: rgba(255,0,0,.05);
+}
+
+.error-console::-webkit-scrollbar-thumb {
+    background: #ff4444;
+}
+
+@keyframes pulseError {
+
+    0%,100% {
+        text-shadow:
+                0 0 15px #ff0000;
+    }
+
+    50% {
+        text-shadow:
+                0 0 30px #ff0000,
+                0 0 60px #ff0000;
+    }
+}
+
+@keyframes terminalLine {
+
+    from {
+        opacity: 0;
+        transform: translateX(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

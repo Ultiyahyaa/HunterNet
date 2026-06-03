@@ -1,0 +1,197 @@
+<!--
+ARCHIVE REF: AL-404-27X-B
+NODE STATUS: OFFLINE
+PUBLIC ARCHIVE FAILURE
+
+Mirror lookup failed.
+
+Error Code:
+HN-000404
+
+If you reached this page intentionally,
+you are searching the wrong network.
+
+Remember:
+Reading doesn't make you an expert.
+
+Contact:
+Witness1
+
+Transmission End.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AN-000404 | Page Not Found</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/user/404.css">
+
+</head>
+
+<script>
+    function start404Console() {
+
+        const consoleEl =
+            document.getElementById("errorConsole");
+
+        if (!consoleEl) return;
+
+        const commands = [
+
+            "> init recovery process",
+            "> loading archive manifest",
+            "> scanning public repository",
+            "> checking mirror node #12",
+            "> checking mirror node #18",
+            "> querying backup index",
+            "> validating route",
+            "> locating requested resource",
+            "> searching cached records",
+            "> searching archive sectors",
+            "> searching archive sectors",
+            "> searching archive sectors",
+            "> response timeout",
+            "> fallback search engaged",
+            "> no matching document found",
+            "> error code: 404",
+            "> terminating process"
+
+        ];
+
+        let index = 0;
+
+        const interval = setInterval(() => {
+
+            const line =
+                document.createElement("div");
+
+            line.className =
+                "error-line";
+
+            line.textContent =
+                commands[index];
+
+            consoleEl.appendChild(line);
+
+            consoleEl.scrollTop =
+                consoleEl.scrollHeight;
+
+            index++;
+
+            if (index >= commands.length) {
+
+                clearInterval(interval);
+
+                const fail =
+                    document.createElement("div");
+
+                fail.className =
+                    "error-line error-fail";
+
+                fail.textContent =
+                    "> RESOURCE NOT FOUND";
+
+                consoleEl.appendChild(fail);
+
+            }
+
+        }, 350);
+
+    }
+
+    setTimeout(() => {
+
+        const fail =
+            document.querySelector(".error-fail");
+
+        if (!fail) return;
+
+        fail.textContent =
+            "> CONNECTION LOST";
+
+    }, 9000);
+
+    setTimeout(() => {
+
+        const fail =
+            document.querySelector(".error-fail");
+
+        if (!fail) return;
+
+        fail.textContent =
+            "> NETWORK ROUTE INVALID";
+
+    }, 11000);
+
+    setTimeout(() => {
+
+        const fail =
+            document.querySelector(".error-fail");
+
+        if (!fail) return;
+
+        fail.textContent =
+            "> ERROR 404";
+
+    }, 13000);
+
+
+    setTimeout(() => {
+
+        const footer =
+            document.querySelector(".error-footer");
+
+        if (!footer) return;
+
+        footer.textContent =
+            "SESSION TRACE: PURGED";
+
+    }, 15000);
+</script>
+
+<body onload="start404Console()">
+    <div class="error-terminal">
+
+        <div class="error-code">
+            ERROR 404
+        </div>
+
+        <div class="error-subtitle">
+            Resource Not Found
+        </div>
+
+        <div class="error-message">
+
+            The requested document does not exist within the
+            Anonymous Liberty public archive.
+
+        </div>
+
+        <div class="error-console" id="errorConsole"></div>
+
+        <div class="error-classification">
+
+            CLASSIFICATION: PUBLIC ACCESS FAILURE
+
+        </div>
+
+        <button
+                class="error-home-btn"
+                onclick="window.location.href = '/home'">
+
+            RETURN TO HOME
+
+        </button>
+
+        <div class="error-footer">
+            Archive Reference: AL-404-27X-B
+        </div>
+
+    </div>
+
+
+</body>
+</html>

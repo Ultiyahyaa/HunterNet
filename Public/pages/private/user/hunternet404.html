@@ -1,0 +1,200 @@
+<!--
+ARCHIVE REF: AL-404-27X-B
+NODE STATUS: OFFLINE
+PUBLIC ARCHIVE FAILURE
+
+Mirror lookup failed.
+
+Error Code:
+HN-000404
+
+If you reached this page intentionally,
+you are searching the wrong network.
+
+Remember:
+Reading doesn't make you an expert.
+
+Contact:
+Witness1
+
+Transmission End.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HN-000404 | Subject Not Found</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/user/hunternet404.css">
+
+</head>
+
+<script>
+    function start404Console() {
+
+        const consoleEl =
+            document.getElementById("errorConsole");
+
+        if (!consoleEl) return;
+
+        const commands = [
+
+            "> establishing hunter-net route",
+            "> requesting archive authorization",
+            "> validating witness credentials",
+            "> querying messenger index",
+            "> searching designation registry",
+            "> checking mirror node AL-12",
+            "> checking mirror node AL-18",
+            "> scanning restricted archives",
+            "> retrieving archived sightings",
+            "> validating transmission path",
+            "> querying dead-drop caches",
+            "> searching witness records",
+            "> searching witness records",
+            "> searching witness records",
+            "> route integrity failure",
+            "> designation not recognized",
+            "> archive lookup failed",
+            "> error code: HN-000404",
+            "> terminating connection"
+
+        ];
+
+        let index = 0;
+
+        const interval = setInterval(() => {
+
+            const line =
+                document.createElement("div");
+
+            line.className =
+                "error-line";
+
+            line.textContent =
+                commands[index];
+
+            consoleEl.appendChild(line);
+
+            consoleEl.scrollTop =
+                consoleEl.scrollHeight;
+
+            index++;
+
+            if (index >= commands.length) {
+
+                clearInterval(interval);
+
+                const fail =
+                    document.createElement("div");
+
+                fail.className =
+                    "error-line error-fail";
+
+                fail.textContent =
+                    "> SUBJECT NOT FOUND";
+
+                consoleEl.appendChild(fail);
+
+            }
+
+        }, 350);
+
+    }
+
+    setTimeout(() => {
+
+        const fail =
+            document.querySelector(".error-fail");
+
+        if (!fail) return;
+
+        fail.textContent =
+            "> NODE OFFLINE";
+
+    }, 9000);
+
+    setTimeout(() => {
+
+        const fail =
+            document.querySelector(".error-fail");
+
+        if (!fail) return;
+
+        fail.textContent =
+            "> ROUTE ACCESS FAILURE";
+
+    }, 11000);
+
+    const finalStates = [
+
+        "> SUBJECT NOT FOUND",
+        "> DESIGNATION UNKNOWN",
+        "> NODE OFFLINE",
+        "> ARCHIVE SEALED",
+        "> ERROR HN-000404"
+
+    ];
+
+    let state = 0;
+
+    setInterval(() => {
+
+        const fail =
+            document.querySelector(".error-fail");
+
+        if (!fail) return;
+
+        fail.textContent =
+            finalStates[state];
+
+        state =
+            (state + 1) % finalStates.length;
+
+    }, 15000);
+</script>
+
+<body onload="start404Console()">
+<div class="error-terminal">
+
+    <div class="error-code">
+        SUBJECT NOT FOUND
+    </div>
+
+    <div class="error-subtitle">
+        Last Known Designation: UNKNOWN
+    </div>
+
+    <div class="error-message">
+        HunterNet was unable to locate the requested
+        destination. The resource may have been deleted,
+        relocated, restricted, or never existed.
+    </div>
+
+    <div class="error-console" id="errorConsole"></div>
+
+    <div class="error-classification">
+
+        CLASSIFICATION: ROUTE ACCESS FAILURE
+
+    </div>
+
+    <button
+            class="error-home-btn"
+            onclick="window.location.href = '/dashboard'">
+
+        RETURN TO HOME
+
+    </button>
+
+    <div class="error-footer" id="archiveRef">
+        Archive Reference: AL-404-27X-B
+    </div>
+
+</div>
+
+
+</body>
+</html>
