@@ -66,7 +66,7 @@ app.use("/admin", adminRoutes)
 app.use("/chat/api/rooms", roomRoutes)
 app.use("/chat/api/dms", dmRoutes)
 app.use("/chat", chatRoutes);
-app.use("/threads", threadsRoutes);
+app.use("/threads/api", threadsRoutes);
 
 
 app.get([
@@ -135,6 +135,27 @@ app.use("/admin", adminOnly, express.static(
     }
   )
 )
+
+app.use((req, res) => {
+
+    if (req.session?.user) {
+
+        return res.status(404).sendFile(
+            path.join(
+                __dirname,
+                "../Public/pages/private/user/hunternet404.html"
+            )
+        );
+    }
+
+    return res.status(404).sendFile(
+        path.join(
+            __dirname,
+            "../Public/pages/public/404.html"
+        )
+    );
+
+});
 
 server.listen(3000, () => {
 
