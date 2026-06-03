@@ -160,6 +160,25 @@ h1 {
     text-shadow: 0 0 10px #00ffff;
 }
 
+.adminPanel {
+    background: rgba(0, 0, 0, 0.85);
+
+    border: 2px solid #ffd700;
+
+    padding: 30px;
+
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.12),
+    inset 0 0 12px rgba(255, 215, 0, 0.04);
+}
+
+.adminPanel h2 {
+    color: #00ffff;
+
+    margin-top: 0;
+
+    text-shadow: 0 0 10px #00ffff;
+}
+
 /* =========================
    FORM
 ========================= */

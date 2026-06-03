@@ -62,18 +62,9 @@ const chat = createChatCore({
     adminHandlers: {
 
         onDelete: async (id) => {
-            console.log(
-                "DELETE CHAT:",
-                chat.getCurrentChat()
-            );
 
             const current =
                 chat.getCurrentChat();
-
-            console.log(
-                "CURRENT TYPE:",
-                current
-            );
 
             await fetch(
                 `/chat/api/admin/message/${id}`,
@@ -283,17 +274,10 @@ async function loadUsers() {
 }
 
 function setActiveContact(element) {
-    console.log("SET ACTIVE CONTACT", element);
-
     document.querySelectorAll(".contact-item")
         .forEach(el => el.classList.remove("active"));
 
     element?.classList.add("active");
-
-    console.log(
-        "OVERRIDE CHAT:",
-        chat.getCurrentChat()
-    );
 
     document.querySelectorAll(".contact-item").forEach(el => el.classList.remove("active"));
     element?.classList.add("active");
@@ -345,8 +329,6 @@ async function loadContactsForUser(userId) {
 }
 
 async function selectAdminContact(contact, element) {
-
-    console.log("CONTACT OBJECT:", contact);
 
     if (!selectedAdminUser) return;
 

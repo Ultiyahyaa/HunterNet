@@ -627,65 +627,58 @@ router.get(
     }
 );
 
-/* =========================
-PIN MESSAGE
-========================= */
+    /* =========================
+    PIN MESSAGE
+    ========================= */
 
-router.post(
-    "/api/admin/pin",
-    authRequired,
-    adminOnly,
+    router.post(
+        "/api/admin/pin",
+        authRequired,
+        adminOnly,
+        async (req, res) => {
 
-    async (req, res) => {
-
-        const {
-            message_id,
-            chat_type,
-            chat_target,
-            content,
-            username
-        } = req.body;
-
-        try {
-
-            await pool.query(`
-                INSERT INTO pinned_messages
-                (
-                    message_id,
-                    chat_type,
-                    chat_target,
-                    content,
-                    username,
-                    pinned_by
-                )
-                VALUES
-                    ($1, $2, $3, $4, $5, $6)
-            `, [
-
+            const {
                 message_id,
                 chat_type,
                 chat_target,
                 content,
-                username,
-                req.session.user.id
-            ]);
+                username
+            } = req.body;
 
-            io.emit("message:pin", message_id)
+            if (!message_id || !chat_type) {
+                return res.status(400).json({ success: false });
+            }
 
-            res.json({
-                success: true
-            });
+            try {
 
-        } catch (err) {
+                await pool.query(`
+                INSERT INTO pinned_messages
+                    (message_id, chat_type, chat_target, content, username)
+                VALUES ($1, $2, $3, $4, $5)
+                ON CONFLICT (message_id, chat_type, chat_target)
+                DO NOTHING
+            `, [
+                    message_id,
+                    chat_type,
+                    chat_target || null,
+                    content,
+                    username
+                ]);
 
-            console.log(err);
+                io.emit("message:pin", {
+                    messageId: message_id,
+                    chat_type,
+                    chat_target
+                });
 
-            res.status(500).json({
-                success: false
-            });
+                res.json({ success: true });
+
+            } catch (err) {
+                console.error("PIN ERROR:", err);
+                res.status(500).json({ success: false });
+            }
         }
-    }
-);
+    );
 
     /* =========================
     UNPIN MESSAGE
@@ -695,48 +688,43 @@ router.post(
         "/api/admin/pin/:messageId",
         authRequired,
         adminOnly,
-
         async (req, res) => {
+
+            const messageId = Number(req.params.messageId);
+            const {chat_type, chat_target} = req.body;
+
+            if (!messageId || !chat_type) {
+                return res.status(400).json({success: false});
+            }
 
             try {
 
-                const messageId =
-                    Number(req.params.messageId);
-
-                if (!messageId) {
-
-                    return res.status(400).json({
-                        success: false
-                    });
-                }
-
                 await pool.query(`
-                    DELETE FROM pinned_messages
+                    DELETE
+                    FROM pinned_messages
                     WHERE message_id = $1
-                `, [messageId]);
+                      AND chat_type = $2
+                      AND ($3::text IS NULL OR chat_target = $3)
+                `, [
+                    messageId,
+                    chat_type,
+                    chat_target || null
+                ]);
 
-                io.emit(
-                    "message:unpin",
-                    messageId
-                );
-
-                res.json({
-                    success: true
+                io.emit("message:unpin", {
+                    messageId,
+                    chat_type,
+                    chat_target
                 });
+
+                res.json({success: true});
 
             } catch (err) {
-
-                console.error(
-                    "UNPIN ERROR:",
-                    err
-                );
-
-                res.status(500).json({
-                    success: false
-                });
+                console.error("UNPIN ERROR:", err);
+                res.status(500).json({success: false});
             }
         }
-    );
+    )
 
     return router;
-};
+}

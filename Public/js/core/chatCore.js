@@ -49,16 +49,6 @@ export function createChatCore(config) {
         attachmentPreview
     } = elements;
 
-    let currentChat = {
-        type: "global",
-        id: null,
-        name: "Global Chat"
-    };
-
-    let adminOverrideChat = null;
-
-    let activeModal = null;
-
     const modalConfigs = {
         createRoom: {
             title: "Create New Room",
@@ -84,8 +74,18 @@ export function createChatCore(config) {
             "attachBtn"
         );
 
+    let currentChat = {
+        type: "global",
+        id: null,
+        name: "Global Chat"
+    };
+
+    let adminOverrideChat = null;
+
+    let activeModal = null;
 
     let selectedFiles = [];
+
 
     socket.emit("join:global");
 
@@ -450,8 +450,6 @@ export function createChatCore(config) {
 
         messagesDiv.scrollTop =
             messagesDiv.scrollHeight;
-
-        updateTimestamps();
     }
 
     function setActiveChannel(element) {
@@ -675,21 +673,142 @@ export function createChatCore(config) {
 
         settingsTitle.textContent = `${roomName} Settings`;
         roomSettingsBody.innerHTML = `
-        <div class="settings-section">
-            <div class="settings-section-header">
-                <div>
-                    <h3>Members</h3>
-                    <p class="settings-subtitle">Current members who can access this room.</p>
+            <div class="settings-section">
+    
+                <!-- ROOM NAME -->
+                <div class="settings-section-header">
+                    <div>
+                        <h3>Change Room Name</h3>
+                        <p class="settings-subtitle">
+                            Change the name of the room here.
+                        </p>
+                    </div>
                 </div>
-                <span class="settings-count">Loading…</span>
+    
+                <div class="settingsRoom-name-form">
+                    <input
+                        type="text"
+                        id="roomNameInput"
+                        class="settings-input"
+                        maxlength="50"
+                        value="${roomName}"
+                        placeholder="Room Name"
+                    />
+    
+                    <button
+                        id="saveRoomNameBtn"
+                        class="settings-save-btn"
+                    >
+                        SAVE
+                    </button>
+                </div>
+    
+                <!-- MEMBERS -->
+                <div class="settings-section-header">
+                    <div>
+                        <h3>Members</h3>
+                        <p class="settings-subtitle">
+                            Current members who can access this room.
+                        </p>
+                    </div>
+                    <span class="settings-count">Loading…</span>
+                </div>
+    
+                <ul class="settings-members-list">
+                    <li class="settings-loading">
+                        Loading members...
+                    </li>
+                </ul>
+    
             </div>
-            <ul class="settings-members-list">
-                <li class="settings-loading">Loading members...</li>
-            </ul>
-        </div>
-    `;
+        `;
 
-        roomSettingsFooter.innerHTML = `<div class="settings-footer-note">You can remove room members here. Your own membership cannot be removed from this panel.</div>`;
+        roomSettingsFooter.innerHTML = `
+            <div class="settings-footer-note">
+                You can remove room members here.
+                Your own membership cannot be removed from this panel.
+            </div>
+       
+        `;
+
+
+        /* =========================
+        ROOM NAME SAVE
+        ========================= */
+
+        const roomNameInput = roomSettingsBody.querySelector("#roomNameInput");
+        const saveRoomNameBtn = roomSettingsBody.querySelector("#saveRoomNameBtn");
+
+        saveRoomNameBtn?.addEventListener("click", async () => {
+
+            const newName = roomNameInput.value.trim();
+
+            if (!newName) {
+                return alert("Room name cannot be empty.");
+            }
+
+            if (newName === roomName) {
+                return;
+            }
+
+            saveRoomNameBtn.disabled = true;
+            saveRoomNameBtn.textContent = "SAVING...";
+
+            try {
+
+                const response = await fetch(
+                    `/chat/api/rooms/${current.id}/changeName`,
+                    {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            name: newName
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message || "Failed to update room name"
+                    );
+                }
+
+                // update active room object
+                current.name = newName;
+
+                // update room settings title
+                settingsTitle.textContent = `${newName} Settings`;
+
+                // update active chat header
+                chatTitle.textContent = `# ${newName}`;
+
+                current.name = newName;
+                chatTitle.textContent = `# ${newName}`;
+                settingsTitle.textContent = `${newName} Settings`;
+
+                loadRooms()
+
+            } catch (err) {
+
+                console.error(err);
+                alert(err.message);
+
+            } finally {
+
+                saveRoomNameBtn.disabled = false;
+                saveRoomNameBtn.textContent = "SAVE";
+
+            }
+
+        });
+
+        /* =========================
+        MEMBERS
+        ========================= */
 
         const members = await fetchRoomMembers(current.id);
 
@@ -1261,8 +1380,6 @@ export function createChatCore(config) {
                 api.global
             );
 
-            console.log(currentChat);
-
             return;
         }
 
@@ -1285,8 +1402,6 @@ export function createChatCore(config) {
                     chatData.id
                 )
             );
-
-            console.log(currentChat);
 
             return;
         }
@@ -1320,9 +1435,6 @@ export function createChatCore(config) {
                     chatData.id
                 )
             );
-
-            console.log(currentChat);
-
         }
     }
 
@@ -1559,19 +1671,27 @@ FILE PICKER
                             "attachment-item";
 
                         item.innerHTML = `
+                            <img
+                                src="${e.target.result}"
+                                class="attachment-thumb"
+                                style="cursor: pointer;"
+                            >
+    
+                            <button
+                                type="button"
+                                class="remove-attachment"
+                                data-index="${index}">
+                                ×
+                            </button>
+                        `;
 
-                        <img
-                            src="${e.target.result}"
-                            class="attachment-thumb"
-                        >
+                        const img = item.querySelector(".attachment-thumb");
 
-                        <button
-                            type="button"
-                            class="remove-attachment"
-                            data-index="${index}">
-                            ×
-                        </button>
-                    `;
+                        img.addEventListener("click", () => {
+                            if (window.openImageModal) {
+                                window.openImageModal(e.target.result);
+                            }
+                        });
 
                         attachmentPreview.appendChild(
                             item
@@ -1814,14 +1934,6 @@ FILE PICKER
 
             if (!result) {
                 return;
-            }
-
-            if ((currentChat.type === "dm" || currentChat.type === "room") && result.message) {
-                const element =
-                    createMessageElement(result.message);
-                messagesDiv.appendChild(element);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                updateTimestamps();
             }
 
             messageInput.value = "";

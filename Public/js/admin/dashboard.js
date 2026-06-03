@@ -80,4 +80,6 @@ logoutBtn.addEventListener("click", async () => {
       credentials: "include"
     })
 
+  window.location.href = "/adminLogin"
+
 })

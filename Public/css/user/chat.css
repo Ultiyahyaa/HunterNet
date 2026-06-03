@@ -956,6 +956,82 @@ ROOM SETTINGS MODAL
     line-height: 1.4;
 }
 
+.settingsRoom-name-form {
+
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.settings-input {
+
+    flex: 1;
+    min-width: 0;
+
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 255, 136, 0.14);
+    border-radius: 14px;
+
+    padding: 12px 16px;
+
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.settings-input::placeholder {
+
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.settings-input:focus {
+
+    outline: none;
+    border-color: rgba(0, 255, 136, 0.45);
+
+    box-shadow:
+            0 0 0 1px rgba(0, 255, 136, 0.25),
+            0 0 12px rgba(0, 255, 136, 0.12);
+}
+
+.settings-save-btn {
+
+    flex-shrink: 0;
+
+    background: transparent;
+    border: 2px solid #00ff88;
+    border-radius: 12px;
+
+    color: #00ff88;
+
+    padding: 0 18px;
+
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.settings-save-btn:hover {
+
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.settings-save-btn:active {
+
+    transform: scale(0.97);
+}
+
+.settings-save-btn:disabled {
+
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .settings-count {
     color: #00ff88;
     font-size: 13px;
@@ -1158,7 +1234,8 @@ GLOBAL CYBER SCROLLBARS
     gap: 10px;
 }
 
-#messageInput {
+#messageInput,
+#submitBtn{
     font-family: inherit;
 }
 

@@ -933,7 +933,8 @@ GLOBAL CYBER SCROLLBARS
     gap: 10px;
 }
 
-#messageInput {
+#messageInput,
+#submitBtn {
     font-family: inherit;
 }
 
@@ -1206,13 +1207,13 @@ ROOM SETTINGS MODAL
     justify-content: space-between;
     align-items: center;
     padding: 16px 20px;
-    border-bottom: 1px solid rgba(0, 255, 136, 0.12);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.15);
 }
 
 .roomSettings-header h2 {
 
     margin: 0;
-    color: #00ff88;
+    color: #ffd700;
     font-size: 18px;
     letter-spacing: 1px;
 }
@@ -1250,7 +1251,7 @@ ROOM SETTINGS MODAL
 }
 
 .settings-count {
-    color: #00ff88;
+    color: #ffd700;
     font-size: 13px;
     white-space: nowrap;
 }
@@ -1291,8 +1292,8 @@ ROOM SETTINGS MODAL
 
 .settings-remove-btn {
     background: transparent;
-    border: 2px solid #00ff88;
-    color: #00ff88;
+    border: 2px solid #ffd700;
+    color: #ffd700;
     padding: 10px 14px;
     border-radius: 12px;
 
@@ -1329,8 +1330,8 @@ ROOM SETTINGS MODAL
 #closeSettingsBtn {
 
     background: transparent;
-    border: 2px solid #00ff88;
-    color: #00ff88;
+    border: 2px solid #ffd700;
+    color: #ffd700;
     padding: 10px 16px;
     cursor: pointer;
     font-family: inherit;

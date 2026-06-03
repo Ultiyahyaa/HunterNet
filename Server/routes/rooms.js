@@ -321,6 +321,90 @@ module.exports = (io) => {
     );
 
     /* =========================
+       ROOM NAME CHANGE
+    ========================= */
+
+    router.patch(
+        "/:roomId/changeName",
+        authRequired,
+
+        async (req, res) => {
+
+            try {
+
+                const roomId = Number(req.params.roomId);
+                const userId = Number(req.session.user.id);
+                const { name } = req.body;
+
+                const roomName = String(name || "").trim();
+
+                if (!roomName) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Room name is required"
+                    });
+                }
+
+                if (roomName.length > 100) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Room name is too long"
+                    });
+                }
+
+                const memberCheck = await pool.query(`
+                SELECT 1
+                FROM rooms
+                WHERE id = $1
+                  AND members @> ARRAY[$2]::INTEGER[]
+            `, [
+                    roomId,
+                    userId
+                ]);
+
+                if (!memberCheck.rows.length) {
+                    return res.status(403).json({
+                        success: false,
+                        message: "Access denied"
+                    });
+                }
+
+                const updated = await pool.query(`
+                UPDATE rooms
+                SET name = $1
+                WHERE id = $2
+                RETURNING id, name
+            `, [
+                    roomName,
+                    roomId
+                ]);
+
+                if (!updated.rows.length) {
+                    return res.status(404).json({
+                        success: false,
+                        message: "Room not found"
+                    });
+                }
+
+                res.json({
+                    success: true,
+                    room: updated.rows[0]
+                });
+
+            } catch (err) {
+
+                console.log(err);
+
+                res.status(500).json({
+                    success: false
+                });
+
+            }
+
+        }
+    );
+
+    /* =========================
        ROOM MEMBERS
     ========================= */
 
