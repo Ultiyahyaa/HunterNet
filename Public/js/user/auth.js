@@ -1,42 +1,31 @@
 // TOGGLE BUTTONS
 
-const loginContainer =
-  document.getElementById("loginContainer")
+const loginContainer = document.getElementById("loginContainer")
+const loginForm = document.getElementById("loginForm")
 
-const registerContainer =
-  document.getElementById("registerContainer")
+const registerContainer = document.getElementById("registerContainer")
+const registerForm = document.getElementById("registerForm")
 
-const loginReturnBtn =
-  document.getElementById("loginReturnBtn")
+const loginReturnBtn = document.getElementById("loginReturnBtn")
+const registerReturnBtn = document.getElementById("registerReturnBtn")
 
-const registerReturnBtn =
-  document.getElementById("registerReturnBtn")
 
-document
-.getElementById("showLogin")
-.addEventListener("click", () => {
+document.getElementById("showLogin")
+    .addEventListener("click", () => {
 
   loginContainer.style.display = "block"
-
   registerContainer.style.display = "none"
-
 })
 
-document
-.getElementById("showRegister")
-.addEventListener("click", () => {
+document.getElementById("showRegister")
+    .addEventListener("click", () => {
 
   loginContainer.style.display = "none"
-
   registerContainer.style.display = "block"
-
 })
 
 
 // REGISTER
-
-const registerForm =
-  document.getElementById("registerForm")
 
 registerForm.addEventListener(
   "submit",
@@ -107,9 +96,6 @@ registerForm.addEventListener(
 
 
 // LOGIN
-
-const loginForm =
-  document.getElementById("loginForm")
 
 loginForm.addEventListener(
   "submit",

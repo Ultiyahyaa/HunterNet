@@ -18,6 +18,7 @@ const io =
     });
 
 const chatSockets = require("./sockets/chatSockets")
+const threadSockets = require("./sockets/threadSockets")
 const chatRoutes = require("./routes/chat")(io);
 const settingsRoutes = require("./routes/settings")
 const roomRoutes = require("./routes/rooms")(io)
@@ -30,6 +31,7 @@ const authRequired = require("./middleware/auth")
 const adminOnly = require("./middleware/admin")
 
 chatSockets(io);
+threadSockets(io);
 
 app.set("io", io);
 
@@ -115,7 +117,7 @@ app.get("/settings", authRequired, (req, res) => {
     )
 })
 
-app.get("/boards", authRequired, (req, res) => {
+app.get("/threads", authRequired, (req, res) => {
     res.sendFile(
       path.join(__dirname, "../Public/pages/private/user/threads.html")
     )

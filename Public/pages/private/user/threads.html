@@ -7,9 +7,8 @@
 
     <title>HunterNet Threads</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/user/threads.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -21,34 +20,33 @@
         HunterNet
     </div>
 
-    <button class="logout-btn" onclick="window.location.href='/home'">
+    <button id="logoutBtn" class="logout-btn">
         LOG OUT
     </button>
 
 </div>
 
 <!-- MAIN LAYOUT -->
-<div class="boards-layout">
+<div class="threads-layout">
 
     <!-- SIDEBAR -->
-    <div class="boards-sidebar">
+    <div class="sidebar">
 
         <div class="sidebar-section">
 
-            <h2>Threads</h2>
+            <h2>Threads Feed</h2>
 
-            <div id="threadsList" class="boards-list"></div>
+            <div id="globalChat" class="thread-item" onclick="window.location.href='/threads'">
+                # Threads Feed
+            </div>
 
         </div>
 
         <div class="sidebar-section">
 
-            <h2>Actions</h2>
+            <h2>Joined Threads</h2>
 
-            <!-- FIXED ID -->
-            <button id="openCreateThreadBtn" class="board-item create-board">
-                + Create Thread
-            </button>
+            <div id="joinedThreadsList" class="threads-list"></div>
 
         </div>
 
@@ -62,23 +60,26 @@
 
     </div>
 
-    <!-- MAIN -->
-    <div class="boards-container">
 
-        <div class="boards-header">
+    <!-- MAIN -->
+    <div class="threads-container">
+
+
+
+    </div>
+</div>
+
+<template id="threadsFeedTemplate">
+    <div class="threads-feed">
+        <div class="threads-header">
 
             <div>
                 <h2 id="threadTitleView"># Threads</h2>
 
-                <p class="board-description">
+                <p class="thread-description">
                     Secure discussion threads and classified message channels.
                 </p>
             </div>
-
-            <button id="refreshThreadsBtn" class="refresh-btn">
-                REFRESH
-            </button>
-
         </div>
 
         <!-- CREATE THREAD PANEL -->
@@ -114,42 +115,79 @@
 
         <!-- FEED -->
         <div id="threadsFeed" class="posts-feed"></div>
-
     </div>
+</template>
 
-</div>
+<template id="threadRoomTemplate">
+    <!-- CHAT -->
+    <div class="chat-container">
 
-<!-- THREAD MODAL -->
-<div id="threadModal" class="thread-modal hidden">
+        <div class="chat-header">
+            <div>
+                <h2 id="chatTitle"></h2>
+            </div>
 
-    <div class="thread-modal-box">
+            <div class="chat-header-actions">
+                <button id="backBtn" class="chat-options">
+                    ← BACK
+                </button>
 
-        <div class="thread-header">
-
-            <h2>THREAD CHAT</h2>
-
-            <button id="closeThreadBtn">X</button>
+                <button id="pinsBtn" class="chat-options">
+                    PINS
+                </button>
+            </div>
 
         </div>
 
-        <div class="thread-messages"></div>
+        <div id="messages" class="messages"></div>
 
-        <form class="thread-reply-form">
+        <form id="messageForm" class="message-form">
 
-            <input
-                    type="text"
-                    id="threadReplyInput"
-                    placeholder="Reply in thread..."
-            >
+            <!-- IMAGE PREVIEW -->
+            <div
+                    id="attachmentPreview"
+                    class="attachment-preview hidden">
+            </div>
 
-            <button type="submit">SEND</button>
+            <div class="message-input-row">
+
+                <!-- HIDDEN FILE INPUT -->
+                <input
+                        type="file"
+                        id="imageInput"
+                        accept="image/*"
+                        multiple
+                        hidden
+                >
+
+                <!-- ATTACH BUTTON -->
+                <button
+                        type="button"
+                        id="attachBtn"
+                        class="attach-btn">
+                    +
+                </button>
+
+                <!-- MESSAGE INPUT -->
+                <input
+                        type="text"
+                        id="messageInput"
+                        placeholder="Enter transmission..."
+                >
+
+                <!-- SEND -->
+                <button type="submit" id="submitBtn">
+                    SEND
+                </button>
+
+            </div>
 
         </form>
 
     </div>
+</template>
 
-</div>
-
+<script src="/socket.io/socket.io.js"></script>
 <script type="module" src="/js/user/threads.js"></script>
 
 </body>

@@ -1,54 +1,43 @@
 import { createThreadsCore } from "../core/threadsCore.js";
 
-const logoutBtn = document.getElementById("logoutBtn");
+const currentUserResponse = await fetch(
+    "/auth/api/me",
+    {
+        credentials: "include"
+    }
+);
+
+const currentUser =
+    currentUserResponse.ok
+        ? await currentUserResponse.json()
+        : null;
+
+window.currentUserId =
+    currentUser?.id || null;
 
 const thread = createThreadsCore({
 
     elements: {
 
-        threadsList:
-            document.getElementById("threadsList"),
+        joinedThreadsList:
+            document.getElementById("joinedThreadsList"),
 
-        threadTitle:
-            document.getElementById("threadTitle"),
+        onlineUsers:
+            document.getElementById("onlineUsers"),
 
-        threadContent:
-            document.getElementById("threadContent"),
-
-        openCreateThreadBtn:
-            document.getElementById("openCreateThreadBtn"),
-
-        submitThreadBtn:
-            document.getElementById("submitThreadBtn"),
-
-        threadsFeed:
-            document.getElementById("threadsFeed"),
-
-        modal:
-            document.getElementById("threadModal"),
-
-        modalMessages:
-            document.querySelector(".thread-messages"),
-
-        modalInput:
-            document.getElementById("threadReplyInput"),
-
-        modalForm:
-            document.querySelector(".thread-reply-form"),
-
-        closeModalBtn:
-            document.getElementById("closeThreadBtn"),
-
-        refreshBtn:
-            document.getElementById("refreshThreadsBtn")
     },
 
     api: {
-        threads: "/threads/api"
-    }
+        threads: "/threads/api/",
+        messages: "/threads/api/:threadId/messages",
+    },
+
+    currentUserId: window.currentUserId,
+    currentUsername: currentUser?.username || "Anonymous"
 
 });
 
+const logoutBtn = document.getElementById("logoutBtn");
 
 logoutBtn.addEventListener("click", async () => {
     await fetch("/auth/api/logout", {
@@ -58,3 +47,6 @@ logoutBtn.addEventListener("click", async () => {
     window.location.href = "/home"
 
 })
+
+
+

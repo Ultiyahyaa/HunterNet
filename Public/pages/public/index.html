@@ -258,21 +258,10 @@
 
         <h2>Recent Monitoring Activity</h2>
 
-        <div class="incident">
-            [04.27.2002] ISP Metadata Retention Policy Expanded
-        </div>
-
-        <div class="incident">
-            [04.25.2002] Social Platform Tracking Audit Published
-        </div>
-
-        <div class="incident">
-            [04.22.2002] International Encryption Report Released
-        </div>
-
-        <div class="incident">
-            [04.20.2002] Telecommunications Oversight Review Updated
-        </div>
+        <div class="incident">[04.27.2002] ISP Metadata Retention Policy Expanded</div>
+        <div class="incident">[04.25.2002] Social Platform Tracking Audit Published</div>
+        <div class="incident">[04.22.2002] International Encryption Report Released</div>
+        <div class="incident">[04.20.2002] Telecommunications Oversight Review Updated</div>
 
     </div>
 
@@ -384,11 +373,6 @@
         </table>
 
     </div>
-
-    <div class="footer">
-        Anonymous Liberty Network // Secure Transmission Active
-    </div>
-
 </template>
 
 <!-- =========================
@@ -463,11 +447,6 @@
         </div>
 
     </div>
-
-    <div class="footer">
-        Anonymous Liberty Network // Archive Node
-    </div>
-
 </template>
 
 <!-- =========================
@@ -539,11 +518,6 @@
         </div>
 
     </div>
-
-    <div class="footer">
-        Anonymous Liberty Network // Privacy Resources
-    </div>
-
 </template>
 
 <!-- =========================
@@ -587,11 +561,6 @@
         </div>
 
     </div>
-
-    <div class="footer">
-        Anonymous Liberty Network // Repository Access
-    </div>
-
 </template>
 
 <!-- =========================
@@ -611,32 +580,141 @@
     <div class="about-section">
 
         <p>
-
-            Anonymous Liberty is an independent
-            research organization dedicated to
-            promoting transparency, digital rights,
-            privacy awareness, and responsible
-            technology governance.
-
+            At Anonymous Liberty,
+            we are guided by the principles of individual freedom,
+            personal responsibility, privacy, and independent thought.
+            We believe that people are best equipped to make decisions about their own lives,
+            free from unnecessary interference by governments, institutions, or centralized authorities.
         </p>
 
         <p>
+            Our philosophy is rooted in the belief that liberty extends beyond economics or politics.
+            it is a fundamental human right. Individuals should have the freedom to pursue their goals,
+            express their ideas, manage their resources, and shape their futures according to their own values,
+            provided they respect the rights and freedoms of others.
+        </p>
 
-            Through research initiatives,
-            monitoring projects, and public
-            reporting, we seek to provide
-            objective information regarding
-            the evolving digital landscape.
+        <p>
+            With freedom comes responsibility.
+            A free society depends on individuals being accountable for their choices and willing to accept
+            the consequences that follow. We believe that personal responsibility, rather than coercion,
+            is the foundation of a healthy and prosperous society.
+        </p>
+
+        <p>
+            We also recognize the importance of privacy and anonymity in preserving genuine freedom.
+            Throughout history, individuals have often faced social, political,
+            or institutional pressures for challenging accepted narratives,
+            exposing wrongdoing, or exploring controversial ideas. The ability to communicate,
+            investigate, and act without fear of retaliation remains
+            essential to the pursuit of truth and the protection of liberty.
+        </p>
+
+        <p>
+            Anonymous Liberty exists as a platform for independent thinkers,
+            researchers, and those willing to question assumptions about the world around them.
+            We encourage open discussion, critical analysis,
+            and the exploration of ideas that lie beyond conventional explanations.
+        </p>
+
+        <p>
+            While many forces that shape society are visible,
+            others may be less understood. Questions surrounding power,
+            influence, hidden agendas, and the nature of reality itself
+            have fascinated humanity for centuries. We believe such questions
+            deserve thoughtful examination rather than automatic dismissal.
+            Whether those answers are political, social, psychological,
+            historical, or even supernatural in nature, the search for
+            truth begins with the willingness to ask difficult questions.
+        </p>
+
+        <p>
+            Could there be influences at work beyond what we immediately perceive?
+            Are there forces—seen or unseen—that shape the course of human events?
+            We do not claim to possess all the answers. Instead, we seek to foster a
+            space where inquiry is welcomed, curiosity is encouraged, and individuals
+            are free to explore possibilities for themselves.
+
+         </p>
+
+        <p>
+            In an age increasingly defined by surveillance, information control,
+            and institutional authority, we remain committed to defending the individual's
+            right to think freely, speak openly, and pursue truth wherever it may lead.
+
+        </p>
+    </div>
+</template>
+
+<!-- =========================
+     404 PAGE
+========================= -->
+
+<template id="404-template">
+
+    <div class="page-header">
+
+        <h1 class="glitch" data-text="404">404</h1>
+
+        <div class="subtitle">
+            SIGNAL LOST // NODE UNREACHABLE
+        </div>
+
+        <p>
+
+            The requested endpoint does not exist in the
+            Anonymous Liberty network.
+
+            It may have been removed, relocated, or
+            never indexed by the system.
 
         </p>
 
+        <div class="status-bar">
+
+            ERROR CODE: NX-404 |
+            ROUTE STATUS: FAILED |
+            TRACE RESULT: NULL |
+            NODE RESPONSE: TIMEOUT
+
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+
+            <button
+                    class="login-btn"
+                    data-page="home"
+                    onclick="loadPage('home')">
+
+                RETURN TO NETWORK
+
+            </button>
+
+        </div>
+
     </div>
 
-    <div class="footer">
-        Anonymous Liberty Network // Established 1998
+    <div class="incident-panel">
+
+        <h2>System Diagnostics</h2>
+
+        <div class="terminal-feed">
+
+            <div>[SCAN] Route integrity check...</div>
+            <div>[FAIL] Endpoint not found</div>
+            <div>[WARN] Possible dead link or corrupted node</div>
+            <div>[TRACE] Attempting fallback routing...</div>
+            <div>[ABORT] Manual override required</div>
+
+        </div>
+
     </div>
 
 </template>
+
+<div class="footer">
+    Anonymous Liberty Network // Secure Transmission Active
+</div>
 
 <script src="/js/user/index.js"></script>
 

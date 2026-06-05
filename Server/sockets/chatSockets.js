@@ -3,7 +3,7 @@ module.exports = (io) => {
     io.on("connection", (socket) => {
 
         console.log(
-            "Socket connected:",
+            "Chat Socket connected:",
             socket.id
         );
 

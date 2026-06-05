@@ -121,6 +121,7 @@ body::before {
 h1 {
     font-size: 52px;
 
+    margin-top: 10px;
     margin-bottom: 10px;
 
     color: #00ff88;
