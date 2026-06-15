@@ -1,7 +1,7 @@
 const express = require("express");
 const pool = require("../database/database");
 const authRequired = require("../middleware/auth");
-const upload = require("../middleware/uploadChatImages");
+const upload = require("../middleware/chatImages");
 
 module.exports = (io) => {
 
@@ -12,30 +12,21 @@ module.exports = (io) => {
        GET ROOMS
     ========================= */
 
-    router.get(
-        "/",
-        authRequired,
-
-        async (req, res) => {
-
+    router.get("/", authRequired, async (req, res) => {
             try {
 
-                const result =
-                    await pool.query(`
-
-                        SELECT
-                            r.id,
-                            r.name
-
-                        FROM rooms r
-
-                        WHERE $1 = ANY(r.members)
-
-                        ORDER BY r.id ASC
-
-                    `, [
+                const result = await pool.query(`
+                    SELECT
+                        r.id,
+                        r.name
+                    FROM rooms r
+                    WHERE $1 = ANY(r.members)
+                    ORDER BY r.id ASC
+                    `,
+                    [
                         req.session.user.id
-                    ]);
+                    ]
+                );
 
                 res.json(
                     result.rows
@@ -56,11 +47,7 @@ module.exports = (io) => {
        ROOM MESSAGES
     ========================= */
 
-    router.get(
-        "/:roomId/messages",
-        authRequired,
-
-        async (req, res) => {
+    router.get("/:roomId/messages", authRequired, async (req, res) => {
 
             try {
 
@@ -153,11 +140,7 @@ module.exports = (io) => {
        CREATE ROOM
     ========================= */
 
-    router.post(
-        "/create",
-        authRequired,
-
-        async (req, res) => {
+    router.post("/create", authRequired, async (req, res) => {
 
             const { name } =
                 req.body;
@@ -224,11 +207,7 @@ module.exports = (io) => {
        INVITE USER
     ========================= */
 
-    router.post(
-        "/:roomId/invite",
-        authRequired,
-
-        async (req, res) => {
+    router.post("/:roomId/invite", authRequired, async (req, res) => {
 
             const { username } =
                 req.body;
@@ -324,11 +303,7 @@ module.exports = (io) => {
        ROOM NAME CHANGE
     ========================= */
 
-    router.patch(
-        "/:roomId/changeName",
-        authRequired,
-
-        async (req, res) => {
+    router.patch("/:roomId/changeName", authRequired, async (req, res) => {
 
             try {
 
@@ -408,11 +383,7 @@ module.exports = (io) => {
        ROOM MEMBERS
     ========================= */
 
-    router.get(
-        "/:roomId/members",
-        authRequired,
-
-        async (req, res) => {
+    router.get("/:roomId/members", authRequired, async (req, res) => {
             try {
                 const roomId = Number(req.params.roomId);
                 const userId = Number(req.session.user.id);
@@ -462,11 +433,7 @@ module.exports = (io) => {
         }
     );
 
-    router.delete(
-        "/:roomId/members/:memberId",
-        authRequired,
-
-        async (req, res) => {
+    router.delete("/:roomId/members/:memberId", authRequired, async (req, res) => {
             try {
                 const roomId = Number(req.params.roomId);
                 const userId = Number(req.session.user.id);
@@ -522,10 +489,7 @@ module.exports = (io) => {
        SEND ROOM MESSAGE
     ========================= */
 
-    router.post(
-        "/:roomId/send",
-
-        authRequired,
+    router.post("/:roomId/send", authRequired,
 
         upload.array(
             "images",

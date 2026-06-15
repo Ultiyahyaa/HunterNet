@@ -1,7 +1,7 @@
 const express = require("express");
 const pool = require("../database/database");
 const authRequired = require("../middleware/auth");
-const upload = require("../middleware/uploadChatImages");
+const upload = require("../middleware/chatImages");
 
 module.exports = (io) => {
 

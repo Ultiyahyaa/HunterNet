@@ -1902,32 +1902,18 @@ FILE PICKER
 
             if (!url) return;
 
-            const formData =
-                new FormData();
+            const formData = new FormData();
 
-            formData.append(
-                "content",
-                text
-            );
+            formData.append("content", text);
 
-            for (
-                const file
-                of files
-                ) {
-
-                formData.append(
-                    "images",
-                    file
-                );
+            for (const file of files) {
+                formData.append("images", file);
             }
 
-            const result =
-                await safeFetch(
+            const result = await safeFetch(
                     url,
                     {
-
                         method: "POST",
-
                         body: formData
                     }
                 );

@@ -162,6 +162,7 @@ app.use((req, res) => {
 server.listen(3000, () => {
 
     console.log(
-        "HunterNet running on 3000"
+        "\nHunterNet running on Port 3000\n" +
+        "Open ngrok and type 'ngrok http 3000' to Host public.\n"
     );
 });

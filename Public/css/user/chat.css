@@ -1074,6 +1074,7 @@ ROOM SETTINGS MODAL
     color: #00ff88;
     padding: 10px 14px;
     border-radius: 12px;
+    font-family: inherit;
 
     cursor: pointer;
     transition: 0.2s;

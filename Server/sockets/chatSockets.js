@@ -2,10 +2,6 @@ module.exports = (io) => {
 
     io.on("connection", (socket) => {
 
-        console.log(
-            "Chat Socket connected:",
-            socket.id
-        );
 
         /* =========================
         GLOBAL CHAT

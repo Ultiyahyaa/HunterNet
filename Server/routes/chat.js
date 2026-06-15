@@ -2,7 +2,7 @@ const express = require("express");
 const pool = require("../database/database");
 const authRequired = require("../middleware/auth");
 const adminOnly = require("../middleware/admin");
-const upload = require("../middleware/uploadChatImages");
+const upload = require("../middleware/chatImages");
 const fs = require("fs").promises;
 const path = require("path");
 
@@ -653,14 +653,15 @@ router.get(
 
                 await pool.query(`
                 INSERT INTO pinned_messages
-                    (message_id, chat_type, chat_target, content, username)
-                VALUES ($1, $2, $3, $4, $5)
+                    (message_id, chat_type, chat_target, pinned_by, content, username)
+                VALUES ($1, $2, $3, $4, $5, $6)
                 ON CONFLICT (message_id, chat_type, chat_target)
                 DO NOTHING
             `, [
                     message_id,
                     chat_type,
                     chat_target || null,
+                    req.session.id,
                     content,
                     username
                 ]);
