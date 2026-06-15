@@ -340,3 +340,26 @@ loadPage(
     startingPage,
     false
 );
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const loginBtn = document.getElementById("loginBtn");
+
+    try {
+        const res = await fetch("auth/api/me");
+
+        if (res.ok) {
+            const user = await res.json();
+
+            loginBtn.classList.remove("login-btn");
+            loginBtn.textContent = "RETURN TO DASHBOARD";
+            loginBtn.classList.add("return-btn");
+
+
+            loginBtn.addEventListener("click", () => {
+                window.location.href = "/dashboard";
+            })
+        }
+    } catch (err) {
+        console.error("Auth check failed:", err);
+    }
+});
