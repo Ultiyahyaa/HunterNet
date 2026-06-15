@@ -5,18 +5,14 @@ module.exports = (io) => {
 
     io.on("connection", (socket) => {
 
-        console.log("Thread socket connected:", socket.id);
-
-        const userId = socket.handshake.auth?.userId || socket.id;
-
         socket.on("join:thread", (threadId) => {
             socket.join(`thread:${threadId}`);
-            console.log(`User joined thread ${threadId}`);
+
         });
 
         socket.on("leave:thread", (threadId) => {
             socket.leave(`thread:${threadId}`);
-            console.log(`User left thread ${threadId}`);
+
         });
 
         socket.on("thread:message", (data) => {
@@ -46,7 +42,6 @@ module.exports = (io) => {
                 });
             }
 
-            console.log("Thread socket disconnected:", socket.id);
         });
     });
 

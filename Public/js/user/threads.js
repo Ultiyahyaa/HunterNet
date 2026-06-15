@@ -28,8 +28,8 @@ const thread = createThreadsCore({
     },
 
     api: {
-        threads: "/threads/api/",
-        messages: "/threads/api/:threadId/messages",
+        threads: '/threads/api/',
+        messages: (id) => `/threads/api/${id}/messages`,
     },
 
     currentUserId: window.currentUserId,

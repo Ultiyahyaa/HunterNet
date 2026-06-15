@@ -1,2 +1,3 @@
 /.env
 /Public/uploads
+/Server/database/schema.sql

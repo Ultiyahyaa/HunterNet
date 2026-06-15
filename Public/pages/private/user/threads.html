@@ -36,7 +36,7 @@
 
             <h2>Threads Feed</h2>
 
-            <div id="globalChat" class="thread-item" onclick="window.location.href='/threads'">
+            <div id="threadsFeedCard" class="thread-item global">
                 # Threads Feed
             </div>
 
@@ -89,25 +89,37 @@
                     type="text"
                     id="threadTitle"
                     placeholder="Thread title..."
-                    maxlength="80"
+                    maxlength="200"
+                    required
             >
 
             <textarea
                     id="threadContent"
                     placeholder="Write thread content..."
                     maxlength="5000"
+                    required
             ></textarea>
 
             <div class="create-post-footer">
 
-                <div class="post-meta">
-                    STATUS: ENCRYPTED CHANNEL
-                </div>
+                <div class="attachment-preview thread-attachment-preview"></div>
 
-                <!-- FIXED ID -->
-                <button id="submitThreadBtn">
-                    CREATE
-                </button>
+
+                <div class="post-actions">
+                    <input
+                            type="file"
+                            id="threadImageInput"
+                            accept="image/*"
+                            multiple
+                            hidden
+                    >
+                    <button id="threadAttachBtn">
+                        ATTACH
+                    </button>
+                    <button id="submitThreadBtn">
+                        CREATE
+                    </button>
+                </div>
 
             </div>
 
@@ -186,6 +198,23 @@
 
     </div>
 </template>
+
+<!-- Pins Panel -->
+<div id="pinsPanel" class="pins-panel hidden">
+
+    <div class="pins-header">
+
+        <h2>Pinned Messages</h2>
+
+        <button id="closePins">
+            X
+        </button>
+
+    </div>
+
+    <div id="pinsList"></div>
+
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script type="module" src="/js/user/threads.js"></script>

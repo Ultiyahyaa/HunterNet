@@ -1,19 +1,12 @@
-const multer =
-    require("multer");
-
-const path =
-    require("path");
-
-const crypto =
-    require("crypto");
-
-const fs =
-    require("fs");
+const multer = require("multer");
+const path = require("path");
+const crypto = require("crypto");
+const fs = require("fs");
 
 const uploadPath =
     path.join(
         __dirname,
-        "../../public/uploads/chat"
+        "../../public/uploads/threads"
     );
 
 /* =========================
@@ -57,35 +50,19 @@ const storage =
     });
 
 const fileFilter =
-    (
-        req,
-        file,
-        cb
-    ) => {
+    (req, file, cb) => {
 
         const allowed = [
-
             "image/png",
             "image/jpeg",
             "image/webp",
             "image/gif"
         ];
 
-        if (
-            allowed.includes(
-                file.mimetype
-            )
-        ) {
-
+        if (allowed.includes(file.mimetype)) {
             cb(null, true);
-
         } else {
-
-            cb(
-                new Error(
-                    "Invalid file type"
-                )
-            );
+            cb(new Error("Invalid file type"));
         }
     };
 
