@@ -1,5 +1,3 @@
-// TOGGLE BUTTONS
-
 const loginContainer = document.getElementById("loginContainer")
 const loginForm = document.getElementById("loginForm")
 
@@ -10,154 +8,151 @@ const loginReturnBtn = document.getElementById("loginReturnBtn")
 const registerReturnBtn = document.getElementById("registerReturnBtn")
 
 
-document.getElementById("showLogin")
-    .addEventListener("click", () => {
+document.getElementById("showLogin").addEventListener("click", () => {
+        registerForm.reset();
 
-  loginContainer.style.display = "block"
-  registerContainer.style.display = "none"
-})
+        loginContainer.style.display = "block"
+        registerContainer.style.display = "none"
+    })
 
-document.getElementById("showRegister")
-    .addEventListener("click", () => {
+document.getElementById("showRegister").addEventListener("click", () => {
+        loginForm.reset();
 
-  loginContainer.style.display = "none"
-  registerContainer.style.display = "block"
-})
+        loginContainer.style.display = "none"
+        registerContainer.style.display = "block"
+    })
 
 
 // REGISTER
 
 registerForm.addEventListener(
-  "submit",
-  async (e) => {
+    "submit",
+    async (e) => {
 
-    e.preventDefault()
+        e.preventDefault()
 
-    const username =
-      document.getElementById(
-        "registerUsername"
-      ).value.trim()
+        const username = document.getElementById("registerUsername").value.trim()
 
-    const password =
-      document.getElementById(
-        "registerPassword"
-      ).value
+        const password = document.getElementById("registerPassword").value
 
-    try {
+        const faction = document.getElementById("selectFaction").value
 
-      const response =
-        await fetch("/auth/api/register", {
+        try {
 
-          method: "POST",
+            const response =
+                await fetch("/auth/api/register", {
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+                    method: "POST",
 
-          body: JSON.stringify({
-            username,
-            password
-          })
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-        })
+                    body: JSON.stringify({
+                        username,
+                        password,
+                        faction
+                    })
 
-      const data =
-        await response.json()
+                })
 
-      if (data.success) {
+            const data =
+                await response.json()
 
-        alert(
-          `Account created!\n\nYour permanent username is:\n${data.username}`
-        )
+            if (data.success) {
 
-        registerForm.reset()
+                alert(
+                    `Account created!\n\nYour permanent username is:\n${data.username}`
+                )
 
-      } else {
+                registerForm.reset()
 
-        alert(
-          data.message ||
-          "Registration failed"
-        )
+            } else {
 
-      }
+                alert(
+                    data.message ||
+                    "Registration failed"
+                )
 
-    } catch (err) {
+            }
 
-      console.log(err)
+        } catch (err) {
 
-      alert(
-        "Server error"
-      )
+            console.log(err)
 
-    }
+            alert(
+                "Server error"
+            )
 
-})
+        }
+
+    })
 
 
 // LOGIN
 
 loginForm.addEventListener(
-  "submit",
-  async (e) => {
+    "submit",
+    async (e) => {
 
-    e.preventDefault()
+        e.preventDefault()
 
-    const username =
-      document.getElementById(
-        "loginUsername"
-      ).value
+        const username =
+            document.getElementById(
+                "loginUsername"
+            ).value
 
-    const password =
-      document.getElementById(
-        "loginPassword"
-      ).value
+        const password =
+            document.getElementById(
+                "loginPassword"
+            ).value
 
-    try {
+        try {
 
-      const response =
-        await fetch("/auth/api/login", {
+            const response =
+                await fetch("/auth/api/login", {
 
-          method: "POST",
+                    method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-          body: JSON.stringify({
-            username,
-            password
-          })
+                    body: JSON.stringify({
+                        username,
+                        password
+                    })
 
-        })
+                })
 
-      const data =
-        await response.json()
+            const data =
+                await response.json()
 
-      if (data.success) {
+            if (data.success) {
 
-        window.location.href =
-          "/dashboard"
+                window.location.href =
+                    "/dashboard"
 
-      } else {
+            } else {
 
-        alert(data.message)
+                alert(data.message)
 
-      }
+            }
 
-    } catch (err) {
+        } catch (err) {
 
-      console.log(err)
+            console.log(err)
 
-    }
+        }
 
-})
+    })
 
 loginReturnBtn.onclick = () => {
-  window.location.href = "/home"
+    window.location.href = "/home"
 }
 
 registerReturnBtn.onclick = () => {
-  window.location.href = "/home"
+    window.location.href = "/home"
 }
