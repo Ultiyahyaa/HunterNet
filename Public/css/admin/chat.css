@@ -65,7 +65,7 @@ body::before {
 
     border-bottom: 2px solid #ffd700;
 
-    box-shadow: 0 0 15px rgba(0, 255, 100, 0.25);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 
     z-index: 999;
 }
@@ -211,7 +211,7 @@ body::before {
     border-color: #ffd700;
     background: rgba(0, 255, 136, 0.08);
 
-    box-shadow: 0 0 15px rgba(0, 255, 136, 0.25);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
 .global.active {
@@ -219,7 +219,7 @@ body::before {
 
     background: rgba(0, 255, 136, 0.12);
 
-    box-shadow: 0 0 18px rgba(0, 255, 136, 0.35);
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.4);
 }
 
 /* ROOMS = BLUE */
@@ -387,7 +387,7 @@ MESSAGES
 
     border-radius: 10px;
 
-    box-shadow: 0 0 12px rgba(0, 255, 100, 0.08);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
 
     transition: 0.2s;
 }
@@ -1379,8 +1379,7 @@ MESSAGE BASE
 }
 
 /* ONLY hover when menu is NOT open */
-.message:hover:not(.menu-open) {
-    transform: translateY(-1px);
+.message:hover {
     border-color: rgba(0, 255, 255, 0.35);
     background: rgba(0, 255, 255, 0.03);
     box-shadow: 0 0 18px rgba(0, 255, 255, 0.12);

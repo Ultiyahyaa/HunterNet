@@ -5,29 +5,22 @@ async function loadUsers() {
 
   try {
 
-    const res =
-      await fetch("/admin/api/users", {
+    const res = await fetch("/admin/api/users", {
         credentials: "include"
       })
 
-    const data =
-      await res.json()
+    const data = await res.json()
 
     userList.innerHTML = ""
 
     data.users.forEach(user => {
 
-      const div =
-        document.createElement("div")
+      const div = document.createElement("div")
 
       div.className = "user-card"
-
       div.innerHTML = `
-
         <h3>${user.username}</h3>
-
         <p>ID: ${user.id}</p>
-
         <p>
           ROLE:
           ${
@@ -36,9 +29,7 @@ async function loadUsers() {
               : "USER"
           }
         </p>
-
         <div class="button-group">
-
           <button
             class="role-btn"
             onclick="toggleRole(
@@ -68,60 +59,39 @@ async function loadUsers() {
     })
 
   } catch (err) {
-
     console.log(err)
-
     alert("Failed to load users")
 
   }
 
 }
 
-async function toggleRole(
-  id,
-  currentRole
-) {
-
+async function toggleRole(id, currentRole) {
   try {
-
-    const res =
-      await fetch(
-        `/admin/api/user/${id}/role`,
-        {
-
+    const res = await fetch(`/admin/api/user/${id}/role`, {
           method: "PATCH",
-
           headers: {
             "Content-Type":
               "application/json"
           },
-
           credentials: "include",
-
           body: JSON.stringify({
             is_admin: !currentRole
           })
-
         }
       )
 
-    const data =
-      await res.json()
+    const data = await res.json()
 
     if (data.success) {
-
       loadUsers()
 
     } else {
-
       alert(data.message)
 
     }
-
   } catch (err) {
-
     console.log(err)
-
     alert("Role update failed")
 
   }
@@ -130,44 +100,30 @@ async function toggleRole(
 
 async function deleteUser(id) {
 
-  if (
-    !confirm(
-      "Delete this user?"
-    )
-  ) return
+  if (!confirm("Delete this user?")) return
 
   try {
-
-    const res =
-      await fetch(
-        `/admin/api/user/${id}`,
+    const res = await fetch(`/admin/api/user/${id}`,
         {
           method: "DELETE",
           credentials: "include"
-        }
-      )
+        })
 
-    const data =
-      await res.json()
+    const data = await res.json()
 
     if (data.success) {
-
       loadUsers()
 
     } else {
-
       alert(data.message)
 
     }
 
   } catch (err) {
-
     console.log(err)
-
     alert("Delete failed")
 
   }
-
 }
 
 loadUsers()
@@ -179,25 +135,7 @@ logoutBtn.addEventListener("click", async () => {
       credentials: "include"
     })
 
-    const text = await res.text()
-    console.log("RAW RESPONSE:", text)
-
-    let data
-    try {
-      data = JSON.parse(text)
-    } catch (e) {
-      throw new Error("Server did not return JSON")
-    }
-
-    if (!res.ok) {
-      throw new Error(data.message || "Request failed")
-    }
-
-    if (data.success) {
-      window.location.href = "/dashboard"
-    } else {
-      throw new Error("Failed to exit admin mode")
-    }
+    window.location.href = "/adminLogin"
 
   } catch (err) {
     console.log("ADMIN LOGOUT ERROR:", err)

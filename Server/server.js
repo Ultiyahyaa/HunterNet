@@ -19,13 +19,14 @@ const io =
 
 const chatSockets = require("./sockets/chatSockets")
 const threadSockets = require("./sockets/threadSockets")
+
+const authRoutes = require("./routes/auth")
 const chatRoutes = require("./routes/chat")(io);
-const settingsRoutes = require("./routes/settings")
 const roomRoutes = require("./routes/rooms")(io)
 const dmRoutes = require("./routes/dms")(io);
-const authRoutes = require("./routes/auth")
-const adminRoutes = require("./routes/admin")
 const threadsRoutes = require("./routes/threads")
+const settingsRoutes = require("./routes/settings")
+const adminRoutes = require("./routes/admin")
 
 const authRequired = require("./middleware/auth")
 const adminOnly = require("./middleware/admin")
@@ -49,10 +50,6 @@ app.use(session({
     httpOnly: true
   }
 }))
-
-/* =========================
-SOCKET CONNECTIONS
-========================= */
 
 /* =========================
 ROUTES

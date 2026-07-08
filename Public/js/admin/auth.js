@@ -1,29 +1,18 @@
-const loginForm =
-  document.getElementById("loginForm")
+const loginForm = document.getElementById("loginForm")
 
-loginForm.addEventListener(
-  "submit",
-  async (e) => {
+loginForm.addEventListener("submit", async (e) => {
 
     e.preventDefault()
 
     const username =
-      document.getElementById(
-        "loginUsername"
-      ).value
+      document.getElementById("loginUsername").value
 
     const password =
-      document.getElementById(
-        "loginPassword"
-      ).value
+      document.getElementById("loginPassword").value
 
     try {
-
-      const response =
-        await fetch("/admin/api/login", {
-
+      const response = await fetch("/admin/api/login", {
           method: "POST",
-
           headers: {
             "Content-Type":
               "application/json"

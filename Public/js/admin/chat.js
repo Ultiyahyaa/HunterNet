@@ -163,6 +163,9 @@ const chat = createChatCore({
 
         onUnpin: async (messageId) => {
 
+            const current =
+                chat.getCurrentChat();
+
             const res = await fetch(
                 `/chat/api/admin/pin/${messageId}`,
                 {
@@ -170,7 +173,20 @@ const chat = createChatCore({
                     method: "DELETE",
 
                     credentials:
-                        "include"
+                        "include",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        chat_type:
+                        current.type,
+
+                        chat_target:
+                        current.target
+                    })
                 }
             );
 
@@ -471,6 +487,9 @@ pinsList?.addEventListener(
         const messageId =
             btn.dataset.id;
 
+        const current =
+            chat.getCurrentChat();
+
         const res = await fetch(
             `/chat/api/admin/pin/${messageId}`,
             {
@@ -478,7 +497,20 @@ pinsList?.addEventListener(
                 method: "DELETE",
 
                 credentials:
-                    "include"
+                    "include",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    chat_type:
+                    current.type,
+
+                    chat_target:
+                    current.target
+                })
             }
         );
 

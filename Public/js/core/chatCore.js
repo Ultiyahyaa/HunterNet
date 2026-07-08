@@ -1,7 +1,3 @@
-/* =========================
-CORE CHAT ENGINE (SHARED)
-========================= */
-
 export function createChatCore(config) {
 
     const {
@@ -127,18 +123,11 @@ export function createChatCore(config) {
     }
 
     function updateTimestamps() {
-
-        document
-            .querySelectorAll(".timestamp")
+        document.querySelectorAll(".timestamp")
             .forEach(el => {
-
                 const time =
-                    el.getAttribute(
-                        "data-time"
-                    );
-
-                el.textContent =
-                    ` // ${getRelativeTime(time)}`;
+                    el.getAttribute("data-time");
+                el.textContent = ` // ${getRelativeTime(time)}`;
             });
     }
 
@@ -148,19 +137,13 @@ export function createChatCore(config) {
     SAFE FETCH
     ========================= */
 
-    async function safeFetch(
-        url,
-        options = {}
-    ) {
+    async function safeFetch(url, options = {}) {
+        if (!url) return null;
 
         try {
 
-            const res =
-                await fetch(url, {
-
-                    credentials:
-                        "include",
-
+            const res = await fetch(url, {
+                    credentials: "include",
                     ...options
                 });
 
@@ -168,11 +151,8 @@ export function createChatCore(config) {
                 return null;
 
             return await res.json();
-
         } catch (err) {
-
             console.log(err);
-
             return null;
         }
     }
@@ -1094,7 +1074,11 @@ export function createChatCore(config) {
 
     socket.on(
         "message:pin",
-        (messageId) => {
+        (payload) => {
+
+            const messageId =
+                payload?.messageId ??
+                payload;
 
             const message =
                 document.querySelector(
@@ -1156,7 +1140,11 @@ export function createChatCore(config) {
 
     socket.on(
         "message:unpin",
-        (messageId) => {
+        (payload) => {
+
+            const messageId =
+                payload?.messageId ??
+                payload;
 
             const message =
                 document.querySelector(

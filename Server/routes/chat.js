@@ -655,13 +655,13 @@ router.get(
                 INSERT INTO pinned_messages
                     (message_id, chat_type, chat_target, pinned_by, content, username)
                 VALUES ($1, $2, $3, $4, $5, $6)
-                ON CONFLICT (message_id, chat_type, chat_target)
+                ON CONFLICT (message_id)
                 DO NOTHING
             `, [
                     message_id,
                     chat_type,
                     chat_target || null,
-                    req.session.id,
+                    Number(req.session.user.id),
                     content,
                     username
                 ]);
@@ -692,7 +692,7 @@ router.get(
         async (req, res) => {
 
             const messageId = Number(req.params.messageId);
-            const {chat_type, chat_target} = req.body;
+            const {chat_type, chat_target} = req.body || {};
 
             if (!messageId || !chat_type) {
                 return res.status(400).json({success: false});

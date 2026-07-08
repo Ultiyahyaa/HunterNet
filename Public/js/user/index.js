@@ -233,12 +233,13 @@ function generateHeadline() {
     const subject = randomFrom(subjects);
     const action = randomFrom(actions);
     const object = randomFrom(objects);
+    const region = randomFrom(regions);
 
     // optional spice: sometimes include stats
     const includeStat = Math.random() < 0.35;
 
     if (includeStat) {
-        return `[${type}] ${subject} ${action} ${object} (${numbers()}%) in ${randomFrom(regions)}\``;
+        return `[${type}] ${subject} ${action} ${object} (${numbers()}%) in ${region}\``;
     }
 
     return `[${type}] ${subject} ${action} ${object} in ${randomFrom(regions)}`;
@@ -319,9 +320,7 @@ function animateStats() {
    INITIAL LOAD
 ========================= */
 
-const path =
-    window.location.pathname
-        .replace(/^\/+/, "");
+const path = window.location.pathname.replace(/^\/+/, "");
 
 const validPages = [
     "home",
@@ -331,15 +330,9 @@ const validPages = [
     "about"
 ];
 
-const startingPage =
-    validPages.includes(path)
-        ? path
-        : "home";
+const startingPage = validPages.includes(path) ? path : "home";
 
-loadPage(
-    startingPage,
-    false
-);
+loadPage(startingPage, false);
 
 document.addEventListener("DOMContentLoaded", async () => {
     const loginBtn = document.getElementById("loginBtn");
@@ -348,16 +341,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         const res = await fetch("auth/api/me");
 
         if (res.ok) {
-            const user = await res.json();
-
             loginBtn.classList.remove("login-btn");
             loginBtn.textContent = "RETURN TO DASHBOARD";
             loginBtn.classList.add("return-btn");
 
-
             loginBtn.addEventListener("click", () => {
                 window.location.href = "/dashboard";
             })
+        }
+
+        if (!res.ok) {
+
         }
     } catch (err) {
         console.error("Auth check failed:", err);
