@@ -25,6 +25,15 @@ const thread = createThreadsCore({
         onlineUsers:
             document.getElementById("onlineUsers"),
 
+        pinsPanel:
+            document.getElementById("pinsPanel"),
+
+        pinsList:
+            document.getElementById("pinsList"),
+
+        attachmentPreview:
+            document.getElementById("attachmentPreview"),
+
     },
 
     api: {

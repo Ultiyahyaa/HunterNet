@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>HunterNet Chat</title>
+    <title>HunterNet Threads Admin</title>
 
     <link rel="stylesheet" href="/css/admin/threads.css">
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -26,6 +26,186 @@
 
 </div>
 
+<!-- MAIN LAYOUT -->
+<div class="threads-layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <div class="sidebar-section">
+
+            <h2>Threads Feed</h2>
+
+            <div id="threadsFeedCard" class="thread-item global">
+                # Threads Feed
+            </div>
+
+        </div>
+
+        <div class="sidebar-section">
+
+            <h2>All Threads</h2>
+
+            <div id="joinedThreadsList" class="threads-list"></div>
+
+        </div>
+
+        <div class="sidebar-section">
+
+            <h2>Users Online</h2>
+
+            <div id="onlineUsers"></div>
+
+        </div>
+
+    </div>
+
+    <!-- MAIN -->
+    <div class="threads-container"></div>
+</div>
+
+<template id="threadsFeedTemplate">
+    <div class="threads-feed">
+        <div class="threads-header">
+
+            <div>
+                <h2 id="threadTitleView"># Threads</h2>
+
+                <p class="thread-description">
+                    Review, lock, pin, and remove discussion threads.
+                </p>
+            </div>
+        </div>
+
+        <!-- CREATE THREAD PANEL -->
+        <div class="create-post-panel">
+
+            <input
+                    type="text"
+                    id="threadTitle"
+                    placeholder="Thread title..."
+                    maxlength="200"
+                    required
+            >
+
+            <textarea
+                    id="threadContent"
+                    placeholder="Write thread content..."
+                    maxlength="5000"
+                    required
+            ></textarea>
+
+            <div class="create-post-footer">
+
+                <div class="attachment-preview thread-attachment-preview"></div>
+
+                <div class="post-actions">
+                    <input
+                            type="file"
+                            id="threadImageInput"
+                            accept="image/*"
+                            multiple
+                            hidden
+                    >
+                    <button id="threadAttachBtn">
+                        ATTACH
+                    </button>
+                    <button id="submitThreadBtn">
+                        CREATE
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FEED -->
+        <div id="threadsFeed" class="posts-feed"></div>
+    </div>
+</template>
+
+<template id="threadRoomTemplate">
+    <!-- CHAT -->
+    <div class="chat-container">
+
+        <div class="chat-header">
+            <div class="chat-header-title">
+                <h2 id="chatTitle"></h2>
+            </div>
+
+            <div class="chat-header-actions">
+                <button id="backBtn" class="chat-options">
+                    ← BACK
+                </button>
+
+                <button id="pinsBtn" class="chat-options">
+                    PINS
+                </button>
+            </div>
+
+        </div>
+
+        <div id="messages" class="messages"></div>
+
+        <form id="messageForm" class="message-form">
+
+            <div
+                    id="attachmentPreview"
+                    class="attachment-preview hidden">
+            </div>
+
+            <div class="message-input-row">
+
+                <input
+                        type="file"
+                        id="imageInput"
+                        accept="image/*"
+                        multiple
+                        hidden
+                >
+
+                <button
+                        type="button"
+                        id="attachBtn"
+                        class="attach-btn">
+                    +
+                </button>
+
+                <input
+                        type="text"
+                        id="messageInput"
+                        placeholder="Enter transmission..."
+                >
+
+                <button type="submit" id="submitBtn">
+                    SEND
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</template>
+
+<!-- Pins Panel -->
+<div id="pinsPanel" class="pins-panel hidden">
+
+    <div class="pins-header">
+
+        <h2>Pinned Messages</h2>
+
+        <button id="closePins">
+            X
+        </button>
+
+    </div>
+
+    <div id="pinsList"></div>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
 <script type="module" src="/js/admin/threads.js"></script>
 
 </body>

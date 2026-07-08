@@ -721,45 +721,65 @@ body::before {
 }
 
 /* =========================
-PINNED MESSAGE
+STATUS BADGES
 ========================= */
 
-.message.pinned {
-
-    border-left: 4px solid #ffd700;
-
-    background: rgba(255, 215, 0, 0.05);
-
-    box-shadow: 0 0 18px rgba(255, 215, 0, 0.12);
+.status-badges {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
-
+.status-badge,
 .message-pinned-badge,
-.pinned-label {
-
+.locked-label {
     display: inline-flex;
-
     align-items: center;
-
-    margin-left: 10px;
-
-    padding: 3px 8px;
-
+    justify-content: center;
+    padding: 4px 9px;
+    border-radius: 999px;
     font-size: 10px;
-
     letter-spacing: 1px;
-
     font-weight: bold;
-
     text-transform: uppercase;
+    line-height: 1.2;
+    white-space: nowrap;
+}
 
+.status-badge.pinned-label,
+.message-pinned-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    text-transform: uppercase;
     color: black;
-
     background: #00ff88;
-
     border-radius: 5px;
-
     box-shadow: 0 0 10px rgba(0, 255, 136, 0.18);
+}
+
+.message-pinned-badge {
+    margin-left: 10px;
+}
+
+.status-badge.locked-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+    background: rgb(216 22 22 / 0.79);
+    border-radius: 5px;
+    box-shadow: inset 0 0 8px rgba(255, 85, 85, 0.12);
 }
 
 /* =========================
