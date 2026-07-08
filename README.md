@@ -60,6 +60,7 @@ This project attempts to modernize that concept while preserving the atmosphere 
 * Node.js
 * Express.js
 * Socket.IO
+* Multer
 
 ## Database
 
@@ -121,7 +122,6 @@ Just like the original lore.
 
 # Planned Features
 
-* End-to-end encrypted rooms
 * Hunter symbol/tag systems
 * File drops and evidence archives
 * Anonymous reports

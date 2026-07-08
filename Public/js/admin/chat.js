@@ -430,7 +430,7 @@ pinsBtn?.addEventListener(
         pinsList.innerHTML = "";
 
         if (!pins || !pins.length) {
-            pinsList.innerHTML = "<div class='channel-item'>No pinned messages.</div>";
+            pinsList.innerHTML = "<div class='empty-pins'>NO PINNED MESSAGES</div>";
             return;
         }
 

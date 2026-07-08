@@ -2110,7 +2110,9 @@ BUTTONS
 
     loadRooms();
 
-    loadDMs();
+    if(!isAdmin){
+        loadDMs();
+    }
 
     return {
 

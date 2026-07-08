@@ -1250,6 +1250,82 @@ ROOM SETTINGS MODAL
     line-height: 1.4;
 }
 
+.settingsRoom-name-form {
+
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.settings-input {
+
+    flex: 1;
+    min-width: 0;
+
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    border-radius: 14px;
+
+    padding: 12px 16px;
+
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.settings-input::placeholder {
+
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.settings-input:focus {
+
+    outline: none;
+    border-color: rgba(255, 215, 0, 0.25);
+
+    box-shadow:
+            0 0 0 1px rgba(255, 215, 0, 0.25),
+            0 0 12px rgba(255, 215, 0, 0.25);
+}
+
+.settings-save-btn {
+
+    flex-shrink: 0;
+
+    background: transparent;
+    border: 2px solid #ffd700;
+    border-radius: 12px;
+
+    color: #ffd700;
+
+    padding: 0 18px;
+
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.settings-save-btn:hover {
+
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.settings-save-btn:active {
+
+    transform: scale(0.97);
+}
+
+.settings-save-btn:disabled {
+
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .settings-count {
     color: #ffd700;
     font-size: 13px;
@@ -1271,7 +1347,7 @@ ROOM SETTINGS MODAL
     gap: 16px;
     padding: 14px 16px;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(0, 255, 136, 0.14);
+    border: 1px solid rgba(255, 215, 0, 0.25);
     border-radius: 14px;
 }
 
@@ -1296,6 +1372,7 @@ ROOM SETTINGS MODAL
     color: #ffd700;
     padding: 10px 14px;
     border-radius: 12px;
+    font-family: inherit;
 
     cursor: pointer;
     transition: 0.2s;
