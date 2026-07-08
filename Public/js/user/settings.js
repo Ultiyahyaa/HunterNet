@@ -1,4 +1,5 @@
 const passForm = document.getElementById("changePasswordForm")
+const factionForm = document.getElementById("changeFactionForm")
 const adminAccessBtn = document.getElementById("adminAccessBtn")
 
 passForm.addEventListener("submit", async (e) => {
@@ -24,6 +25,30 @@ passForm.addEventListener("submit", async (e) => {
     alert("Password changed successfully!")
   } else {
     alert(data.message || "Failed to change password")
+  }
+})
+
+factionForm.addEventListener("submit", async (e) => {
+  e.preventDefault()
+
+  const newFaction = document.getElementById("selectFaction").value
+
+  const res = await fetch("/api/changeFaction", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      newFaction
+    })
+  })
+
+  const data = await res.json()
+
+  if (data.success) {
+    alert("Faction changed successfully!")
+  } else {
+    alert(data.message || "Failed to change Faction")
   }
 })
 

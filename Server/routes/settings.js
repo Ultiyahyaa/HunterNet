@@ -44,4 +44,23 @@ router.post("/api/changePassword", authRequired, async (req, res) => {
   }
 })
 
+router.post("/api/changeFaction", authRequired, async (req, res) => {
+  const { newFaction } = req.body
+
+  const username = req.session.user.username
+
+  try {
+    await pool.query(
+        "UPDATE users SET faction=$1 WHERE username=$2",
+        [newFaction, username]
+    )
+
+    res.json({ success: true })
+
+  } catch (err){
+    console.log(err)
+    res.status(500).json({ success: false })
+  }
+})
+
 module.exports = router
