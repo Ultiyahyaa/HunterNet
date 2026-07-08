@@ -43,16 +43,7 @@
         Administrative Console
     </h1>
 
-    <p class="cursor">
-
-        Elevated privileges confirmed.
-
-        Welcome back,
-        <span id="adminUsername">
-        Administrator
-      </span>
-
-    </p>
+    <p id="dashboardMessage" class="cursor"></p>
 
 </div>
 
@@ -62,8 +53,8 @@
 <div class="status-bar">
 
     STATUS: ROOT ACCESS<br>
-    NODE: HN-ADMIN-01<br>
-    ENCRYPTION: MILITARY GRADE<br>
+    NODE: <span id="dashboardNode">Node</span><br>
+    ENCRYPTION: ENHANCED<br>
     CLEARANCE LEVEL: ADMINISTRATOR
 
 </div>
@@ -73,22 +64,14 @@
 
 <div class="dashboard-grid">
 
-
     <!-- USER MANAGEMENT -->
-
-    <div
-            class="card"
-            id="manageUsersBtn"
-    >
-
+    <div class="card" id="manageUsersBtn">
         <h2>User Management</h2>
 
         <p>
-
             Review accounts,
             permissions,
             and user activity.
-
         </p>
 
     </div>
@@ -96,40 +79,27 @@
 
     <!-- CHAT MODERATION -->
 
-    <div
-            class="card"
-            id="chatModerationBtn"
-    >
-
+    <div class="card" id="chatModerationBtn">
         <h2>Chat Moderation</h2>
 
         <p>
-
             Lock channels,
             remove messages,
             and monitor communications.
-
         </p>
 
     </div>
 
-
     <!-- BOARD MANAGEMENT -->
 
-    <div
-            class="card"
-            id="threadsBtn"
-    >
-
+    <div class="card" id="threadsBtn">
         <h2>Forum & Intel Control</h2>
 
         <p>
-
             Create,
             archive,
             sticky,
             and moderate discussion boards & forums.
-
         </p>
 
     </div>
@@ -137,39 +107,26 @@
 
     <!-- DATABASE -->
 
-    <div
-            class="card"
-            id="databaseBtn"
-    >
-
+    <div class="card" id="databaseBtn">
         <h2>Database Access</h2>
 
         <p>
-
             View server statistics,
             storage,
             and backend diagnostics.
-
         </p>
 
     </div>
 
-
     <!-- SECURITY -->
 
-    <div
-            class="card"
-            id="securityBtn"
-    >
-
+    <div class="card" id="securityBtn">
         <h2>Security Logs</h2>
 
         <p>
-
             Review login attempts,
             IP activity,
             and authentication events.
-
         </p>
 
     </div>
@@ -177,20 +134,14 @@
 
     <!-- SYSTEM -->
 
-    <div
-            class="card"
-            id="systemBtn"
-    >
-
+    <div class="card" id="systemBtn">
         <h2>System Controls</h2>
 
         <p>
-
             Manage relays,
             uptime,
             maintenance,
             and server operations.
-
         </p>
 
     </div>

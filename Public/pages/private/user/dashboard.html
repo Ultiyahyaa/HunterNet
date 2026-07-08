@@ -30,11 +30,7 @@
 
     <h1>Member Dashboard</h1>
 
-    <p class="cursor">
-        Secure connection established, welcome back,
-        [<span id="dashboardUsername">User</span>].
-        Access your tools, communications, and resources below.
-    </p>
+    <p id="dashboardMessage" class="cursor"></p>
 
 </div>
 
@@ -42,7 +38,7 @@
 <div class="status-bar">
 
     STATUS: ONLINE<br>
-    NODE: HN-042<br>
+    NODE: <span id="dashboardNode">Node</span><br>
     ENCRYPTION: ACTIVE<br>
     CLEARANCE LEVEL: VERIFIED USER
 
@@ -64,7 +60,6 @@
 
     <!-- CHAT -->
     <div class="card" id="chatBtn">
-
         <h2>Global Chat</h2>
 
         <p>

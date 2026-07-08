@@ -1,24 +1,10 @@
-const manageUsersBtn =
-  document.getElementById("manageUsersBtn")
-
-const chatModerationBtn =
-  document.getElementById("chatModerationBtn")
-
-const threadsBtn =
-  document.getElementById("threadsBtn")
-
-const databaseBtn =
-  document.getElementById("databaseBtn")
-
-const securityBtn =
-  document.getElementById("securityBtn")
-
-const systemBtn =
-  document.getElementById("systemBtn")
-
-const logoutBtn =
-  document.getElementById("logoutBtn")
-
+const manageUsersBtn = document.getElementById("manageUsersBtn")
+const chatModerationBtn = document.getElementById("chatModerationBtn")
+const threadsBtn = document.getElementById("threadsBtn")
+const databaseBtn = document.getElementById("databaseBtn")
+const securityBtn = document.getElementById("securityBtn")
+const systemBtn = document.getElementById("systemBtn")
+const logoutBtn = document.getElementById("logoutBtn")
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -40,32 +26,79 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 })
 
+async function loadNode(){
+  const node = String((Math.random() * 10).toFixed(0)).padStart(2, "0");
+
+  document.getElementById("dashboardNode").textContent =  `HN-ADMIN-${node};`
+}
+
+
+function typeWriter(element, text, index = 0) {
+
+  if (index >= text.length) return;
+
+  element.textContent += text[index];
+
+  let delay = 50;
+
+  switch (text[index]) {
+    case ".":
+      delay = 500;   // longest pause
+      break;
+    case ",":
+      delay = 200;
+      break;
+    case " ":
+      delay = 15;
+      break;
+  }
+
+  setTimeout(() => {
+    typeWriter(element, text, index + 1);
+  }, delay);
+}
+
+async function initDashboard() {
+
+  await loadNode();
+
+  const message =
+      `Elevated privileges confirmed.
+        Welcome back, Administrator.`;
+
+  typeWriter(
+      document.getElementById("dashboardMessage"),
+      message
+  );
+}
+
+initDashboard();
 
 // ------------------------
-// NAV ACTIONS (PLACEHOLDERS)
+// NAV ACTIONS
 // ------------------------
 
-manageUsersBtn.addEventListener("click", () => {
+manageUsersBtn?.addEventListener("click", () => {
   window.location.href = "/admin/users"
 })
 
-chatModerationBtn.addEventListener("click", () => {
+chatModerationBtn?.addEventListener("click", () => {
   window.location.href = "/admin/chat"
 })
 
-threadsBtn.addEventListener("click", () => {
+threadsBtn?.addEventListener("click", () => {
   window.location.href = "/admin/threads"
 })
 
-databaseBtn.addEventListener("click", () => {
+databaseBtn?.addEventListener("click", () => {
   alert("Database monitor coming soon.")
 })
 
-securityBtn.addEventListener("click", () => {
+securityBtn?.addEventListener("click", () => {
   alert("Security logs coming soon.")
 })
 
-systemBtn.addEventListener("click", () => {
+systemBtn?.addEventListener("click", () => {
   alert("System controls coming soon.")
 })
 

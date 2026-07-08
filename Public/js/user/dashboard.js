@@ -1,10 +1,10 @@
 const chatBtn = document.getElementById("chatBtn")
-const logoutBtn = document.getElementById("logoutBtn")
 const settingsBtn = document.getElementById("settingsBtn")
 const backBtn = document.getElementById("backBtn")
 const threadsBtn = document.getElementById("threadsBtn")
 const archiveBtn = document.getElementById("archiveBtn")
 const statusBtn = document.getElementById("statusBtn")
+const logoutBtn = document.getElementById("logoutBtn")
 
 async function loadDashboardUser() {
 
@@ -18,9 +18,7 @@ async function loadDashboardUser() {
         const user =
             await res.json();
 
-        document.getElementById(
-            "dashboardUsername"
-        ).textContent = user.username;
+        return user
 
     } catch (err) {
 
@@ -28,18 +26,55 @@ async function loadDashboardUser() {
     }
 }
 
-loadDashboardUser();
+async function loadNode(){
+    const node = String((Math.random() * 1000).toFixed(0)).padStart(3, "0");
+
+    document.getElementById("dashboardNode").textContent =  `HN-${node};`
+}
 
 
-logoutBtn?.addEventListener("click", async () => {
-    await fetch("/auth/api/logout", {
-      method: "POST"
-    })
+function typeWriter(element, text, index = 0) {
 
-    window.location.href = "/home"
-  
-  })
+    if (index >= text.length) return;
 
+    element.textContent += text[index];
+
+    let delay = 50;
+
+    switch (text[index]) {
+        case ".":
+            delay = 500;   // longest pause
+            break;
+        case ",":
+            delay = 200;
+            break;
+        case " ":
+            delay = 15;
+            break;
+    }
+
+    setTimeout(() => {
+        typeWriter(element, text, index + 1);
+    }, delay);
+}
+
+async function initDashboard() {
+
+    const user = await loadDashboardUser();
+    if (!user) return;
+
+    await loadNode();
+
+    const message =
+        `Access Granted. Secure connection established. Welcome,
+        [${user.username}].
+        Access your tools and resources below.`;
+
+    typeWriter(
+        document.getElementById("dashboardMessage"),
+        message
+    );
+}
 
 chatBtn?.addEventListener("click", () => {
     window.location.href = "/chat"
@@ -71,3 +106,14 @@ archiveBtn?.addEventListener("click", () => {
 statusBtn?.addEventListener("click", () => {
     window.location.href = "/status"
 })
+
+logoutBtn?.addEventListener("click", async () => {
+    await fetch("/auth/api/logout", {
+        method: "POST"
+    })
+
+    window.location.href = "/home"
+
+})
+
+initDashboard();
