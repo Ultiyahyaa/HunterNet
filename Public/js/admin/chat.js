@@ -49,7 +49,7 @@ const chat = createChatCore({
         sendGlobal: "/chat/api/global/send",
 
         rooms: "/chat/api/rooms",
-        roomMessages: (id) => `/chat/api/rooms/${id}/messages`,
+        roomMessages: (id) => `/chat/api/rooms/admin/${id}/messages`,
         sendRoom: (id) => `/chat/api/rooms/${id}/send`,
 
         dms: "/chat/api/dms",
@@ -312,7 +312,7 @@ async function selectAdminUser(user, element) {
 }
 
 async function loadContactsForUser(userId) {
-    const res = await fetch(`/chat/api/admin/user/${userId}/contacts`, {
+    const res = await fetch(`/chat/api/dms/admin/${userId}/contacts`, {
         credentials: "include"
     });
 
@@ -351,8 +351,8 @@ async function selectAdminContact(contact, element) {
     selectedAdminContact = contact;
 
     adminDmRoomId =
-        [selectedAdminUser.id, contact.id]
-            .sort()
+        [Number(selectedAdminUser.id), Number(contact.id)]
+            .sort((a, b) => a - b)
             .join("-");
 
     chat.setAdminChat({
@@ -386,7 +386,7 @@ async function joinAdminDmRoom(roomId) {
 }
 
 async function loadAdminDmThread(userId, contactId) {
-    const res = await fetch(`/chat/api/admin/dms/${userId}/${contactId}`, {
+    const res = await fetch(`/chat/api/dms/admin/${userId}/${contactId}`, {
         credentials: "include"
     });
 

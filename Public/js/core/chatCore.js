@@ -160,15 +160,15 @@ export function createChatCore(config) {
     function buildApiPaths() {
         const defaultApi = {
             createRoom:
-                api.createRoom || (api.rooms ? `${api.rooms}/create` : undefined),
+                api.createRoom || (api.rooms ? `${api.rooms}create` : undefined),
             startDm:
                 api.startDm || (api.dms ? `${api.dms}/start` : undefined),
             roomInvite:
-                api.roomInvite || (api.rooms ? ((roomId) => `${api.rooms}/${roomId}/invite`) : undefined),
+                api.roomInvite || (api.rooms ? ((roomId) => `${api.rooms}${roomId}/invite`) : undefined),
             roomMembers:
-                api.roomMembers || (api.rooms ? ((roomId) => `${api.rooms}/${roomId}/members`) : undefined),
+                api.roomMembers || (api.rooms ? ((roomId) => `${api.rooms}${roomId}/members`) : undefined),
             roomRemoveMember:
-                api.roomRemoveMember || (api.rooms ? ((roomId, memberId) => `${api.rooms}/${roomId}/members/${memberId}`) : undefined),
+                api.roomRemoveMember || (api.rooms ? ((roomId, memberId) => `${api.rooms}${roomId}/members/${memberId}`) : undefined),
             pins:
                 api.pins || "/chat/api/pins"
         };
@@ -1398,10 +1398,10 @@ export function createChatCore(config) {
 
             const dmRoom =
                 chatData.roomId || [
-                    chatData.id,
-                    window.currentUserId
+                    Number(chatData.id),
+                    Number(window.currentUserId)
                 ]
-                    .sort()
+                    .sort((a, b) => a - b)
                     .join("-");
 
             socket.emit(

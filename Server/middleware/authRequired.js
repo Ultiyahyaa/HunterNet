@@ -1,3 +1,5 @@
+const response = require("../utils/response");
+
 function authRequired(req, res, next) {
   if (!req.session?.user) {
     const wantsJson = req.headers.accept?.includes("application/json") ||
@@ -5,7 +7,7 @@ function authRequired(req, res, next) {
       req.path.includes("/api")
 
     if (wantsJson) {
-      return res.status(401).json({ success: false, error: "Unauthorized" })
+      return response.error(res, "Unauthorized", 403)
     }
 
     return res.redirect("/login")

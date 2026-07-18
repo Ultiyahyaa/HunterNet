@@ -8,7 +8,7 @@ passForm.addEventListener("submit", async (e) => {
   const currentPassword = document.getElementById("currentPassword").value
   const newPassword = document.getElementById("newPassword").value
 
-  const res = await fetch("/api/changePassword", {
+  const res = await fetch("/settings/api/changePassword", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -33,7 +33,7 @@ factionForm.addEventListener("submit", async (e) => {
 
   const newFaction = document.getElementById("selectFaction").value
 
-  const res = await fetch("/api/changeFaction", {
+  const res = await fetch("settings/api/changeFaction", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

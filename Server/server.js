@@ -20,16 +20,17 @@ const io =
 const chatSockets = require("./sockets/chatSockets")
 const threadSockets = require("./sockets/threadSockets")
 
-const authRoutes = require("./routes/auth")
-const chatRoutes = require("./routes/chat")(io);
-const roomRoutes = require("./routes/rooms")(io)
-const dmRoutes = require("./routes/dms")(io);
-const threadsRoutes = require("./routes/threads")
-const settingsRoutes = require("./routes/settings")
-const adminRoutes = require("./routes/admin")
+const authRoutes = require("./routes/authRoutes")
+const chatRoutes = require("./routes/chatRoutes")(io);
+const roomRoutes = require("./routes/roomRoutes")(io)
+const dmRoutes = require("./routes/dmRoutes")(io);
+const threadsRoutes = require("./routes/threadRoutes")(io)
+const settingsRoutes = require("./routes/settingRoutes")
+const adminRoutes = require("./routes/adminRoutes")
 
-const authRequired = require("./middleware/auth")
-const adminOnly = require("./middleware/admin")
+const authRequired = require("./middleware/authRequired")
+const adminOnly = require("./middleware/adminOnly")
+const errorHandler = require("./middleware/errorHandler");
 
 chatSockets(io);
 threadSockets(io);
@@ -59,23 +60,19 @@ app.use(express.static(
   path.join(__dirname, "../public")
 ))
 
-app.use("/", settingsRoutes)
-app.use("/auth", authRoutes)
-app.use("/admin", adminRoutes)
+app.use("/settings/api", settingsRoutes)
+app.use("/auth/api", authRoutes)
+app.use("/admin/api", adminRoutes)
 app.use("/chat/api/rooms", roomRoutes)
 app.use("/chat/api/dms", dmRoutes)
-app.use("/chat", chatRoutes);
+app.use("/chat/api", chatRoutes);
 app.use("/threads/api", threadsRoutes);
 
+app.use(errorHandler);
 
-app.get([
-    "/",
-    "/home",
-    "/articles",
-    "/privacy",
-    "/leaks",
-    "/about"
-], (req, res) => {
+
+app.get(["/", "/home", "/articles", "/privacy", "/leaks", "/about"],
+    (req, res) => {
 
     res.sendFile(
         path.join(
@@ -96,29 +93,12 @@ app.get("/login", (req, res) => {
 PROTECTED ROUTES
 ========================= */
 
-app.get("/dashboard", authRequired,(req, res) => {
-    res.sendFile(
-      path.join(__dirname, "../Public/pages/private/user/dashboard.html")
-    )
-})
-
-app.get("/chat", authRequired, (req, res) => {
-    res.sendFile(
-      path.join(__dirname, "../Public/pages/private/user/chat.html")
-    )
-})
-
-app.get("/settings", authRequired, (req, res) => {
-    res.sendFile(
-      path.join(__dirname, "../Public/pages/private/user/settings.html")
-    )
-})
-
-app.get("/threads", authRequired, (req, res) => {
-    res.sendFile(
-      path.join(__dirname, "../Public/pages/private/user/threads.html")
-    )
-})
+app.use("/", authRequired, express.static(
+    path.join(__dirname, "../Public/pages/private/user"),
+    {
+        extensions: ["html"]
+    })
+);
 
 app.get("/adminLogin", authRequired, (req, res) => {
     res.sendFile(
@@ -129,10 +109,9 @@ app.get("/adminLogin", authRequired, (req, res) => {
 app.use("/admin", adminOnly, express.static(
     path.join(__dirname, "../Public/pages/private/admin"),
     {
-      extensions: ["html"],
-      index: "dashboard.html"
-    }
-  )
+        extensions: ["html"],
+        index: "dashboard.html"
+    })
 )
 
 app.use((req, res) => {

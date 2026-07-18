@@ -64,7 +64,7 @@ const chat = createChatCore({
         global: "/chat/api/global",
         sendGlobal: "/chat/api/global/send",
 
-        rooms: "/chat/api/rooms",
+        rooms: "/chat/api/rooms/",
         roomMessages: (id) => `/chat/api/rooms/${id}/messages`,
         sendRoom: (id) => `/chat/api/rooms/${id}/send`,
 
