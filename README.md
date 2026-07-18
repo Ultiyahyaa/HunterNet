@@ -203,7 +203,7 @@ Server/database/schema.sql
 ### Run schema:
 
 ```bash
-psql -U <insert-user> -d <insert-db-name> -f Server/database/schema.sql
+psql -U <insert-user> -d <insert-db-name> -f Server/config/schema.sql
 ```
 
 ---
